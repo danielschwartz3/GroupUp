@@ -1,0 +1,3 @@
+task stage () {
+    dependsOn ':GroupUp-Backend:assemble'
+}
