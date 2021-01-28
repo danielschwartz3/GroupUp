@@ -1,9 +1,9 @@
-language: java
-script:
-- "./gradlew build"
-deploy:
-  provider: heroku
-  api_key:
-    secure: xms6Q+iQejJUKRMqs6yE1XxJEiYjYwwTG/E2hgyrZtdrBZ1zTleDM+q66oqMjGeaXRYyKQxmPq3BC5ZS/mfbL0qjv2KYnvdrLccAgW8LgccxU6+kSyenhFWMMqNZKtb/pbFJ6DxWawhc9tdR8XcatB1U6WKwnU4fp2o8baRSTvr8WCbOGaKwORjM3XcbPHiQoaw8xFjpjM5P8Ndb0nQ5y2/jLjQAS8p6ekRR5vIlic3VxPHxUVkbHEnJKYL1kaE9PsuAFMozbNMp3KV2TGG1T0CwxS03nfpY4eqzRx6L4M5TvCc2j2Bqw8EUwR855J2CJxhv0zHMmX2w5e7iveVuXZAZrdrQcZ54sQnflhkHq5A4TjNTiYnaLHYC9p5+8KHfrVxNTb44CYHKjkN9xPKbaPmsdESiaArwplP7NfvLLAYEJkznVrDOOWfUybMPVhj9kqqmF9tpkmpoMdXFH3hbk277huqG+wBENbyEnCJfKtSmsGci+Ffgf44a0CM3MYbiK7RHJOi0IzLYEAOJtARww3sNEeiFIurQzdgV1B+2V6doG2147JFHmPAB6nOBi8BwwrdZHyNybA77MteYysOSuBYGaKPeaGzjmL5UnTWSgm3nZzxbTVV7YIoYunqsiPaxUT5/fASvKfLjIUr46h4xyzIKzr2C7Nz6/s4ASxkWE48=
-  app: groupup-backend
-  on: main
+jobs:
+- language: java
+  script: "./gradlew build"
+  deploy:
+    provider: heroku
+    api_key:
+      secure: PmBd/7Bg55moq1EFze721FFqV/v5ewKQUHVG5FXSFjxQogk/olN0bUK0na9R9rkR7EFmRIANeVCSJ8A6iuZrFqGDz1mB3Q3Qy2xuV+dMmROSyim8pFLNSRB6mxRFg6caKSKRA5eQ8tqkfKGe00SsLVwNq003P+XeMJWLjZeT/RsUjpXizGmJvL+jxQPatInttKWHcdZnASAyRA/OWz0vu7PxwLxuLkztA+akCm8vst8Ezbnm82bdIm2nTr3yi+gIMzNFkkp6wWzJ38L+DGlbqehRnNb8jJ7rafA6/Igqf3cXXQHJLLIyXuX17ZDwqP0Bc1fTbl2xNrZGfS3nFm+XBD28O0ReoJBJQOjWKfzQwmztxSv0bT8XzTeWoA5FbncOE4wPVRABCmtdzriDyOIXiS7CF/5/Zu9HaFVa4TbLtGJ5QuWkKiiBZsAGENEoKvt2ui7/uh5bxpkUSKPbO+XsOlsGChdx4ZmzxbJvyovDbPc5/Boo8JIiyogB8TyeHu71g7r2cz32EwOw45e1O8+LiMUSH/UTq2YC4UZ4KcIQfmL2Ifv/lcNHH4nKAKtXOZW9WRBQzKPtnTDDChbcdWfI9GEHss8Wv+QuD/ZIuT23O+xzyPItEQiGVRvQzEyox1Foo2noDgBDu1jjOuqGz/Xa9pUKhhohnzcBPanrTTnq75A=
+   app: groupup-backend
+   on: main
