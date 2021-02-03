@@ -1,9 +1,14 @@
 package ca.mcgill.ecse428.groupup.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.*;
+
+@Entity
 public class Account{
     private UserRole role;
     public String user_name;
     public String student_name; //student Full-name
+    public String user_email;
     public String user_institution;
     public String password;
 
@@ -11,6 +16,8 @@ public class Account{
         this.role = userRole;
     }
 
+    @OneToOne (cascade = CascadeType.ALL)
+    @JsonManagedReference
     public UserRole getUserRole(){
         return this.role;
     }
@@ -19,6 +26,7 @@ public class Account{
         this.user_name = username;
     }
 
+    @Id
     public String getUsername(){
         return user_name;
     }
@@ -29,6 +37,14 @@ public class Account{
 
     public String getFullName(){
         return this.student_name;
+    }
+    
+    public void setEmail(String email){
+        this.user_email = email;
+    }
+
+    public String geEmail(){
+        return this.user_email;
     }
 
     public void setInstitution(String institution){
