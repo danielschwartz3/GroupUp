@@ -1,11 +1,11 @@
 jobs:
  include:
- - language: java
+  -language: java
    script: "./gradlew build"
    deploy:
-     provider: heroku
-     api_key:
-       secure: PmBd/7Bg55moq1EFze721FFqV/v5ewKQUHVG5FXSFjxQogk/olN0bUK0na9R9rkR7EFmRIANeVCSJ8A6iuZrFqGDz1mB3Q3Qy2xuV+dMmROSyim8pFLNSRB6mxRFg6caKSKRA5eQ8tqkfKGe00SsLVwNq003P+XeMJWLjZeT/RsUjpXizGmJvL+jxQPatInttKWHcdZnASAyRA/OWz0vu7PxwLxuLkztA+akCm8vst8Ezbnm82bdIm2nTr3yi+gIMzNFkkp6wWzJ38L+DGlbqehRnNb8jJ7rafA6/Igqf3cXXQHJLLIyXuX17ZDwqP0Bc1fTbl2xNrZGfS3nFm+XBD28O0ReoJBJQOjWKfzQwmztxSv0bT8XzTeWoA5FbncOE4wPVRABCmtdzriDyOIXiS7CF/5/Zu9HaFVa4TbLtGJ5QuWkKiiBZsAGENEoKvt2ui7/uh5bxpkUSKPbO+XsOlsGChdx4ZmzxbJvyovDbPc5/Boo8JIiyogB8TyeHu71g7r2cz32EwOw45e1O8+LiMUSH/UTq2YC4UZ4KcIQfmL2Ifv/lcNHH4nKAKtXOZW9WRBQzKPtnTDDChbcdWfI9GEHss8Wv+QuD/ZIuT23O+xzyPItEQiGVRvQzEyox1Foo2noDgBDu1jjOuqGz/Xa9pUKhhohnzcBPanrTTnq75A=
-   app: groupup-backend
-   on: 
-    branch: main
+    provider: heroku
+    api_key:
+     secure: PmBd/7Bg55moq1EFze721FFqV/v5ewKQUHVG5FXSFjxQogk/olN0bUK0na9R9rkR7EFmRIANeVCSJ8A6iuZrFqGDz1mB3Q3Qy2xuV+dMmROSyim8pFLNSRB6mxRFg6caKSKRA5eQ8tqkfKGe00SsLVwNq003P+XeMJWLjZeT/RsUjpXizGmJvL+jxQPatInttKWHcdZnASAyRA/OWz0vu7PxwLxuLkztA+akCm8vst8Ezbnm82bdIm2nTr3yi+gIMzNFkkp6wWzJ38L+DGlbqehRnNb8jJ7rafA6/Igqf3cXXQHJLLIyXuX17ZDwqP0Bc1fTbl2xNrZGfS3nFm+XBD28O0ReoJBJQOjWKfzQwmztxSv0bT8XzTeWoA5FbncOE4wPVRABCmtdzriDyOIXiS7CF/5/Zu9HaFVa4TbLtGJ5QuWkKiiBZsAGENEoKvt2ui7/uh5bxpkUSKPbO+XsOlsGChdx4ZmzxbJvyovDbPc5/Boo8JIiyogB8TyeHu71g7r2cz32EwOw45e1O8+LiMUSH/UTq2YC4UZ4KcIQfmL2Ifv/lcNHH4nKAKtXOZW9WRBQzKPtnTDDChbcdWfI9GEHss8Wv+QuD/ZIuT23O+xzyPItEQiGVRvQzEyox1Foo2noDgBDu1jjOuqGz/Xa9pUKhhohnzcBPanrTTnq75A=
+    app: groupup-backend
+    on: 
+     branch: main
