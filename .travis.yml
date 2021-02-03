@@ -1,11 +1,10 @@
 jobs:
   include:
-  - language: java
-    script: "./gradlew build"
-    deploy:
-      skip_cleanup: true
-      provider: heroku
-      api_key:
-        secure: q6NK3t2LDtt+UNWvoJXscFwhHwA9qROyabiYnWAdBgA2xpjh6B8msLIdjIvZXsRwoi7fyBOsEKOwjlPEICsnd3f48FEIGSaJloeBDtfNohw1f9Tz5XfU1mTsBHZ/siCv15T8aLYsuQWrlPqJ0uo/rV23Qe/rRoxTjKuoYcg7hBg/IW7QYJslcR7fv6UsRzThAYSBhyzDaT/SenAi/TMxg3X1oMCaFsL1H9qoRsWv4pzaUm+PhjzJCpdmXfu8opgWnhSnzT3jiX0/a7+7kWns9jTj6PRvI7lzfiH37ikf0DfsIbk2r5SWnUZkFh8oJMgXI25wxIH23oQvN8zGa8TfEP5zi5+PfWo9qbTE0RpVnY+TiBXEQVMf8S7SF2KmFyqAVbZCTLVrdmNCenDMBzZ/1mtk4YJS5Cw3p1ZLa9ZCnBVHRlj7I5HIWaZDE/BNrnjOPQr7q/xNjDI9wBNLnQNEoCB/MoQOZksJ2kyCi9TVjSEXqSt366vG4tHh8D33GreqRcGrmvGGKlBepVZxKlbOwDYs6HgPzqulirtSCBZ/qwCBld4SkB5GO5Bd9UCi8O/aRpyl6x7orhqwBRn4pFanFQg1f+R/Ry7wmrlK7wGIbguLbVpgEJw+1vXDYiGR24IAcYgLi94VmfyZgUNSoXvJdf/Va14g8SlJbkWH070F/ns=
-      app: groupup-backend
-      on: main
+    - language: java
+      script: "./gradlew build"
+      deploy:
+        provider: heroku
+        api_key:
+          secure: q6NK3t2LDtt+UNWvoJXscFwhHwA9qROyabiYnWAdBgA2xpjh6B8msLIdjIvZXsRwoi7fyBOsEKOwjlPEICsnd3f48FEIGSaJloeBDtfNohw1f9Tz5XfU1mTsBHZ/siCv15T8aLYsuQWrlPqJ0uo/rV23Qe/rRoxTjKuoYcg7hBg/IW7QYJslcR7fv6UsRzThAYSBhyzDaT/SenAi/TMxg3X1oMCaFsL1H9qoRsWv4pzaUm+PhjzJCpdmXfu8opgWnhSnzT3jiX0/a7+7kWns9jTj6PRvI7lzfiH37ikf0DfsIbk2r5SWnUZkFh8oJMgXI25wxIH23oQvN8zGa8TfEP5zi5+PfWo9qbTE0RpVnY+TiBXEQVMf8S7SF2KmFyqAVbZCTLVrdmNCenDMBzZ/1mtk4YJS5Cw3p1ZLa9ZCnBVHRlj7I5HIWaZDE/BNrnjOPQr7q/xNjDI9wBNLnQNEoCB/MoQOZksJ2kyCi9TVjSEXqSt366vG4tHh8D33GreqRcGrmvGGKlBepVZxKlbOwDYs6HgPzqulirtSCBZ/qwCBld4SkB5GO5Bd9UCi8O/aRpyl6x7orhqwBRn4pFanFQg1f+R/Ry7wmrlK7wGIbguLbVpgEJw+1vXDYiGR24IAcYgLi94VmfyZgUNSoXvJdf/Va14g8SlJbkWH070F/ns=
+        app: groupup-backend
+        on: master
