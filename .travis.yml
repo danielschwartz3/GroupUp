@@ -1,10 +1,13 @@
 jobs:
   include:
-    - language: java
-      script: "./gradlew build"
-      deploy:
-        provider: heroku
-        api_key:
-          secure: 9bwCnXbTxUWuBU98p0V6XABWjiHH3K2dy/ZAF2TvfRrDHkA8NeUDsO/kvnngOv6NvPYBxdeuxS7/+ek+cCy2Pi0yKtww/iNwCcPYUZJeA/KXQGT9sdimLUVCr7gM3TbvzFbijJ4ai8q3e4bm2k9eSJVt91lTqkQwUJgZDuFhwx9j8Ae82QQIBUPhoC7Tqu9WrRKwjc6D2b4y6OqKM3sMPfKQfKLA8/EmYXexbRSGrMETwGqboU9WsnR5cjrrm/OBHsYDaPO8Znj5iYHXV1F0UR4doWFaZbcXm86a1rft1GsBjEBQ1WbCdvgifjU1FSLn551sQUh/tTa/KJT9t/GE7swUpblDk554On+nPJSP0xvaqvnWgLRs5FdYx70J4m8VhR4ijVxkcBlJNRe9cUaoaH4i2Tr1VcG0f+0cu0KI+lOFrmB3GqPGLHYRAZ6klM2l6Biw0JTulXOuPvjPRJFlFpCPhbtFUGVohg+qQUVvjxgEdX8gOLDjRT4gxzQdzZeXxtj7/2RupOMsRzC/0bXMwypbxDQhA9NHGf7e1x+Nk3ipLJRN3luvvc0TSVbXNEGGqBSowy+kUnnhUMdEKEPmO8Dro0O4O9EXtwYx/h3TKKbBqmOcbyoQ/fFiMkGqaMsAQhmqFCKNAl6+E9H/t0tYj3k81od8kHiCxIFSeJoULhU=
-        app: groupup-backend
-        on: main
+  - language: java
+    script: "./gradlew build"
+    deploy:
+      provider: heroku
+      api_key:
+        secure: 9bwCnXbTxUWuBU98p0V6XABWjiHH3K2dy/ZAF2TvfRrDHkA8NeUDsO/kvnngOv6NvPYBxdeuxS7/+ek+cCy2Pi0yKtww/iNwCcPYUZJeA/KXQGT9sdimLUVCr7gM3TbvzFbijJ4ai8q3e4bm2k9eSJVt91lTqkQwUJgZDuFhwx9j8Ae82QQIBUPhoC7Tqu9WrRKwjc6D2b4y6OqKM3sMPfKQfKLA8/EmYXexbRSGrMETwGqboU9WsnR5cjrrm/OBHsYDaPO8Znj5iYHXV1F0UR4doWFaZbcXm86a1rft1GsBjEBQ1WbCdvgifjU1FSLn551sQUh/tTa/KJT9t/GE7swUpblDk554On+nPJSP0xvaqvnWgLRs5FdYx70J4m8VhR4ijVxkcBlJNRe9cUaoaH4i2Tr1VcG0f+0cu0KI+lOFrmB3GqPGLHYRAZ6klM2l6Biw0JTulXOuPvjPRJFlFpCPhbtFUGVohg+qQUVvjxgEdX8gOLDjRT4gxzQdzZeXxtj7/2RupOMsRzC/0bXMwypbxDQhA9NHGf7e1x+Nk3ipLJRN3luvvc0TSVbXNEGGqBSowy+kUnnhUMdEKEPmO8Dro0O4O9EXtwYx/h3TKKbBqmOcbyoQ/fFiMkGqaMsAQhmqFCKNAl6+E9H/t0tYj3k81od8kHiCxIFSeJoULhU=
+      app: groupup-backend
+      on: main
+deploy:
+  api_key:
+    secure: E0d7FqI77AOqgIzyx7NaTPB2Ko8E1FE1LpYU1GjCHBfUrv84IIDmWO/AoriPRvtBr/mmLVApZ0lEbsfoxT1pDnXQEolIt64HFCRtsezTV+wKKgYDE9GPtKcJo6j4qq8+ip88K1M0qTl2W4OiDx1B9vq9WCVISXfJip05fQ/dzRiqMgEqkA4M2VE1N/wZESvAUzQ+cpRLX37Wa3aEV5sFk4X1nV2ep/eKSQms85aoJDnNbSnx+7mMZqigsZi/LIS6I1pqOVXBsMklo6wYo7SKJ71GmDymHgxBKF5+82LZx+ETZaj5vHgYZ3MfDpVpTe7i9GdH+XmimgE6cQZnbSSIFQsXQCe9TGKFFFF+av0ZauYhJ5yUy9xz+Jvcgu+8Hq+bgy12Brk2iakCrnXGOlJXREsm9oi9sxT+L4g5benxjCfxfypJ5v+kOGh3+RXkPNJdux4AJ3eLFtqpP0zxs/OudorfjoheB9sUMRN97yCuGg/+kHjzwd1F1Oem6OSHOBALEvJ9bce1Gok5RTDJIGtOXGxG1xKKh3oLZu0xDcUqc5qANcI7v700o69fOtrxBJtNO4QlxSIoki/dAQtV4gjBDOQ+pNddvSs/o68nxhbJ1twJ4dWeHdRTAAQ9Dxqilsk6GZQTphGRsvVmfGdq/AfWCSbnxOkkHVJZBWcdyc6TSL8=
