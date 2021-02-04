@@ -1,4 +1,4 @@
-package ca.mcgill.ecse428.groupup;
+package ca.mcgill.ecse428.groupup.application;
 
 //import static org.junit.jupiter.api.Assertions.assertTrue;
 
