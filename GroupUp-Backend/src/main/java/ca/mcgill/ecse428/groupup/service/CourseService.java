@@ -65,7 +65,7 @@ public class CourseService {
         if (courseID == null || courseID.trim().length() == 0) {
             throw new IllegalArgumentException("CourseID cannot be empty");
         }
-        Course persitedCourse = courseRepository.findCourseByCourseID(courseID);
+        Course persitedCourse = courseRepository.findById(courseID).orElse(null);
         if (persitedCourse == null) {
             throw new IllegalArgumentException("The course with courseID: " + courseID + " does not exist. Please add the course first");
         }
@@ -93,7 +93,7 @@ public class CourseService {
 
     @Transactional
     public Course getCourseByID(String courseID) {
-        Course course = courseRepository.findCourseByCourseID(courseID);
+        Course course = courseRepository.findById(courseID).orElse(null);
         if (course == null) {
             throw new IllegalArgumentException("The course with courseID: " + courseID + " does not exist. Please add the course first");
         }

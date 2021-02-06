@@ -5,17 +5,17 @@ import javax.persistence.*;
 
 @Entity
 public abstract class UserRole{
-    private int id;
-    public Account acc;
+	private int id;
+    public Account account;
 
     public void setAccount(Account account){
-        this.acc = account;
+        this.account = account;
     }
 
-    @OneToOne(optional = false)
+    @OneToOne(mappedBy="userRole", optional = false)
     @JsonBackReference
     public Account getAccount(){
-        return this.acc;
+        return this.account;
     }
 
     public void setId(int id){
@@ -27,6 +27,4 @@ public abstract class UserRole{
     public int getId(){
         return this.id;
     }
-
-
 }

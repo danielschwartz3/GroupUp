@@ -2,10 +2,15 @@ package ca.mcgill.ecse428.groupup.model;
 
 import ca.mcgill.ecse428.groupup.utility.Semester;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Course {
@@ -16,9 +21,18 @@ public class Course {
     Semester semester;
     String year;
     String courseSection;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy="courses")
+    Set<Student> students;
 
+    public Set<Student> getStudents() {
+		return students;
+	}
 
-    public String getFaculty() {
+	public void setStudents(Set<Student> students) {
+		this.students = students;
+	}
+
+	public String getFaculty() {
         return faculty;
     }
 
