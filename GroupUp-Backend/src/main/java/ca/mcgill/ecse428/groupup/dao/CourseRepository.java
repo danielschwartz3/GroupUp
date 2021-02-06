@@ -10,4 +10,6 @@ public interface CourseRepository extends CrudRepository<Course, String> {
     boolean existsByCourseID(String courseID);
 
     Course findCourseByCourseID(String courseID);
+
+    void deleteCourseByCourseID(String courseID);
 }

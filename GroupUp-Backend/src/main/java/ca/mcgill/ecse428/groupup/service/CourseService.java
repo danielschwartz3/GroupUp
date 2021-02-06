@@ -36,8 +36,12 @@ public class CourseService {
         if (courseSection == null || courseSection.trim().length() == 0) {
             error += "section number cannot be empty";
         }
-        if (error.length() == 0) {
+
+        if (error.length() != 0) {
             throw new IllegalArgumentException(error);
+        }
+        if(courseRepository.existsByCourseID(courseID)) {
+            throw new IllegalArgumentException("Course ID: " + courseID + " already exists");
         }
         course = new Course();
         course.setCourseID(courseID);
@@ -56,7 +60,7 @@ public class CourseService {
     }
 
     @Transactional
-    public Course updateAccount(Course course) {
+    public Course updateCourse(Course course) {
         String courseID = course.getCourseID();
         if (courseID == null || courseID.trim().length() == 0) {
             throw new IllegalArgumentException("CourseID cannot be empty");
@@ -99,6 +103,12 @@ public class CourseService {
     @Transactional
     public List<Course> getAllCourses() {
         return toList(courseRepository.findAll());
+    }
+
+    @Transactional
+    public boolean deleteCourse(String courseID) {
+        courseRepository.deleteCourseByCourseID(courseID);
+        return courseRepository.existsByCourseID(courseID);
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {
