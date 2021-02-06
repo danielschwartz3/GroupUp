@@ -21,6 +21,7 @@ public class Course {
     Semester semester;
     String year;
     String courseSection;
+    String courseName;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy="courses")
     Set<Student> students;
 
@@ -31,6 +32,15 @@ public class Course {
 	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
+    
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
 	public String getFaculty() {
         return faculty;
