@@ -21,9 +21,10 @@ public class CourseController {
                                   @RequestParam("faculty") String faculty,
                                   @RequestParam("year") String year,
                                   @RequestParam("semester") String semester,
-                                  @RequestParam("section") String section) {
-        Course course = courseService.createCourse(courseID, faculty, semester, year, section);
-        CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection());
+                                  @RequestParam("section") String section,
+                                  @RequestParam("name") String courseName) {
+        Course course = courseService.createCourse(courseID, faculty, semester, year, section, courseName);
+        CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
 
         return courseDTO;
 
@@ -34,7 +35,7 @@ public class CourseController {
         List<Course> courses = courseService.getAllCourses();
         List<CourseDTO> courseDTOs = new ArrayList<>();
         for (Course course : courses) {
-            CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection());
+            CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
             courseDTOs.add(courseDTO);
         }
 
@@ -44,7 +45,7 @@ public class CourseController {
     @GetMapping(value = {"/courses/{courseID}", "/courses/{courseID}/"})
     public CourseDTO getCourseOfId(@PathVariable("courseID") String courseID) {
         Course course = courseService.getCourseByID(courseID);
-        CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection());
+        CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
 
         return courseDTO;
     }
@@ -54,17 +55,19 @@ public class CourseController {
                                       @RequestParam(value = "faculty", required = false) String faculty,
                                       @RequestParam(value = "year", required = false) String year,
                                       @RequestParam(value = "semester", required = false) String semester,
-                                      @RequestParam(value = "section", required = false) String section) {
+                                      @RequestParam(value = "section", required = false) String section,
+                                      @RequestParam(value = "name", required = false) String name) {
         Course course = new Course();
         course.setCourseID(courseID);
         course.setFaculty(faculty);
         course.setCourseSection(section);
         course.setYear(year);
         course.setSemester(Semester.valueOf(semester));
+        course.setCourseName(name);
 
         Course updatedCourse = courseService.updateCourse(course);
 
-        CourseDTO courseDTO = new CourseDTO(updatedCourse.getCourseID(), updatedCourse.getFaculty(), updatedCourse.getYear(), updatedCourse.getSemester().toString(), updatedCourse.getCourseSection());
+        CourseDTO courseDTO = new CourseDTO(updatedCourse.getCourseID(), updatedCourse.getFaculty(), updatedCourse.getYear(), updatedCourse.getSemester().toString(), updatedCourse.getCourseSection(), course.getCourseName());
 
         return courseDTO;
 
