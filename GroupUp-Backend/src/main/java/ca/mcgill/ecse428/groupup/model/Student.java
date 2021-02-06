@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Entity
 public class Student extends UserRole{
 //attributes unique to this class added later
+	
 	Set<Course> courses;
 
 	/**
