@@ -18,7 +18,7 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     @Transactional
-    public Course createCourse(String courseID, String faculty, String semester, String year, String courseSection) {
+    public Course createCourse(String courseID, String faculty, String semester, String year, String courseSection, String courseName) {
         Course course;
         String error = "";
         if (courseID == null || courseID.trim().length() == 0) {
@@ -36,6 +36,9 @@ public class CourseService {
         if (courseSection == null || courseSection.trim().length() == 0) {
             error += "section number cannot be empty";
         }
+        if(courseName == null || courseName.trim().length() == 0) {
+            error += "course name cannot be empty";
+        }
 
         if (error.length() != 0) {
             throw new IllegalArgumentException(error);
@@ -49,6 +52,7 @@ public class CourseService {
         course.setCourseSection(courseSection);
         course.setSemester(Semester.valueOf(semester));
         course.setYear(year);
+        course.setCourseName(courseName);
 
         courseRepository.save(course);
 
@@ -84,6 +88,10 @@ public class CourseService {
         String newCrsSection = course.getCourseSection();
         if (newCrsSection != null && newCrsSection.trim().length() != 0) {
             persitedCourse.setCourseSection(newCrsSection);
+        }
+        String courseName = course.getCourseName();
+        if(courseName != null && courseName.trim().length() != 0) {
+            persitedCourse.setCourseName(courseName);
         }
         courseRepository.save(persitedCourse);
 
