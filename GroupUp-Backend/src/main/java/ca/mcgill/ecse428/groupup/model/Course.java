@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.groupup.model;
 
 import ca.mcgill.ecse428.groupup.utility.Semester;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Course {
@@ -22,7 +25,8 @@ public class Course {
     String year;
     String courseSection;
     String courseName;
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy="courses")
+    @ManyToMany(fetch = FetchType.LAZY, cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonManagedReference
     Set<Student> students;
 
     public Set<Student> getStudents() {
@@ -80,5 +84,19 @@ public class Course {
 
     public void setCourseSection(String courseSection) {
         this.courseSection = courseSection;
+    }
+    
+    public Course() {
+		this.students = new HashSet<>();
+	}
+    
+    public void addStudent(Student student) {
+    	this.students.add(student);
+    	student.getCourses().add(this);
+    }
+    
+    public void removeStudent(Student student) {
+    	this.students.remove(student);
+    	student.getCourses().remove(this);
     }
 }

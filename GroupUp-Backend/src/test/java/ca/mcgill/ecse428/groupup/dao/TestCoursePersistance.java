@@ -49,6 +49,7 @@ public class TestCoursePersistance {
 	}
 	
 	@Test
+	@Transactional
 	void testCreateCourse() {
 		Course newCourse = createSampleCourse();
 		Course savedCourse = courseRepository.save(newCourse);
@@ -92,15 +93,17 @@ public class TestCoursePersistance {
 	@Test
 	@Transactional
 	void findByStudent() {
-//		Course newCourse = createSampleCourse();
-//		courseRepository.save(newCourse);
-//		Student newStudent = createTempStudent();
-//		newStudent.setCourses(new HashSet<Course>());
-//		newStudent.getCourses().add(newCourse);
-//		courseRepository.save(newCourse);
-//		newCourse.getStudents().add(newStudent);
-//		List<Course> courses = courseRepository.findByStudents_id(newStudent.getId());
-//		assertEquals(courses.size(), 1);
+		Course newCourse = createSampleCourse();
+		courseRepository.save(newCourse);
+		Student newStudent = createTempStudent();
+		newCourse.addStudent(newStudent);
+		courseRepository.save(newCourse);
+		List<Course> courses = courseRepository.findByStudents_id(newStudent.getId());
+		assertEquals(1,courses.size());
+		checkCourseEqual(courses.get(0),newCourse);
+		newStudent = studentRepository.findById(newStudent.getId()).orElse(null);
+		assertNotNull(newStudent);
+		assertEquals(newStudent.getCourses().size(),1);
 	}
 	
 	
@@ -134,7 +137,6 @@ public class TestCoursePersistance {
 		course.setFaculty(FACULTY);
 		course.setSemester(SEMESTER);
 		course.setYear(YEAR);
-		course.setStudents(new HashSet<Student>());
 		return course;
 	}
 	

@@ -17,7 +17,6 @@ public class Account{
     }
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="role", nullable=false)
     @JsonManagedReference
     public UserRole getUserRole(){
         return this.userRole;
