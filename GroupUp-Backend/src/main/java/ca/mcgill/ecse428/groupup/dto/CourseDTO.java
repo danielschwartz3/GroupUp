@@ -6,15 +6,25 @@ public class CourseDTO {
     String year;
     String semester;
     String section;
+    String name;
 
     public CourseDTO() {};
 
-    public CourseDTO(String courseID, String faculty, String year, String semester, String section) {
+    public CourseDTO(String courseID, String faculty, String year, String semester, String section, String name) {
         this.courseID = courseID;
         this.faculty = faculty;
         this.year = year;
         this.semester = semester;
         this.section = section;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCourseID() {
