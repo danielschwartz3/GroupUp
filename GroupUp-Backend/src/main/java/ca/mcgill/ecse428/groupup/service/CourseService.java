@@ -3,6 +3,7 @@ package ca.mcgill.ecse428.groupup.service;
 
 import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.model.Course;
+import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
-
+    
     @Transactional
     public Course createCourse(String courseID, String faculty, String semester, String year, String courseSection, String courseName) {
         Course course;
@@ -69,7 +70,7 @@ public class CourseService {
         if (courseID == null || courseID.trim().length() == 0) {
             throw new IllegalArgumentException("CourseID cannot be empty");
         }
-        Course persitedCourse = courseRepository.findCourseByCourseID(courseID);
+        Course persitedCourse = courseRepository.findById(courseID).orElse(null);
         if (persitedCourse == null) {
             throw new IllegalArgumentException("The course with courseID: " + courseID + " does not exist. Please add the course first");
         }
@@ -96,12 +97,20 @@ public class CourseService {
         courseRepository.save(persitedCourse);
 
         return persitedCourse;
-
+    }
+    
+    public Student registerStudent(Student student, Course course) {
+    	if(student == null) throw new IllegalArgumentException("Student does not exist");
+    	if(course == null) throw new IllegalArgumentException("Course does not exist");
+    	if(course.getStudents().contains(student))throw new IllegalArgumentException("Student already in the course");
+    	course.addStudent(student);
+    	courseRepository.save(course);
+    	return student;
     }
 
     @Transactional
     public Course getCourseByID(String courseID) {
-        Course course = courseRepository.findCourseByCourseID(courseID);
+        Course course = courseRepository.findById(courseID).orElse(null);
         if (course == null) {
             throw new IllegalArgumentException("The course with courseID: " + courseID + " does not exist. Please add the course first");
         }
@@ -115,7 +124,7 @@ public class CourseService {
 
     @Transactional
     public boolean deleteCourse(String courseID) {
-        courseRepository.deleteCourseByCourseID(courseID);
+        courseRepository.deleteById(courseID);
         return courseRepository.existsByCourseID(courseID);
     }
 
