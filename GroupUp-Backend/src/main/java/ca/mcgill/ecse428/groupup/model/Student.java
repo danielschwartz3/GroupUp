@@ -7,6 +7,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
+@DiscriminatorValue("Student")
 public class Student extends UserRole{
 //attributes unique to this class added later
 	
