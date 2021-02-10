@@ -6,10 +6,10 @@ import javax.persistence.*;
 @Entity
 public class Account{
     private UserRole userRole;
-    public String user_name;
+    public String username;
     public String name; //student Full-name
-    public String user_email;
-    public String user_institution;
+    public String email;
+    public String institution;
     public String password;
 
     public void setUserRole(UserRole userRole){
@@ -23,12 +23,12 @@ public class Account{
     }
 
     public void setUsername(String username){
-        this.user_name = username;
+        this.username = username;
     }
 
     @Id
     public String getUsername(){
-        return user_name;
+        return username;
     }
 
     public void setFullName(String fullname){
@@ -40,19 +40,19 @@ public class Account{
     }
     
     public void setEmail(String email){
-        this.user_email = email;
+        this.email = email;
     }
 
-    public String geEmail(){
-        return this.user_email;
+    public String getEmail(){
+        return this.email;
     }
 
     public void setInstitution(String institution){
-        this.user_institution = institution;
+        this.institution = institution;
     }
 
     public String getInstitution(){
-        return this.user_institution;
+        return this.institution;
     }
 
     public void setPassword(String pass){
