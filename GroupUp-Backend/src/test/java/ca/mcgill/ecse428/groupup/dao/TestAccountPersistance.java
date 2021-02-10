@@ -17,8 +17,8 @@ public class TestAccountPersistance {
 	
     static Account createSampleAccount(){
 		 Account account = new Account();
-		 account.setUsername(USERNAME);
-		 account.setFullName(NAME);
+		 account.setUserName(USERNAME);
+		 account.setName(NAME);
 		 account.setInstitution(INSTITUTION);
 		 account.setEmail(EMAIL);
 		 account.setPassword(PASSWORD);

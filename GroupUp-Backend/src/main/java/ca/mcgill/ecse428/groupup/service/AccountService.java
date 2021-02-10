@@ -35,8 +35,8 @@ public class AccountService {
             throw new IllegalArgumentException(error);
         }
         acc = new Account();
-        acc.setUsername(userName);
-        acc.setFullName(name);
+        acc.setUserName(userName);
+        acc.setName(name);
         acc.setEmail(email);
         acc.setInstitution(institution);
         acc.setPassword(password);
@@ -61,8 +61,8 @@ public class AccountService {
             throw new IllegalArgumentException(error);
         }
         acc = new Account();
-        acc.setUsername(userName);
-        acc.setFullName(name);
+        acc.setUserName(userName);
+        acc.setName(name);
         acc.setEmail(email);
         acc.setInstitution(institution);
         acc.setPassword(password);

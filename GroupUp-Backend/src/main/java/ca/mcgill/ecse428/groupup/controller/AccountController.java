@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.mcgill.ecse428.groupup.dto.AccountDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -17,26 +18,43 @@ public class AccountController{
     private AccountService accountService;
 
     @PostMapping(value ={"/register/newStudent","/register/newStudent/"})
-    public Account createStudentAccount (@RequestParam("userName")String userName,
+    public AccountDTO createStudentAccount (@RequestParam("userName")String userName,
                                         @RequestParam("name")String name,
                                         @RequestParam("email")String email,
                                         @RequestParam("institution")String institution,
                                         @RequestParam("password")String password)
                                         throws IllegalArgumentException{
      Account acc = accountService.createStudentAccount(new Student(), userName, name, email, institution, password);                                  
-     return acc;
+     return convertToDTO(acc);
     }
 
     @PostMapping(value ={"/register/newAdmin","/register/newAdmin/"})
-    public Account createAdminAccount (@RequestParam("userName")String userName,
+    public AccountDTO createAdminAccount (@RequestParam("userName")String userName,
                                         @RequestParam("name")String name,
                                         @RequestParam("email")String email,
                                         @RequestParam("institution")String institution,
                                         @RequestParam("password")String password)
                                         throws IllegalArgumentException{
      Account acc = accountService.createAdminAccount(new Admin(), userName, name, email, institution, password);                                  
-     return acc;
+     return convertToDTO(acc);
     }
   
-
+    /**
+     * Helper method for Account controller
+     */
+    private AccountDTO convertToDTO(Account account){
+        if(account == null){
+            throw new IllegalArgumentException("No account");
+        }
+        String userRole = "";
+        if(account.getUserRole() instanceof Student){
+            userRole = "Student";
+        }else if (account.getUserRole() instanceof Admin){
+            userRole = "Admin";
+        }
+        AccountDTO accountDTO = new AccountDTO(userRole,account.getUserName(),account.getName(), 
+                                                account.getEmail(), account.getInstitution());
+        return accountDTO;
+    }
+    
 }
