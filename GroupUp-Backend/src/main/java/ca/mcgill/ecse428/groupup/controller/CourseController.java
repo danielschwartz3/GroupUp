@@ -5,7 +5,6 @@ import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.service.CourseService;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

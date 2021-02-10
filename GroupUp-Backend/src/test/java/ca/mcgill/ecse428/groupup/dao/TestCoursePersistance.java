@@ -98,7 +98,7 @@ public class TestCoursePersistance {
 		Student newStudent = createTempStudent();
 		newCourse.addStudent(newStudent);
 		courseRepository.save(newCourse);
-		List<Course> courses = courseRepository.findByStudents_id(newStudent.getId());
+		List<Course> courses = courseRepository.findByStudentsId(newStudent.getId());
 		assertEquals(1,courses.size());
 		checkCourseEqual(courses.get(0),newCourse);
 		newStudent = studentRepository.findById(newStudent.getId()).orElse(null);

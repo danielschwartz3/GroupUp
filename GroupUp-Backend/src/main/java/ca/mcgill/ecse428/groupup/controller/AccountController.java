@@ -16,13 +16,13 @@ public class AccountController{
     private AccountService accountService;
 
     @PostMapping(value ={"/register/newstudent","/register/newstudent/"})
-    public Account createStudentAccount (@RequestParam("user_name")String user_name,
+    public Account createStudentAccount (@RequestParam("userName")String userName,
                                         @RequestParam("name")String name,
                                         @RequestParam("email")String email,
-                                        @RequestParam("user_institution")String user_institution,
+                                        @RequestParam("institution")String institution,
                                         @RequestParam("password")String password)
                                         throws IllegalArgumentException{
-     Account acc = accountService.createAccount(new Student(), user_name, name, email, user_institution, password);                                  
+     Account acc = accountService.createAccount(new Student(), userName, name, email, institution, password);                                  
      return acc;
     }
   
