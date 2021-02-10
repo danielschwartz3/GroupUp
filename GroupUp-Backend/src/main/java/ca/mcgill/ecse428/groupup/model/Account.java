@@ -8,7 +8,7 @@ public class Account{
     private UserRole userRole;
     public String user_name;
     public String name; //student Full-name
-    public String user_email;
+    public String email;
     public String user_institution;
     public String password;
 
@@ -40,11 +40,11 @@ public class Account{
     }
     
     public void setEmail(String email){
-        this.user_email = email;
+        this.email = email;
     }
 
     public String geEmail(){
-        return this.user_email;
+        return this.email;
     }
 
     public void setInstitution(String institution){
