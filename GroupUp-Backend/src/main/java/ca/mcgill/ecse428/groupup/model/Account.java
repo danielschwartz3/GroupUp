@@ -43,7 +43,7 @@ public class Account{
         this.email = email;
     }
 
-    public String geEmail(){
+    public String getEmail(){
         return this.email;
     }
 
