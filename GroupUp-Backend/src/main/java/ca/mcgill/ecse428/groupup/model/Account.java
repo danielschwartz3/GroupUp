@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Entity
 public class Account{
     private UserRole userRole;
-    public String username;
+    public String userName;
     public String name; //student Full-name
     public String email;
     public String institution;
@@ -22,20 +22,20 @@ public class Account{
         return this.userRole;
     }
 
-    public void setUsername(String username){
-        this.username = username;
+    public void setUserName(String username){
+        this.userName = username;
     }
 
-    @Id
-    public String getUsername(){
-        return username;
+
+    public String getUserName(){
+        return userName;
     }
 
-    public void setFullName(String fullname){
+    public void setName(String fullname){
         this.name = fullname;
     }
 
-    public String getFullName(){
+    public String getName(){
         return this.name;
     }
     
@@ -43,6 +43,7 @@ public class Account{
         this.email = email;
     }
 
+    @Id
     public String getEmail(){
         return this.email;
     }
