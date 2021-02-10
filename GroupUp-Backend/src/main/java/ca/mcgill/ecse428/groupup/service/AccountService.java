@@ -30,7 +30,7 @@ public class AccountService {
         error = verifyInput(role, userName, name, email, institution, password);
         isEmailValid = verifyEmail(email);
         if(!isEmailValid) error+= "INVALID_EMAIL";
-        if(accRepo.existsById(userName))error = error + "Already registered";
+        if(accRepo.existsById(email))error = error + "Already registered";
         if (error.length() > 0) {
             throw new IllegalArgumentException(error);
         }
@@ -56,7 +56,7 @@ public class AccountService {
         error = verifyInput(role, userName, name, email, institution, password);
         isEmailValid = verifyEmail(email);
         if(!isEmailValid) error+= "INVALID_EMAIL";
-        if(accRepo.existsById(userName))error = error + "Already registered";
+        if(accRepo.existsById(email))error = error + "Already registered";
         if (error.length() > 0) {
             throw new IllegalArgumentException(error);
         }
