@@ -5,21 +5,21 @@ import javax.persistence.*;
 
 @Entity
 public class Account{
-    private UserRole role;
+    private UserRole userRole;
     public String user_name;
-    public String student_name; //student Full-name
+    public String name; //student Full-name
     public String user_email;
     public String user_institution;
     public String password;
 
     public void setUserRole(UserRole userRole){
-        this.role = userRole;
+        this.userRole = userRole;
     }
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     public UserRole getUserRole(){
-        return this.role;
+        return this.userRole;
     }
 
     public void setUsername(String username){
@@ -32,11 +32,11 @@ public class Account{
     }
 
     public void setFullName(String fullname){
-        this.student_name = fullname;
+        this.name = fullname;
     }
 
     public String getFullName(){
-        return this.student_name;
+        return this.name;
     }
     
     public void setEmail(String email){
