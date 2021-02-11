@@ -98,7 +98,7 @@ public class TestCoursePersistance {
 		Student newStudent = createTempStudent();
 		newCourse.addStudent(newStudent);
 		courseRepository.save(newCourse);
-		List<Course> courses = courseRepository.findByStudents_id(newStudent.getId());
+		List<Course> courses = courseRepository.findByStudentsId(newStudent.getId());
 		assertEquals(1,courses.size());
 		checkCourseEqual(courses.get(0),newCourse);
 		newStudent = studentRepository.findById(newStudent.getId()).orElse(null);
@@ -120,13 +120,17 @@ public class TestCoursePersistance {
 	
 	Student createTempStudent() {
 		Account account = new Account();
-		account.setUsername("username");
-		account = accountRepository.save(account);
-		assertNotNull(account);
+		account.setEmail("test@mail.mcgill.ca");
+		account.setInstitution("Institution");
+		account.setName("testFullname");
+		account.setPassword("password");
+		account.setUserName("testusername");
 		Student newStudent = new Student();
 		account.setUserRole(newStudent);
 		newStudent.setAccount(account);
 		newStudent = studentRepository.save(newStudent);
+		account = accountRepository.save(account);
+		assertNotNull(account);
 		return newStudent;
 	}
 	

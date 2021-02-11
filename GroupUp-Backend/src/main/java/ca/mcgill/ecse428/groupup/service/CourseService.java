@@ -1,6 +1,5 @@
 package ca.mcgill.ecse428.groupup.service;
 
-
 import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -44,7 +43,7 @@ public class CourseService {
         if (error.length() != 0) {
             throw new IllegalArgumentException(error);
         }
-        if(courseRepository.existsByCourseID(courseID)) {
+        if(courseRepository.existsById(courseID)) {
             throw new IllegalArgumentException("Course ID: " + courseID + " already exists");
         }
         course = new Course();
@@ -57,7 +56,7 @@ public class CourseService {
 
         courseRepository.save(course);
 
-        if (!courseRepository.existsByCourseID(courseID)) {
+        if (!courseRepository.existsById(courseID)) {
             throw new PersistenceException("Failed to persist course");
         }
         return course;
@@ -99,6 +98,7 @@ public class CourseService {
         return persitedCourse;
     }
     
+    @Transactional
     public Student registerStudent(Student student, Course course) {
     	if(student == null) throw new IllegalArgumentException("Student does not exist");
     	if(course == null) throw new IllegalArgumentException("Course does not exist");
@@ -125,7 +125,7 @@ public class CourseService {
     @Transactional
     public boolean deleteCourse(String courseID) {
         courseRepository.deleteById(courseID);
-        return courseRepository.existsByCourseID(courseID);
+        return courseRepository.existsById(courseID);
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {
