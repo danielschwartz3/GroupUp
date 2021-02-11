@@ -79,7 +79,7 @@ public class AccountService {
     public Account LogIn(String email, String password) throws IllegalArgumentException{
         Account acc = accRepo.findById(email).orElse(null);
         if(acc == null) {
-			throw new IllegalArgumentException("Username cannot be found.");
+			throw new IllegalArgumentException("Account email cannot be found.");
 		} else if(!acc.getPassword().equals(password)) {
             throw new IllegalArgumentException("Password is incorrect.");
 		}
