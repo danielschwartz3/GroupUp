@@ -1,6 +1,5 @@
 package ca.mcgill.ecse428.groupup.service;
 
-
 import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -99,6 +98,7 @@ public class CourseService {
         return persitedCourse;
     }
     
+    @Transactional
     public Student registerStudent(Student student, Course course) {
     	if(student == null) throw new IllegalArgumentException("Student does not exist");
     	if(course == null) throw new IllegalArgumentException("Course does not exist");
