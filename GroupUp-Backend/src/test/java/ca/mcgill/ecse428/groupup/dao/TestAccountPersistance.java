@@ -11,14 +11,14 @@ public class TestAccountPersistance {
 	AccountRepository accountRepository;
     public static final String USERNAME = "sample_user1";
     public static final String NAME = "John Doe"; //student Full-name
-    public static final String EMAIL = "sample_user1@mcgill.ca";
+    public static final String EMAIL = "sample_user1@mail.mcgill.ca";
     public static final String INSTITUTION = "Mcgill University";
     public static final String PASSWORD = "samplepassword";
 	
     static Account createSampleAccount(){
 		 Account account = new Account();
-		 account.setUsername(USERNAME);
-		 account.setFullName(NAME);
+		 account.setUserName(USERNAME);
+		 account.setName(NAME);
 		 account.setInstitution(INSTITUTION);
 		 account.setEmail(EMAIL);
 		 account.setPassword(PASSWORD);

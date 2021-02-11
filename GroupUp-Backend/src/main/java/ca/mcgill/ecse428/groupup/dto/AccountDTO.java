@@ -3,19 +3,19 @@ package ca.mcgill.ecse428.groupup.dto;
 public class AccountDTO {
 
     String userRole;
-    String user_name;
+    String userName;
     String name;
     String email;
-    String user_institution;
+    String institution;
 
     public AccountDTO() {};
 
-    public AccountDTO(String userRole, String user_name, String name, String email, String user_institution) {
+    public AccountDTO(String userRole, String userName, String name, String email, String institution) {
         this.userRole = userRole;
-        this.user_name = user_name;
+        this.userName = userName;
         this.name = name;
         this.email = email;
-        this.user_institution = user_institution;
+        this.institution = institution;
     }
 
     public String getUserRole() {
@@ -26,10 +26,10 @@ public class AccountDTO {
     }
 
     public String getUserName() {
-        return user_name;
+        return userName;
     }
-    public void setUserName(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getName() {
@@ -47,10 +47,10 @@ public class AccountDTO {
     }
 
     public String getUserInstitution() {
-        return user_institution;
+        return institution;
     }
-    public void setUserInstitution(String user_institution) {
-        this.user_institution = user_institution;
+    public void setUserInstitution(String institution) {
+        this.institution = institution;
     }
 
 
