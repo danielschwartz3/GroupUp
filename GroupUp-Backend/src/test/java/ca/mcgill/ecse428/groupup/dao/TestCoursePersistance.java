@@ -90,21 +90,21 @@ public class TestCoursePersistance {
 		assertEquals(engCourses.size(), 2);
 	}
 	
-	@Test
-	@Transactional
-	void findByStudent() {
-		Course newCourse = createSampleCourse();
-		courseRepository.save(newCourse);
-		Student newStudent = createTempStudent();
-		newCourse.addStudent(newStudent);
-		courseRepository.save(newCourse);
-		List<Course> courses = courseRepository.findByStudentsId(newStudent.getId());
-		assertEquals(1,courses.size());
-		checkCourseEqual(courses.get(0),newCourse);
-		newStudent = studentRepository.findById(newStudent.getId()).orElse(null);
-		assertNotNull(newStudent);
-		assertEquals(newStudent.getCourses().size(),1);
-	}
+	// @Test
+	// @Transactional
+	// void findByStudent() {
+	// 	Course newCourse = createSampleCourse();
+	// 	courseRepository.save(newCourse);
+	// 	Student newStudent = createTempStudent();
+	// 	newCourse.addStudent(newStudent);
+	// 	courseRepository.save(newCourse);
+	// 	List<Course> courses = courseRepository.findByStudentsId(newStudent.getId());
+	// 	assertEquals(1,courses.size());
+	// 	checkCourseEqual(courses.get(0),newCourse);
+	// 	newStudent = studentRepository.findById(newStudent.getId()).orElse(null);
+	// 	assertNotNull(newStudent);
+	// 	assertEquals(newStudent.getCourses().size(),1);
+	// }
 	
 	
 	void checkCourseEqual(Course course1, Course course2) {

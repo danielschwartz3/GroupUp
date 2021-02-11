@@ -38,6 +38,16 @@ public class AccountController{
      Account acc = accountService.createAdminAccount(new Admin(), userName, name, email, institution, password);                                  
      return convertToDTO(acc);
     }
+
+    @PostMapping(value ={"/Login/","/Login/"})
+    public AccountDTO LogIn (@RequestParam("email")String email,
+                            @RequestParam("password")String password)
+                            throws IllegalArgumentException{
+     Account acc = accountService.LogIn(email, password);                                  
+     return convertToDTO(acc);
+    }
+
+
   
     /**
      * Helper method for Account controller

@@ -77,7 +77,7 @@ public class AccountService {
     
     @Transactional
     public Account LogIn(String email, String password) throws IllegalArgumentException{
-        Account acc = accRepo.findByEmail(email);
+        Account acc = accRepo.findById(email).orElse(null);
         if(acc == null) {
 			throw new IllegalArgumentException("Username cannot be found.");
 		} else if(!acc.getPassword().equals(password)) {
