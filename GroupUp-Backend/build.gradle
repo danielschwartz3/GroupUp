@@ -19,8 +19,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.cucumber:cucumber-java8:6.8.1'
+    testImplementation 'io.cucumber:cucumber-junit:6.8.1'
 }
 
 test {
 	useJUnitPlatform()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
 }
