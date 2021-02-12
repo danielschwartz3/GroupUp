@@ -46,6 +46,16 @@ public class CourseController {
         student = courseService.registerStudent(student, course);
         return student;                           
     }
+    
+    @PostMapping(value = {"/unregister/student/course", "/unregister/student/course/"})
+    public Student unregisterStudent(@RequestParam("email") String email,
+                                  @RequestParam("courseID") String courseID){
+        Account account  = accountRepository.findById(email).orElse(null);   
+        Student student = (Student) account.getUserRole();
+        Course course = courseRepository.findById(courseID).orElse(null);
+        student = courseService.unregisterStudent(student, course);
+        return student;                           
+    }
 
     @GetMapping(value = {"/courses", "courses/"})
     public List<CourseDTO> getAllCourses() {
