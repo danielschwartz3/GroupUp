@@ -5,54 +5,55 @@ import javax.persistence.*;
 
 @Entity
 public class Account{
-    private UserRole role;
-    public String user_name;
-    public String student_name; //student Full-name
-    public String user_email;
-    public String user_institution;
+    private UserRole userRole;
+    public String userName;
+    public String name; //student Full-name
+    public String email;
+    public String institution;
     public String password;
 
     public void setUserRole(UserRole userRole){
-        this.role = userRole;
+        this.userRole = userRole;
     }
 
-    @OneToOne (cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonManagedReference
     public UserRole getUserRole(){
-        return this.role;
+        return this.userRole;
     }
 
-    public void setUsername(String username){
-        this.user_name = username;
+    public void setUserName(String username){
+        this.userName = username;
     }
 
-    @Id
-    public String getUsername(){
-        return user_name;
+
+    public String getUserName(){
+        return userName;
     }
 
-    public void setFullName(String fullname){
-        this.student_name = fullname;
+    public void setName(String fullname){
+        this.name = fullname;
     }
 
-    public String getFullName(){
-        return this.student_name;
+    public String getName(){
+        return this.name;
     }
     
     public void setEmail(String email){
-        this.user_email = email;
+        this.email = email;
     }
 
-    public String geEmail(){
-        return this.user_email;
+    @Id
+    public String getEmail(){
+        return this.email;
     }
 
     public void setInstitution(String institution){
-        this.user_institution = institution;
+        this.institution = institution;
     }
 
     public String getInstitution(){
-        return this.user_institution;
+        return this.institution;
     }
 
     public void setPassword(String pass){
