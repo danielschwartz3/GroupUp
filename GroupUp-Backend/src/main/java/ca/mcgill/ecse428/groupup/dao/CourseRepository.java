@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CourseRepository extends CrudRepository<Course, String> {
-	List<Course> findByAccountEmail(String email);
 	List<Course> findByStudentsId(int id);
 	List<Course> findByFaculty(String faculty);	 
 }

@@ -139,8 +139,8 @@ public class CourseService {
     }
 
     @Transactional
-    public List<Course> getEnrolledCourses(String email){
-        return toList(courseRepository.findByAccountEmail(email));
+    public List<Course> getEnrolledCourses(int id){
+        return toList(courseRepository.findByStudentsId(id));
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {

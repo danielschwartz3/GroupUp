@@ -7,6 +7,7 @@ import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.CourseService;
+import ca.mcgill.ecse428.groupup.service.AccountService;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import java.util.List;
 public class CourseController {
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -79,8 +82,10 @@ public class CourseController {
 
 
     @GetMapping(value = {"/courses/enrolled/{email}", "/courses/enrolled/{email}/"})
-    public List<CourseDTO> getEnrolledCourses(@PathVariable("email") String email){
-        List<Course> courses = courseService.getEnrolledCourses(email);
+    public List<CourseDTO> getEnrolledCourses(@PathVariable("studentId") String email){
+        Account account = accountService.getAccountByID(email);
+        int studentId = account.getUserRole().getId();
+        List<Course> courses = courseService.getEnrolledCourses(studentId);
         List<CourseDTO> courseDTOs = new ArrayList<>();
         for (Course course : courses) {
             CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
@@ -88,10 +93,6 @@ public class CourseController {
         }
         return courseDTOs;
     }
-
-
-
-
 
     @PutMapping(value = {"/updatecourse/{courseID}", "/updatecourse/{courseID}/"})
     public CourseDTO updateCourseOfId(@PathVariable(value = "courseID", required = false) String courseID,

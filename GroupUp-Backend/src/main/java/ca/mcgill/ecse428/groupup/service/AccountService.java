@@ -85,6 +85,17 @@ public class AccountService {
 		}
         return acc;
     }
+
+    @Transactional
+    public Account getAccountByID(String email) {
+        Account acc = accRepo.findById(email).orElse(null);
+        if (acc == null) {
+            throw new IllegalArgumentException("The Account with email: " + email + " does not exist.");
+        }
+        return acc;
+    }
+
+    
     
     
    /**
