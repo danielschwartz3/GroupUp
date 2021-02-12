@@ -128,6 +128,11 @@ public class CourseService {
         return courseRepository.existsById(courseID);
     }
 
+    @Transactional
+    public List<Course> getEnrolledCourses(String email){
+        return toList(courseRepository.findByAccountEmail(email));
+    }
+
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<T>();
         for (T t : iterable) {

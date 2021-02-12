@@ -49,6 +49,22 @@ public class CourseController {
         return courseDTO;
     }
 
+
+    @GetMapping(value = {"/courses/enrolled/{email}", "/courses/enrolled/{email}/"})
+    public List<CourseDTO> getEnrolledCourses(@PathVariable("email") String email){
+        List<Course> courses = courseService.getEnrolledCourses(email);
+        List<CourseDTO> courseDTOs = new ArrayList<>();
+        for (Course course : courses) {
+            CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
+            courseDTOs.add(courseDTO);
+        }
+        return courseDTOs;
+    }
+
+
+
+
+
     @PutMapping(value = {"/updatecourse/{courseID}", "/updatecourse/{courseID}/"})
     public CourseDTO updateCourseOfId(@PathVariable(value = "courseID", required = false) String courseID,
                                       @RequestParam(value = "faculty", required = false) String faculty,
