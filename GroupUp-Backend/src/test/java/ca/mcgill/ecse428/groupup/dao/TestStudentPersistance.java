@@ -54,15 +54,6 @@ public class TestStudentPersistance {
 	
 	@Test
 	@Transactional
-	void testCreateAccount() {
-		Account newAccount = createSampleAccount();
-		Account savedAccount = accountRepository.save(newAccount);
-		assertNotNull(savedAccount);
-		checkAccountEqual(newAccount, savedAccount);
-	}
-	
-	@Test
-	@Transactional
 	void testCreateStudent() {
 		Account newAccount = createSampleAccount();
 		newAccount = accountRepository.save(newAccount);
@@ -78,16 +69,6 @@ public class TestStudentPersistance {
 	
 	@Test
 	@Transactional
-	void testFindByEmail() {
-		Account newAccount = createSampleAccount();
-		accountRepository.save(newAccount);
-		Account savedAccount = accountRepository.findByEmail(EMAIL);
-		assertNotNull(savedAccount);
-		checkAccountEqual(newAccount, savedAccount);
-	}
-	
-	@Test
-	@Transactional
 	void testFindByCoursesCourseID() {
 		Course newCourse = createSampleCourse();
 		Student newStudent = createSampleStudent();
@@ -98,7 +79,6 @@ public class TestStudentPersistance {
 		Student savedStudent = studentList.get(0);
 		assertNotNull(savedStudent);
 		checkStudentEqual(newStudent, savedStudent);
-		
 	}
 	
 	@Test
@@ -109,15 +89,6 @@ public class TestStudentPersistance {
 		Student savedStudent = studentRepository.findByAccount(newStudent.account);
 		assertNotNull(savedStudent);
 		checkStudentEqual(newStudent, savedStudent);
-	}
-	
-	void checkAccountEqual(Account account1, Account account2) {
-		assertEquals(account1.getEmail(), account2.getEmail());
-		assertEquals(account1.getInstitution(), account2.getInstitution());
-		assertEquals(account1.getName(), account2.getName());
-		assertEquals(account1.getPassword(), account2.getPassword());
-		assertEquals(account1.getUserName(), account2.getUserName());
-//		assertEquals(account1.getUserRole(), account2.getUserRole());
 	}
 	
 	void checkStudentEqual(Student student1, Student student2) {
@@ -135,23 +106,6 @@ public class TestStudentPersistance {
 		account.setUserName(USERNAME);
 //		account.setUserRole(STUDENTROLE);
 		return account;
-	}
-	
-	Student createStudent() {
-		Account account = new Account();
-		account.setEmail(EMAIL);
-		account.setInstitution(INSTITUTION);
-		account.setName(NAME);
-		account.setPassword(PASSWORD);
-		account.setUserName(USERNAME);
-		Student student = new Student();
-		account.setUserRole(student);
-		student.setAccount(account);
-//		student.setId(ID);
-		student = studentRepository.save(student);
-		account = accountRepository.save(account);
-		assertNotNull(account);
-		return student;
 	}
 	
 	Student createSampleStudent() {
