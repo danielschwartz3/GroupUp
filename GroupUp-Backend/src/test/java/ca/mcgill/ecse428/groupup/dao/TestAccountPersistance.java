@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.groupup.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.transaction.Transactional;
 
@@ -47,6 +48,16 @@ public class TestAccountPersistance {
 		Account savedAccount = accountRepository.findByEmail(EMAIL);
 		assertNotNull(savedAccount);
 		checkAccountEqual(newAccount, savedAccount);
+	}
+	
+	@Test
+	@Transactional
+	void testDeleteAccount() {
+		Account newAccount = createSampleAccount();
+		Account savedAccount = accountRepository.save(newAccount);
+		accountRepository.delete(savedAccount);
+		savedAccount = accountRepository.findByEmail(EMAIL);
+		assertNull(savedAccount);
 	}
 	
     Account createSampleAccount(){

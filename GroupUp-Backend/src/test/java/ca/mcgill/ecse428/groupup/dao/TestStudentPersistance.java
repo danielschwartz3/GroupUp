@@ -91,6 +91,17 @@ public class TestStudentPersistance {
 		checkStudentEqual(newStudent, savedStudent);
 	}
 	
+	@Test
+	@Transactional
+	void testDeleteStudent() {
+		Student newStudent = createSampleStudent();
+		Student savedStudent = studentRepository.save(newStudent);
+		studentRepository.delete(savedStudent);
+		accountRepository.delete(savedStudent.account);
+		savedStudent = studentRepository.findByAccount(savedStudent.account);
+		assertNull(savedStudent);
+	}
+	
 	void checkStudentEqual(Student student1, Student student2) {
 		assertEquals(student1.getAccount(), student2.getAccount());
 		assertEquals(student1.getCourses(), student2.getCourses());
