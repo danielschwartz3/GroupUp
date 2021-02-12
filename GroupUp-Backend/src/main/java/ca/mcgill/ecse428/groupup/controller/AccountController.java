@@ -25,7 +25,7 @@ public class AccountController{
                                         @RequestParam("password")String password)
                                         throws IllegalArgumentException{
      Account acc = accountService.createStudentAccount(new Student(), userName, name, email, institution, password);                                  
-     return convertToDTO(acc);
+     return DTOUtil.convertToDTO(acc);
     }
 
     @PostMapping(value ={"/register/newAdmin","/register/newAdmin/"})
@@ -36,25 +36,9 @@ public class AccountController{
                                         @RequestParam("password")String password)
                                         throws IllegalArgumentException{
      Account acc = accountService.createAdminAccount(new Admin(), userName, name, email, institution, password);                                  
-     return convertToDTO(acc);
+     return DTOUtil.convertToDTO(acc);
     }
   
-    /**
-     * Helper method for Account controller
-     */
-    private AccountDTO convertToDTO(Account account){
-        if(account == null){
-            throw new IllegalArgumentException("No account");
-        }
-        String userRole = "";
-        if(account.getUserRole() instanceof Student){
-            userRole = "Student";
-        }else if (account.getUserRole() instanceof Admin){
-            userRole = "Admin";
-        }
-        AccountDTO accountDTO = new AccountDTO(userRole,account.getUserName(),account.getName(), 
-                                                account.getEmail(), account.getInstitution());
-        return accountDTO;
-    }
+
     
 }
