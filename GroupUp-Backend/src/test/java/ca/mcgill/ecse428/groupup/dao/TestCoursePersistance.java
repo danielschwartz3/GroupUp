@@ -121,12 +121,16 @@ public class TestCoursePersistance {
 	Student createTempStudent() {
 		Account account = new Account();
 		account.setEmail("test@mail.mcgill.ca");
-		account = accountRepository.save(account);
-		assertNotNull(account);
+		account.setInstitution("Institution");
+		account.setName("testFullname");
+		account.setPassword("password");
+		account.setUserName("testusername");
 		Student newStudent = new Student();
 		account.setUserRole(newStudent);
 		newStudent.setAccount(account);
 		newStudent = studentRepository.save(newStudent);
+		account = accountRepository.save(account);
+		assertNotNull(account);
 		return newStudent;
 	}
 	

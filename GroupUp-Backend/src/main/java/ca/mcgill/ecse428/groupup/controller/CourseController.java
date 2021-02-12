@@ -1,7 +1,11 @@
 package ca.mcgill.ecse428.groupup.controller;
 
+import ca.mcgill.ecse428.groupup.dao.AccountRepository;
+import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.dto.CourseDTO;
+import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
+import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.CourseService;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,10 @@ import java.util.List;
 public class CourseController {
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     @PostMapping(value = {"/newcourse", "/newcourse/"})
     public CourseDTO createCourse(@RequestParam("courseID") String courseID,
@@ -27,6 +35,26 @@ public class CourseController {
 
         return courseDTO;
 
+    }
+
+    @PostMapping(value = {"/register/student/course", "/register/student/course/"})
+    public Student registerStudent(@RequestParam("email") String email,
+                                  @RequestParam("courseID") String courseID){
+        Account account  = accountRepository.findById(email).orElse(null);   
+        Student student = (Student) account.getUserRole();
+        Course course = courseRepository.findById(courseID).orElse(null);
+        student = courseService.registerStudent(student, course);
+        return student;                           
+    }
+    
+    @PostMapping(value = {"/unregister/student/course", "/unregister/student/course/"})
+    public Student unregisterStudent(@RequestParam("email") String email,
+                                  @RequestParam("courseID") String courseID){
+        Account account  = accountRepository.findById(email).orElse(null);   
+        Student student = (Student) account.getUserRole();
+        Course course = courseRepository.findById(courseID).orElse(null);
+        student = courseService.unregisterStudent(student, course);
+        return student;                           
     }
 
     @GetMapping(value = {"/courses", "courses/"})
