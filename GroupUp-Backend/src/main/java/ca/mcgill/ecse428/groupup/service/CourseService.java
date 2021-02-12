@@ -196,6 +196,11 @@ public class CourseService {
         return courseRepository.existsById(id);
     }
 
+    @Transactional
+    public List<Course> getEnrolledCourses(int id){
+        return toList(courseRepository.findByStudentsId(id));
+    }
+
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<T>();
         for (T t : iterable) {
