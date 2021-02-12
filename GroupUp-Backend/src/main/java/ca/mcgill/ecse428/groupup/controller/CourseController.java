@@ -82,7 +82,7 @@ public class CourseController {
         List<Course> courses = courseService.getEnrolledCourses(studentId);
         List<CourseDTO> courseDTOs = new ArrayList<>();
         for (Course course : courses) {
-            CourseDTO courseDTO = new CourseDTO(course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
+            CourseDTO courseDTO = new CourseDTO(course.getId(), course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
             courseDTOs.add(courseDTO);
         }
         return courseDTOs;
