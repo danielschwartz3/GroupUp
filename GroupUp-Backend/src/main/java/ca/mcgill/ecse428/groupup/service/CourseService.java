@@ -107,6 +107,16 @@ public class CourseService {
     	courseRepository.save(course);
     	return student;
     }
+    
+    @Transactional
+    public Student unregisterStudent(Student student, Course course) {
+    	if(student == null) throw new IllegalArgumentException("Student does not exist");
+    	if(course == null) throw new IllegalArgumentException("Course does not exist");
+    	if(course.getStudents().contains(student))throw new IllegalArgumentException("Student already in the course");
+    	course.removeStudent(student);
+    	courseRepository.save(course);
+    	return student;
+    }
 
     @Transactional
     public Course getCourseByID(String courseID) {
