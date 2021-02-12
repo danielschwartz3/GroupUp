@@ -1,0 +1,12 @@
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo-style {
+    height: 50px
+}
+
+.navbar-btn-container {
+    display: flex;
+}
