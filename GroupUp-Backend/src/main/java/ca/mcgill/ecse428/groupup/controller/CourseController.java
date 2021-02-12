@@ -7,6 +7,7 @@ import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.CourseService;
+import ca.mcgill.ecse428.groupup.service.AccountService;
 import ca.mcgill.ecse428.groupup.utility.DTOUtil;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import java.util.List;
 public class CourseController {
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -70,6 +73,19 @@ public class CourseController {
         CourseDTO courseDTO = DTOUtil.convertToDTO(course);
 
         return courseDTO;
+    }
+
+    @GetMapping(value = {"/courses/enrolled/{email}", "/courses/enrolled/{email}/"})
+    public List<CourseDTO> getEnrolledCourses(@PathVariable("studentId") String email){
+        Account account = accountService.getAccountByID(email);
+        int studentId = account.getUserRole().getId();
+        List<Course> courses = courseService.getEnrolledCourses(studentId);
+        List<CourseDTO> courseDTOs = new ArrayList<>();
+        for (Course course : courses) {
+            CourseDTO courseDTO = new CourseDTO(course.getId(), course.getCourseID(), course.getFaculty(), course.getYear(), course.getSemester().toString(), course.getCourseSection(), course.getCourseName());
+            courseDTOs.add(courseDTO);
+        }
+        return courseDTOs;
     }
 
     @GetMapping(value = {"/coursesbyyear", "/coursesbyyear/"})
