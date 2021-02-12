@@ -5,38 +5,35 @@ import ca.mcgill.ecse428.groupup.utility.Semester;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.GeneratorType;
 
 @Entity
 public class Course {
-    String faculty;
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    int id;
+    String faculty;
     String courseID;
     @Enumerated(EnumType.ORDINAL)
     Semester semester;
     String year;
     String courseSection;
     String courseName;
-    @ManyToMany(fetch = FetchType.LAZY, cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     Set<Student> students;
 
     public Set<Student> getStudents() {
-		return students;
-	}
+        return students;
+    }
 
-	public void setStudents(Set<Student> students) {
-		this.students = students;
-	}
-    
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
 
     public String getCourseName() {
         return courseName;
@@ -46,7 +43,7 @@ public class Course {
         this.courseName = courseName;
     }
 
-	public String getFaculty() {
+    public String getFaculty() {
         return faculty;
     }
 
@@ -85,18 +82,26 @@ public class Course {
     public void setCourseSection(String courseSection) {
         this.courseSection = courseSection;
     }
-    
+
     public Course() {
-		this.students = new HashSet<>();
-	}
-    
-    public void addStudent(Student student) {
-    	this.students.add(student);
-    	student.getCourses().add(this);
+        this.students = new HashSet<>();
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void addStudent(Student student) {
+        this.students.add(student);
+        student.getCourses().add(this);
+    }
+
     public void removeStudent(Student student) {
-    	this.students.remove(student);
-    	student.getCourses().remove(this);
+        this.students.remove(student);
+        student.getCourses().remove(this);
     }
 }
