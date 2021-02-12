@@ -7,10 +7,10 @@ public class CourseDTO {
     String semester;
     String section;
     String name;
-
+    int id;
     public CourseDTO() {};
 
-    public CourseDTO(String courseID, String faculty, String year, String semester, String section, String name) {
+    public CourseDTO(int id, String courseID, String faculty, String year, String semester, String section, String name) {
         this.courseID = courseID;
         this.faculty = faculty;
         this.year = year;
@@ -65,5 +65,13 @@ public class CourseDTO {
 
     public void setSection(String section) {
         this.section = section;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
