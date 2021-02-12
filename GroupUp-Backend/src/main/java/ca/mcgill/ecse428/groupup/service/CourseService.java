@@ -3,6 +3,7 @@ package ca.mcgill.ecse428.groupup.service;
 import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.utility.Condition;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,115 +17,172 @@ import java.util.List;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
-    
+
     @Transactional
     public Course createCourse(String courseID, String faculty, String semester, String year, String courseSection, String courseName) {
-        Course course;
         String error = "";
-        if (courseID == null || courseID.trim().length() == 0) {
+        if (!Condition.isValid(courseID)) {
             error += "CourseID cannot be empty";
         }
-        if (faculty == null || faculty.trim().length() == 0) {
+        if (!Condition.isValid(faculty)) {
             error += "faculty cannot be empty";
         }
-        if (semester == null || semester.trim().length() == 0) {
+        if (!Condition.isValid(semester)) {
             error += "semester cannot be empty";
         }
-        if (year == null || year.trim().length() == 0) {
+        if (!Condition.isValid(year)) {
             error += "year cannot be empty";
         }
-        if (courseSection == null || courseSection.trim().length() == 0) {
+        if (!Condition.isValid(courseSection)) {
             error += "section number cannot be empty";
         }
-        if(courseName == null || courseName.trim().length() == 0) {
+        if (!Condition.isValid(courseName)) {
             error += "course name cannot be empty";
         }
 
         if (error.length() != 0) {
             throw new IllegalArgumentException(error);
         }
-        if(courseRepository.existsById(courseID)) {
-            throw new IllegalArgumentException("Course ID: " + courseID + " already exists");
+        List<Course> courses = courseRepository.findByCourseID(courseID);
+
+
+        if (Condition.courseExists(courses, courseID, semester, courseSection, year)) {
+            String errorMessage = "This course with courseID: " + courseID + " section: " + courseSection + " already exists for the " + semester + year + " semester ";
+            throw new IllegalArgumentException(errorMessage);
         }
-        course = new Course();
+        Course course = new Course();
         course.setCourseID(courseID);
         course.setFaculty(faculty);
         course.setCourseSection(courseSection);
-        course.setSemester(Semester.valueOf(semester));
+        course.setSemester(Semester.valueOf(semester.toUpperCase()));
         course.setYear(year);
         course.setCourseName(courseName);
 
         courseRepository.save(course);
 
-        if (!courseRepository.existsById(courseID)) {
-            throw new PersistenceException("Failed to persist course");
-        }
+
         return course;
 
     }
 
     @Transactional
-    public Course updateCourse(Course course) {
+    public Course updateCourse(int id, Course course) {
+        Course persitedCourse = courseRepository.findById(id).orElse(null);
+
+        if (!Condition.isValid(persitedCourse)) {
+            throw new IllegalArgumentException("Course with id: " + id + " does not exist");
+        }
         String courseID = course.getCourseID();
-        if (courseID == null || courseID.trim().length() == 0) {
-            throw new IllegalArgumentException("CourseID cannot be empty");
+        if (Condition.isValid(courseID)) {
+            persitedCourse.setCourseID(courseID);
         }
-        Course persitedCourse = courseRepository.findById(courseID).orElse(null);
-        if (persitedCourse == null) {
-            throw new IllegalArgumentException("The course with courseID: " + courseID + " does not exist. Please add the course first");
-        }
+
         String newFaculty = course.getFaculty();
-        if (newFaculty != null && newFaculty.trim().length() != 0) {
+        if (Condition.isValid(newFaculty)) {
             persitedCourse.setFaculty(newFaculty);
         }
         String newSem = course.getSemester().toString();
-        if (newSem != null && newSem.trim().length() != 0) {
+        if (Condition.isValid(newSem)) {
             persitedCourse.setSemester(Semester.valueOf(newSem));
         }
         String newYear = course.getYear();
-        if (newYear != null && newYear.trim().length() != 0) {
+        if (Condition.isValid(newYear)) {
             persitedCourse.setYear(newYear);
         }
         String newCrsSection = course.getCourseSection();
-        if (newCrsSection != null && newCrsSection.trim().length() != 0) {
+        if (Condition.isValid(newCrsSection)) {
             persitedCourse.setCourseSection(newCrsSection);
         }
         String courseName = course.getCourseName();
-        if(courseName != null && courseName.trim().length() != 0) {
+        if (Condition.isValid((courseName))) {
             persitedCourse.setCourseName(courseName);
         }
         courseRepository.save(persitedCourse);
 
         return persitedCourse;
     }
-    
+
     @Transactional
-    public Student registerStudent(Student student, Course course) {
-    	if(student == null) throw new IllegalArgumentException("Student does not exist");
-    	if(course == null) throw new IllegalArgumentException("Course does not exist");
-    	if(course.getStudents().contains(student))throw new IllegalArgumentException("Student already in the course");
-    	course.addStudent(student);
-    	courseRepository.save(course);
-    	return student;
-    }
-    
-    @Transactional
-    public Student unregisterStudent(Student student, Course course) {
-    	if(student == null) throw new IllegalArgumentException("Student does not exist");
-    	if(course == null) throw new IllegalArgumentException("Course does not exist");
-    	if(course.getStudents().contains(student))throw new IllegalArgumentException("Student already in the course");
-    	course.removeStudent(student);
-    	courseRepository.save(course);
-    	return student;
+    public Course registerStudent(Student student, Course course) {
+        if (student == null) throw new IllegalArgumentException("Student does not exist");
+        if (course == null) throw new IllegalArgumentException("Course does not exist");
+        if (course.getStudents().contains(student)) throw new IllegalArgumentException("Student already in the course");
+        course.addStudent(student);
+        courseRepository.save(course);
+        return course;
     }
 
     @Transactional
-    public Course getCourseByID(String courseID) {
-        Course course = courseRepository.findById(courseID).orElse(null);
+    public Course unregisterStudent(Student student, Course course) {
+        if (student == null) throw new IllegalArgumentException("Student does not exist");
+        if (course == null) throw new IllegalArgumentException("Course does not exist");
+        if (!course.getStudents().contains(student))
+            throw new IllegalArgumentException("Student is not registered in the course");
+        course.removeStudent(student);
+        courseRepository.save(course);
+        return course;
+    }
+
+    @Transactional
+    public Course getCourseByID(int id) {
+        Course course = courseRepository.findById(id).orElse(null);
         if (course == null) {
-            throw new IllegalArgumentException("The course with courseID: " + courseID + " does not exist. Please add the course first");
+            throw new IllegalArgumentException("There is no course with id: " + id + " does not exist. Please add the course first");
         }
         return course;
+    }
+
+    @Transactional
+    public List<Course> getCoursesByYearBySemester(String year, String semester) {
+        semester = semester.toUpperCase();
+        String error = "";
+        if (!Condition.isValid(year)) {
+            error += "CourseID cannot be empty";
+        }
+        if (!Condition.isValid(semester)) {
+            error += "semester cannot be empty";
+        }
+        if (error.length() != 0) {
+            throw new IllegalArgumentException(error);
+        }
+        List<Course> courses = courseRepository.findByYearAndSemester(year, Semester.valueOf(semester));
+
+        return courses;
+    }
+
+    @Transactional
+    public List<Course> getCoursesByYearBySemesterBySection(String year, String semester, String section) {
+        semester = semester.toUpperCase();
+        String error = "";
+        if (!Condition.isValid(year)) {
+            error += "CourseID cannot be empty";
+        }
+        if (!Condition.isValid(semester)) {
+            error += "semester cannot be empty";
+        }
+        if (error.length() != 0) {
+            throw new IllegalArgumentException(error);
+        }
+        List<Course> courses = courseRepository.findByYearAndSemesterAndCourseSection(year, Semester.valueOf(semester), section);
+
+        return courses;
+    }
+
+    @Transactional
+    public List<Course> getCoursesBySemester(String semester) {
+        if (!Condition.isValid(semester)) {
+            throw new IllegalArgumentException("semester cannot be empty");
+        }
+        Semester sem = Semester.valueOf(semester);
+        return toList(courseRepository.findBySemester(sem));
+    }
+
+    @Transactional
+    public List<Course> getCoursesByYear(String year) {
+        if (!Condition.isValid(year)) {
+            throw new IllegalArgumentException("semester cannot be empty");
+        }
+        return toList(courseRepository.findByYear(year));
     }
 
     @Transactional
@@ -133,9 +191,9 @@ public class CourseService {
     }
 
     @Transactional
-    public boolean deleteCourse(String courseID) {
-        courseRepository.deleteById(courseID);
-        return courseRepository.existsById(courseID);
+    public boolean deleteCourse(int id) {
+        courseRepository.deleteById(id);
+        return courseRepository.existsById(id);
     }
 
     @Transactional
