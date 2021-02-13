@@ -28,6 +28,7 @@ dependencies {
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0'
 	testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 	testImplementation 'junit:junit:4.12'
+	testRuntime 'org.junit.vintage:junit-vintage-engine:5.2.0'
 	testImplementation 'io.cucumber:cucumber-java:6.8.1'
 	testImplementation 'io.cucumber:cucumber-junit:6.8.1'
 }
