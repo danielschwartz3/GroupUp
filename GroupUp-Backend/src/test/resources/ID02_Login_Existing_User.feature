@@ -5,7 +5,7 @@ I would like to login to my account within the GroupUp sytem
 So that I can join group chats of the classes I am taking, interact with those chats, as well as take advantage of the other tools GroupUp offers
 Or perform admin responsibilities
 
-  Scenario Outline: Student attempts login with an existing password/username combination (Normal Flow)
+  Scenario: Student attempts login with an existing password/username combination (Normal Flow)
   
     Given valid username <user_name> and password <password> 
       And a related student privileges <role>
@@ -17,7 +17,7 @@ Or perform admin responsibilities
       | Ben_Weiss     | aasa     | student | 
       | Ryan_Schuette | fire     | student | 
   
-  Scenario Outline: Admin attempts login with an existing password/username combination (Alternate Flow)
+  Scenario: Admin attempts login with an existing password/username combination (Alternate Flow)
   
     Given valid username <user_name> and password <password> 
       And a related admin privileges <role>
@@ -29,7 +29,7 @@ Or perform admin responsibilities
       | Ben_Weiss_a     | aasa     | admin | 
       | Ryan_Schuette_a | fire     | admin | 
   
-  Scenario Outline: User attempts login with an non-recognized username (Error Flow)
+  Scenario: User attempts login with an non-recognized username (Error Flow)
   
     Given a non-recognized username <user_name>
      When the user requests access to the GroupUp system
@@ -40,7 +40,7 @@ Or perform admin responsibilities
       | Ben_Weiss_NO     | aasa123   | 
       | Ryan_Schuette_NO | fire123   | 
   
-  Scenario Outline: User attempts login with an non-recognized password (Error Flow)
+  Scenario: User attempts login with an non-recognized password (Error Flow)
   
     Given a valid username <user_name> 
       But an incorrect corresponding password 
