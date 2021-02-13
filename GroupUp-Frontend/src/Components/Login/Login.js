@@ -35,7 +35,7 @@ const Login = (props) => {
     }));
 
     const Login = () => {
-    //   console.log(user);
+      console.log(user);
     //   var greg = {
     //     userRole: "Student",
     //     userName: "testStudent2",
@@ -43,7 +43,7 @@ const Login = (props) => {
     //     email: "testEmail@mail.mcgill.ca",
     //     userInstitution: "testInstitution"
     // }
-      //intializeUserAction(greg);
+    //   props.intializeUserAction(greg);
         axios.post(`${URL}/Login/`, null, {
             params: {
                 email: email,
@@ -51,7 +51,7 @@ const Login = (props) => {
             }
         }).then(function (response) {
             console.log(response);
-            intializeUserAction(response.data);
+            props.intializeUserAction(response.data);
 
 
             // const newStudent = {

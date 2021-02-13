@@ -13,6 +13,9 @@ function App() {
   return (
     <Provider store={ store }>
     <div className="App">
+      {/* <Login/> */}
+      {/* <Register/> */}
+
       <Navbar/>
       {/* <AllCourses/> */}
       <MyCourses/>
