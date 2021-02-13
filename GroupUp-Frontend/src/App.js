@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="App">
-      <Register/>
+      <Login/>
       {/* <Navbar/>
       <AllCourses/> */}
     </div>
