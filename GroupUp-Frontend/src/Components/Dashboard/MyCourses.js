@@ -42,34 +42,41 @@ const MyCourses = (props) => {
     return (
         <div>
             <TableContainer component={Paper}>
-                <Table className={classes.table} size="small" aria-label="a dense table">
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>Course Code</TableCell>
-                        <TableCell align="right">Section</TableCell>
-                        <TableCell align="right">Semester</TableCell>
-                        <TableCell align="right">Year</TableCell>
-                        <TableCell align="right">Faculty</TableCell>
-                        <TableCell align="right"></TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {registeredCourses.map((row) => (
-                        <TableRow key={row.code}>
-                        <TableCell component="th" scope="row">
-                            {row.code}
-                        </TableCell>
-                        <TableCell align="right">{row.section}</TableCell>
-                        <TableCell align="right">{row.semester}</TableCell>
-                        <TableCell align="right">{row.year}</TableCell>
-                        <TableCell align="right">{row.faculty}</TableCell>
-                        <TableCell align="right">
-                            <Button className='button' color="secondary" onClick={() => removeCourse(row.code)}>Remove</Button>
-                        </TableCell>
+                {registeredCourses.length != 0 ? 
+                    <Table className={classes.table} size="small" aria-label="a dense table">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell>Course Code</TableCell>
+                            <TableCell align="right">Section</TableCell>
+                            <TableCell align="right">Semester</TableCell>
+                            <TableCell align="right">Year</TableCell>
+                            <TableCell align="right">Faculty</TableCell>
+                            <TableCell align="right"></TableCell>
                         </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                            <TableBody>
+                                {registeredCourses.map((row) => (
+                                    <TableRow key={row.code}>
+                                    <TableCell component="th" scope="row">
+                                        {row.code}
+                                    </TableCell>
+                                    <TableCell align="right">{row.section}</TableCell>
+                                    <TableCell align="right">{row.semester}</TableCell>
+                                    <TableCell align="right">{row.year}</TableCell>
+                                    <TableCell align="right">{row.faculty}</TableCell>
+                                    <TableCell align="right">
+                                        <Button className='button' color="secondary" onClick={() => removeCourse(row.code)}>Remove</Button>
+                                    </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody> 
+                    </Table> : 
+                    <div>
+                        <h4>
+                            You're currently not registered for any courses!
+                        </h4>
+                    </div>
+                }
             </TableContainer>
         </div>
     );
