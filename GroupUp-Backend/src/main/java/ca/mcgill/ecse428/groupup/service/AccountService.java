@@ -1,5 +1,8 @@
 package ca.mcgill.ecse428.groupup.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -126,5 +129,18 @@ public class AccountService {
             if(institution == null ||institution.trim().length()==0) error += "User institution cannot be empty";
             if(password == null || password.trim().length()==0) error += "Password cannot be empty";
         return error;
+    }
+    
+    @Transactional
+    public List<Account> getAllAccounts() {
+        return toList(accRepo.findAll());
+    }
+    
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<T>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
     }
 }

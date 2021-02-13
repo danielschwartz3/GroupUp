@@ -1,5 +1,9 @@
 package ca.mcgill.ecse428.groupup.gherkin;
 
+import java.util.List;
+
+import ca.mcgill.ecse428.groupup.model.Course;
+import ca.mcgill.ecse428.groupup.service.*;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -7,15 +11,16 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class ID022_StepDefinitions {
-
+	CourseService testService = new CourseService();
+	List<Course> allCourses = null;
     @Given("^valid username (.+) and password (.+) $")
     public void valid_username_and_password(String username, String password) throws Throwable {
         throw new PendingException();
     }
 
     @Given("^the following courses exist:$")
-    public void the_following_courses_exist() throws Throwable {
-        throw new PendingException();
+    public void the_following_courses_exist() throws Throwable { //get all the courses for later
+        allCourses = testService.getAllCourses();
     }
 
     @When("^the user requests view available courses in \"([^\"]*)\" semester(s) in \"([^\"]*)\" year$")
