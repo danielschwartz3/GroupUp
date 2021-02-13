@@ -34,6 +34,7 @@ public class TestCoursePersistance {
     private static final String COURSE_ID = "ECSE-428";
     private static final String YEAR = "2021";
     private static final String SECTION = "001";
+
     private static final Semester SEMESTER = Semester.WINTER;
 
     /**
@@ -145,6 +146,5 @@ public class TestCoursePersistance {
         course.setYear(YEAR);
         return course;
     }
-
 
 }

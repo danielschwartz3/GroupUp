@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-connection.project.dir=
-eclipse.preferences.version=1
-=======
 arguments=
 auto.sync=false
 build.scans.enabled=false
@@ -15,4 +11,3 @@ offline.mode=false
 override.workspace.settings=true
 show.console.view=true
 show.executions.view=true
->>>>>>> e293be04d9017798595c91090e3bb4bfc6190176

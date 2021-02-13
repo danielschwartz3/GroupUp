@@ -1,13 +1,10 @@
-package ca.mcgill.ecse428.groupup.service;
+package ca.mcgill.ecse428.groupup.gherkin;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
-import cucumber.api.java.en.Then;
-import cucumber.api.junit.Cucumber;
-import org.junit.runner.RunWith;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
-@RunWith(Cucumber.class)
 public class ID01_StepDefinitions {
 
     @Given("^student (.+) with student email(.+) and institution name (.+) is student in good standing$")
