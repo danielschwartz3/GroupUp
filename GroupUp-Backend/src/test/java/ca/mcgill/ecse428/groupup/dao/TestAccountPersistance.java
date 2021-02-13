@@ -45,7 +45,7 @@ public class TestAccountPersistance {
 	void testFindByEmail() {
 		Account newAccount = createSampleAccount();
 		accountRepository.save(newAccount);
-		Account savedAccount = accountRepository.findByEmail(EMAIL);
+		Account savedAccount = accountRepository.findById(EMAIL).orElse(null);
 		assertNotNull(savedAccount);
 		checkAccountEqual(newAccount, savedAccount);
 	}
@@ -56,7 +56,7 @@ public class TestAccountPersistance {
 		Account newAccount = createSampleAccount();
 		Account savedAccount = accountRepository.save(newAccount);
 		accountRepository.delete(savedAccount);
-		savedAccount = accountRepository.findByEmail(EMAIL);
+		savedAccount = accountRepository.findById(EMAIL).orElse(null);
 		assertNull(savedAccount);
 	}
 	

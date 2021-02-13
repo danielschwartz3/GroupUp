@@ -8,7 +8,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
-@RunWith(Cucumber.class)
+
 public class ID011_StepDefinitions {
 
     @Given("^valid username (.+) and password (.+) $")
