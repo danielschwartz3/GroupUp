@@ -2,12 +2,17 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
 
 const URL = 'http://localhost:8080'
+
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { user } = props;
+
 
     function getModalStyle() {
         const top = 50;
@@ -30,6 +35,15 @@ const Login = (props) => {
     }));
 
     const Login = () => {
+      console.log(user);
+    //   var greg = {
+    //     userRole: "Student",
+    //     userName: "testStudent2",
+    //     name: "testName",
+    //     email: "testEmail@mail.mcgill.ca",
+    //     userInstitution: "testInstitution"
+    // }
+    //   props.intializeUserAction(greg);
         axios.post(`${URL}/Login/`, null, {
             params: {
                 email: email,
@@ -37,11 +51,17 @@ const Login = (props) => {
             }
         }).then(function (response) {
             console.log(response);
-            const newStudent = {
+            props.intializeUserAction(response.data);
+
+            axios.get(`${URL}/courses/enrolled/${email}/`).then((response) => {
+                props.initializeUserCoursesAction(response.data);
+            })
+
+            // const newStudent = {
                 
-                email: email,
-                password: password,
-            }
+            //     email: email,
+            //     password: password,
+            // }
             // const newCourses = [...props.courses, newCourse];
             // props.setCourses(newCourses);
             handleCreateModal();
@@ -95,5 +115,11 @@ const Login = (props) => {
     );
 }
 
+const mapStateToProps = (state) => ({
+  user: state.user
+}); 
 
-export default Login;
+export default connect(
+    mapStateToProps,
+    { intializeUserAction, initializeUserCoursesAction }
+)(Login);

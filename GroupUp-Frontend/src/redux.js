@@ -5,23 +5,10 @@ const initialState = {
         email: '',
         name: ''
     },
-    registeredCourses: [
-        // BOILER TEMPLATE ->
-        {
-            code: 'ECSE 428',
-            section: '001',
-            semester: 'Winter',
-            year: 2021,
-            faculty: 'Eng'
-        },
-        {
-            code: 'ECSE 427',
-            section: '001',
-            semester: 'Winter',
-            year: 2021,
-            faculty: 'Eng'
-        }
-    ]
+
+    registeredCourses: [],
+
+    courses: [],
 };
 
 export const store = createStore(
@@ -45,7 +32,32 @@ function reducer(state, action) {
                 email: '',
                 name: ''
             }
-        }
+        };
+    case 'INITIALIZE_USER_COURSES':
+        return {
+            ...state,
+            registeredCourses: action.payload
+        };
+    case 'GET_COURSES':
+        return {
+            ...state,
+            courses: action.payload
+        };
+    case 'CREATE_COURSE':
+        return {
+            ...state,
+            courses: [...state.courses, action.payload]
+        };
+    case 'DELETE_COURSE':
+        return {
+            ...state,
+            courses: state.courses.filter((course) => course.id !== action.payload)
+        };
+    case 'GET_REGISTERED_COURSES':
+        return {
+            ...state,
+            registeredCourses: action.payload
+        };
     case 'REGISTER_COURSE':
         return {
             ...state,
@@ -54,7 +66,7 @@ function reducer(state, action) {
     case 'UNREGISTER_COURSE':
         return {
             ...state,
-            registeredCourses: state.registeredCourses.filter((course) => course.code !== action.payload)
+            registeredCourses: state.registeredCourses.filter((course) => course.id !== action.payload)
         };
     default:
       return state;
@@ -71,12 +83,37 @@ export const unintializeUserAction = () => ({
     type: 'UNINITIALIZE_USER'
 });
 
+export const initializeUserCoursesAction = (courses) => ({
+    type: 'INITIALIZE_USER_COURSES',
+    payload: courses
+});
+
+export const getCoursesAction = (courses) => ({
+    type: 'GET_COURSES',
+    payload: courses
+});
+
+export const createCourseAction = (course) => ({
+    type: 'CREATE_COURSE',
+    payload: course
+});
+
+export const deleteCourseAction = (id) => ({
+    type: 'DELETE_COURSE',
+    payload: id
+});
+
+export const getRegisteredAction = (courses) => ({
+    type: 'GET_REGISTERED_COURSES',
+    payload: courses
+});
+
 export const registerCourseAction = (course) => ({
     type: 'REGISTER_COURSE',
     payload: course
 });
 
-export const unregisterCourseAction = (courseID) => ({
+export const unregisterCourseAction = (id) => ({
     type: 'UNREGISTER_COURSE',
-    payload: courseID
+    payload: id
 });
