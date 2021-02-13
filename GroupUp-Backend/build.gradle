@@ -47,3 +47,9 @@ task cucumber() {
 test {
 	useJUnitPlatform()
 }
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
