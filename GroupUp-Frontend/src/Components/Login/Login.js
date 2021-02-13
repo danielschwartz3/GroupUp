@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { intializeUserAction } from '../../redux';
+import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
 
 const URL = 'http://localhost:8080'
 
@@ -53,6 +53,9 @@ const Login = (props) => {
             console.log(response);
             props.intializeUserAction(response.data);
 
+            axios.get(`${URL}/courses/enrolled/${email}/`).then((response) => {
+                props.initializeUserCoursesAction(response.data);
+            })
 
             // const newStudent = {
                 
@@ -118,5 +121,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    { intializeUserAction}
+    { intializeUserAction, initializeUserCoursesAction }
 )(Login);

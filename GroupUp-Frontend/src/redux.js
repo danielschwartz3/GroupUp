@@ -50,7 +50,12 @@ function reducer(state, action) {
                 email: '',
                 name: ''
             }
-        }
+        };
+    case 'INITIALIZE_USER_COURSES':
+        return {
+            ...state,
+            registeredCourses: action.payload
+        };
     case 'REGISTER_COURSE':
         return {
             ...state,
@@ -74,6 +79,11 @@ export const intializeUserAction = (user) => ({
 
 export const unintializeUserAction = () => ({
     type: 'UNINITIALIZE_USER'
+});
+
+export const initializeUserCoursesAction = (courses) => ({
+    type: 'INITIALIZE_USER_COURSES',
+    payload: courses
 });
 
 export const registerCourseAction = (course) => ({
