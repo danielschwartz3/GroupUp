@@ -17,51 +17,56 @@ public class ID02_StepDefinitions {
 	
 	AccountService testService = new AccountService();
 	Account testAccount = null;
+	String nonValidEmail = null; //no @ so must be invalid
     @Given("^valid email (.+) and password (.+) $")
-    public void valid_email_and_password(String email, String password) throws Throwable {
-        try { //using login to check validity, and a student membership, not great but it works
-        	testAccount = testService.LogIn(email, password);
-        }
-        catch(IllegalArgumentException e) {
-        	System.out.println(e);
-        	Assert.fail("Should not throw an exception, email and password should be valid");
-        }
+    public void valid_email_and_password(String email, String password) throws Throwable { //ie. an existing student account
+    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
     }
 
     @Given("^a non-recognized email (.+)$")
     public void a_nonrecognized_email(String email) throws Throwable {
-        try {
-        	testService.getAccountByID(email);
-        	Assert.fail("Should through an error since the email doesn't exist");
-        }
-        catch(IllegalArgumentException e) {
-        }
+    	nonValidEmail = "Ben"; //no @ so must be invalid
     }
 
     @Given("^a valid email (.+) $")
     public void a_valid_username(String email) throws Throwable {
-        try {
-        	testAccount = testService.getAccountByID(email);
-        }
-        catch(IllegalArgumentException e) {
-        	Assert.fail("Should through an error since the email doesn't exist");
-        }
+    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", "No matter"); //must be valid
     }
 
     @When("^the user requests access to the GroupUp system$")//removed a duplicate here, one without "the" will need to find dup in feature file
     public void the_user_requests_access_to_the_groupup_system() throws Throwable {
-    	//what do I even do here
-        throw new PendingException();
+    	//check if request works with no error
+        try{
+        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+        }
+        catch(Exception e) {
+        	Assert.fail("Request was not inputed");
+        }
     }
 
     @Then("^they will be granted access to the GroupUp system as a student$")
     public void they_will_be_granted_access_to_the_groupup_system_as_a_student() throws Throwable {
-    	throw new PendingException();
+        try{
+        	Account tempAccount = testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+        	if (tempAccount != testAccount) {
+        		Assert.fail();
+        	}
+        }
+        catch(Exception e) {
+        	Assert.fail("Request was not inputed");
+        }
     }
 
     @Then("^an \"([^\"]*)\" message is issued$")
     public void an_something_message_is_issued(String strArg1) throws Throwable {
-        throw new PendingException();
+        try{
+        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+        }
+        catch(Exception e) {
+        	if (e.getMessage() != "Password is incorrect.") {
+        		Assert.fail("wrong error message");
+        	}
+        }
     }
 
     @And("^a related student privileges (.+)$")
@@ -81,13 +86,9 @@ public class ID02_StepDefinitions {
 
     @But("^an incorrect corresponding password $")
     public void an_incorrect_corresponding_password(String password) throws Throwable {
-    	String email = testAccount.getEmail();
-        try { //using login to check validity
-        	testAccount = testService.LogIn(email, password);
-        }
-        catch(IllegalArgumentException e) {
-        	assertEquals(e.getMessage(),"Password is incorrect.");
-        }
+    	if (password == testAccount.password) {
+    		Assert.fail("password is not unqiue")
+    	}
     }
 
 }

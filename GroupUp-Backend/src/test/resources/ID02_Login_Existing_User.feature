@@ -38,7 +38,7 @@ Feature: Login existing user
     Given a valid email <email>
     But an incorrect corresponding password <password>
     When the user requests access to the GroupUp system
-    Then an "Incorrect Password" message is issued
+    Then an "Password is incorrect." message is issued
       | email                 | role          | password |
       | bw@mail.mcgill.ca     | Student       | aslkda   |
       | bweiss@mail.mcgill.ca | Administrator | aasa     |
