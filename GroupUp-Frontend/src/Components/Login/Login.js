@@ -30,7 +30,7 @@ const Login = (props) => {
     }));
 
     const Login = () => {
-        axios.post(`${URL}/Login`, null, {
+        axios.post(`${URL}/Login/`, null, {
             params: {
                 email: email,
                 password: password,
@@ -40,7 +40,6 @@ const Login = (props) => {
             const newStudent = {
                 
                 email: email,
-                
                 password: password,
             }
             // const newCourses = [...props.courses, newCourse];
