@@ -2,8 +2,13 @@ import { createStore } from 'redux';
 
 const initialState = {
     user: {
-        email: 'user@email.com',
-        name: ''
+
+        userRole: '',
+        userName: '',
+        name: '',
+        email: '',
+        userInstitution: ''
+
     },
     registeredCourses: [
         // BOILER TEMPLATE ->
