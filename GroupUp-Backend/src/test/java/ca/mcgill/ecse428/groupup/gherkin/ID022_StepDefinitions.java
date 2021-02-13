@@ -6,6 +6,7 @@ import org.junit.Assert;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
+import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.*;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
@@ -19,16 +20,10 @@ public class ID022_StepDefinitions {
 	List<Course> allCourses = null;
 	List<Course> requestCourses = null;
 	Account testAccount = null;
-	
+	//might have to come back to this one...
     @Given("^valid email (.+) and password (.+) $")
     public void valid_email_and_password(String email, String password) throws Throwable { //duplicate, ask shudy about how to remove 
-        try { 
-        	testAccount = testAccountService.LogIn(email, password);
-        }
-        catch(IllegalArgumentException e) {
-        	System.out.println(e);
-        	Assert.fail("Should not throw an exception, email and password should be valid");
-        }
+    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "Concordia", password); //must be valid
     }
 
     @Given("^the following courses exist:$")

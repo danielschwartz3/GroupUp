@@ -87,7 +87,7 @@ public class ID02_StepDefinitions {
     @But("^an incorrect corresponding password $")
     public void an_incorrect_corresponding_password(String password) throws Throwable {
     	if (password == testAccount.password) {
-    		Assert.fail("password is not unqiue")
+    		Assert.fail("password is not unqiue");
     	}
     }
 
