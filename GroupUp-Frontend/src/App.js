@@ -13,17 +13,11 @@ function App() {
   return (
     <Provider store={ store }>
     <div className="App">
-<<<<<<< HEAD
-      <Navbar/>
-      {/* <AllCourses/> */}
-      <MyCourses/>
-=======
+    <Login/>
+      {/* <Navbar/>
+      <AllCourses/>
+      <MyCourses/> */}
 
-      <Navbar/>
-      {/* <AllCourses/> */}
-      <MyCourses/>
-
->>>>>>> 5d696430b2aeb1d91a73cdf3cedde2cdeac4e2a4
     </div>
     </Provider>
   );
