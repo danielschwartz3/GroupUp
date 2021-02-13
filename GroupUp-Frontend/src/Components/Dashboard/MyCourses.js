@@ -23,20 +23,22 @@ const useStyles = makeStyles({
 function createData(code, section, semester, year, faculty) {
     return { code, section, semester, year, faculty };
 }
-  
-const rows = [
-    createData('ECSE 428', '001', 'Winter', 2021, 'Eng'),
-    createData('ECSE 343', '001', 'Winter', 2021, 'Eng'),
-    createData('ECSE 427', '001', 'Winter', 2021, 'Eng'),
-];
 
 const MyCourses = (props) => {
     const classes = useStyles();
-    const { registeredCourses } = props;
+    const { registeredCourses, user } = props;
 
     const removeCourse = (courseID) => {
-        console.log(courseID)
         props.unregisterCourseAction(courseID)
+        axios.post(`${URL}/unregister/student/course`, null, {
+            params: {
+                email: user.email,
+                id: courseID
+            }
+        }).then((response) => {
+            console.log(response)
+        });
+        console.log(user)
     }
 
     return (
@@ -83,7 +85,8 @@ const MyCourses = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    registeredCourses: state.registeredCourses
+    registeredCourses: state.registeredCourses,
+    user: state.user
 }); 
 
 export default connect(
