@@ -1,10 +1,9 @@
-package ca.mcgill.ecse428.groupup.service;
+package ca.mcgill.ecse428.groupup.gherkin;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
-import cucumber.api.java.en.Then;
-import cucumber.api.junit.Cucumber;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class ID01_StepDefinitions {
 
