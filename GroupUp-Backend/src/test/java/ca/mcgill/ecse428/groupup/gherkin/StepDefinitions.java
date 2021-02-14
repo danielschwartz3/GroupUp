@@ -228,6 +228,7 @@ public class StepDefinitions extends SpringWrapper {
 	String semester = null;
 	String year = null;
 	String error = "";
+	Course theCourse = null;
 //    @Given("^valid email (.+) and password (.+) $")
 //    public void valid_email_and_password(String email, String password) throws Throwable {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
@@ -245,7 +246,7 @@ public class StepDefinitions extends SpringWrapper {
     
     @Given("the course {word} already exist in the system")
     public void the_course_already_exist_in_the_system(String newcourse) throws Throwable {
-        testCourseService.createCourse(newcourse, "faculty", "WINTER", "2021", "01", "name");
+        theCourse = testCourseService.createCourse(newcourse, "faculty", "WINTER", "2021", "01", "name");
         courseid = newcourse;
         coursesection = "01";
         semester = "WINTER";
@@ -343,39 +344,29 @@ public class StepDefinitions extends SpringWrapper {
 //    public void the_course_exist(String course) throws Throwable { //duplicate 009
 //    	testCourseService.createCourse(course, "faculty", "WINTER", "2021", "01", "name");
 //    }
-
+    Student theStudent = null;
     @When("user {word} requests register for course {word}") 
     public void user_requests_register_for_course(String email, String course) throws Throwable { //we need to decide if course id is a int, if not I need find course by name
-    	mycourse = testCourseService.getCourseByCourseID(course).get(0);
-        testCourseService.registerStudent((Student) testAccount.getUserRole(), mycourse);
+    	theStudent = (Student) testAccount.getUserRole();
+    	try {
+    		testCourseService.registerStudent(theStudent, theCourse);
+    	}
+    	catch(IllegalArgumentException e) {
+    		error = e.getMessage();
+    	}
     }
 
-    @Then("the user will be registered undered the course")
-    public void the_user_will_be_registered_undered_the_course() throws Throwable {
-        Student studentAccount = (Student) testAccount.getUserRole();
-        if (!studentAccount.getCourses().contains(mycourse)) {
+    @Then("the user will be registered under the course")
+    public void the_user_will_be_registered_under_the_course() throws Throwable {
+        if (!theStudent.getCourses().contains(theCourse)) {
         	Assert.fail("The user did not get registered");
         }
     }
 
-    @Then("the user will be notified that user is not logged in")
-    public void the_user_will_be_notified_that_user_is_not_logged_in() throws Throwable {
-        try {
-        	testCourseService.registerStudent((Student) testAccount.getUserRole(), mycourse);
-        }
-        catch(Exception e) {
-        	Assert.assertEquals("Student does not exist", e.getMessage());
-        }
-    }
 
     @Then("the user will be notified that the course does not exist")
     public void the_user_will_be_notified_that_the_course_does_not_exist() throws Throwable {
-        try {
-        	testCourseService.registerStudent((Student) testAccount.getUserRole(), mycourse);
-        }
-        catch(Exception e) {
-        	Assert.assertEquals("Course does not exist", e.getMessage());
-        }
+    	assertEquals(error, "Course does not exist");
     }
 
 //    @And("^the user is logged in$")
@@ -383,10 +374,6 @@ public class StepDefinitions extends SpringWrapper {
 //        testAccountService.LogIn(testAccount.getEmail(), testAccount.getPassword());
 //    }
 
-    @And("the user is not logged in")
-    public void the_user_is_not_logged_in() throws Throwable {
-        testAccount = null;
-    }
 
     @And("the course {word} doesn't exist")
     public void the_course_doesnt_exist(String course) throws Throwable {
