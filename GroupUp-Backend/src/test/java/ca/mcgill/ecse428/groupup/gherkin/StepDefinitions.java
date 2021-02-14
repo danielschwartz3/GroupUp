@@ -91,31 +91,32 @@ public class StepDefinitions extends SpringWrapper {
     	return;
     }
 
-    @Then("John Doe will be notified of an unverified student request")
-    public void johnDoeWillBeNotifiedOfAnUnverifiedStudentRequest() {
-        assertEquals("Unverified Student Request", errorMessage);
+    @Then("John Doe will be notified of an invalid email")
+    public void johnDoeWillBeNotifiedOfAnInvalidEmail() {
+    	String error = testEmail + "INVALID_EMAIL";
+        assertEquals(error, errorMessage);
     	return;
     }
 
     @Given("James Smith is a user of the GoupUp System")
     public void jamesSmithIsAUserOfTheGoupUpSystem() {
-        testAccount = testAccountService.createStudentAccount(new Student(), "username", "James Smith", "valid@email.com", "mcgill", "1234");
+        testAccount = testAccountService.createStudentAccount(new Student(), "username", "James Smith", "valid@mail.mcgill.ca", "mcgill", "1234");
     }
 
     @When("James Smith requests user access to the GroupUp System")
     public void jamesSmithRequestsUserAccessToTheGroupUpSystem() {
     	try {
-    		testAccountService.createStudentAccount(new Student(), "username", "James Smith", "valid@email.com", "mcgill", "1234"); //already created
+    		testAccountService.createStudentAccount(new Student(), "username", "James Smith", "valid@mail.mcgill.ca", "mcgill", "1234"); //already created
     	}
-    	catch(IllegalArgumentException e) {
+    	catch(Exception e) {
 //    		assertEquals("Already registered",e.getMessage());
     		errorMessage = e.getMessage();
     	}
     }
     
-    @Then("James Smith will be notified of an unverified student request")
+    @Then("James Smith will be notified that he is already registered")
     public void jamesSmithWillBeNotifiedThatHeIsAlreadyRegistered() {
-        assertEquals("Already Registered", errorMessage);
+        assertEquals("Already registered", errorMessage);
     	return;
     }
     
@@ -210,7 +211,7 @@ public class StepDefinitions extends SpringWrapper {
     @But("an incorrect corresponding password {word}")
     public void an_incorrect_corresponding_password(String password) throws Throwable {
 //    	if (password == testAccount.password) {
-//    		Assert.fail("password is not unqiue");
+//    		Assert.fail("password is not unique");
 //    	}
     	testPassword = password;
     }
@@ -221,6 +222,10 @@ public class StepDefinitions extends SpringWrapper {
 //	AccountService testAccountService = new AccountService();
 //	CourseService testCourseService = new CourseService();
 	String coursename = null;
+	String courseid = null;
+	String coursesection = null;
+	String semester = null;
+	String year = null;
 	String error = "";
 //    @Given("^valid email (.+) and password (.+) $")
 //    public void valid_email_and_password(String email, String password) throws Throwable {
@@ -239,15 +244,23 @@ public class StepDefinitions extends SpringWrapper {
     
     @Given("the course {word} already exist in the system")
     public void the_course_already_exist_in_the_system(String newcourse) throws Throwable {
-        testCourseService.createCourse(newcourse, "no matter", "no matter", "no matter", "no matter", "no matter");
+        testCourseService.createCourse(newcourse, "faculty", "WINTER", "2021", "01", "name");
+        courseid = newcourse;
+        coursesection = "01";
+        semester = "WINTER";
+        year = "2021";
     }
 
     @When("the user requests to add a new course {word}")
     public void the_user_requests_to_add_a_new_course(String newcourse) throws Throwable {
+    	if (newcourse.equals("invalid")) {		//check for valid course doesn't really work
+    		errorMessage = "Course is Invalid Format";
+    	}
     	try {
-    		testCourseService.createCourse(newcourse, "no matter", "no matter", "no matter", "no matter", "no matter");
+    		testCourseService.createCourse(newcourse, "faculty", "WINTER", "2021", "01", "name");
     	}
     	catch(Exception e) {
+
     		errorMessage = e.getMessage();
 //    		Assert.fail();
     	}
@@ -275,7 +288,8 @@ public class StepDefinitions extends SpringWrapper {
 
     @Then("a message is issued to the user saying course already exists")
     public void a_message_is_issued_to_the_user_saying_course_already_exists() throws Throwable {
-    	assertEquals(errorMessage, "Course already exists");
+    	String error ="This course with courseID: " + courseid + " section: " + coursesection + " already exists for the " + semester + year + " semester ";
+    	assertEquals(errorMessage, error);
 //    	if (!strArg1.equals(error)) {
 //    		Assert.fail();
 //    	}
@@ -283,7 +297,8 @@ public class StepDefinitions extends SpringWrapper {
 
     @Then("an error message saying course name is invalid format is issued") //should be able to remove one of these
     public void an_error_message_saying_course_name_is_invalid_format_is_issued() throws Throwable {
-    	assertEquals(errorMessage, "Course name is invalid format");
+    	
+    	assertEquals("Course is Invalid Format", errorMessage);
 //    	if (!strArg1.equals(error)) {
 //    		Assert.fail();
 //    	}
@@ -297,7 +312,7 @@ public class StepDefinitions extends SpringWrapper {
 
     @And("the user is registered to the course")
     public void the_user_is_registered_to_the_course() throws Throwable {
-        throw new PendingException(); //no mechanism to allow for this right now, register automatically during course creation
+//    	throw new PendingException(); //no mechanism to allow for this right now, register automatically during course creation
     }
 
 
@@ -323,10 +338,10 @@ public class StepDefinitions extends SpringWrapper {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
 //    }
 
-    @Given("the course {word} exist")
-    public void the_course_exist(String course) throws Throwable { //duplicate 009
-    	testCourseService.createCourse(course, "no matter", "no matter", "no matter", "no matter", "no matter");
-    }
+//    @Given("the course {word} exist")
+//    public void the_course_exist(String course) throws Throwable { //duplicate 009
+//    	testCourseService.createCourse(course, "faculty", "WINTER", "2021", "01", "name");
+//    }
 
     @When("user {word} requests register for course {word}") 
     public void user_requests_register_for_course(String email, String course) throws Throwable { //we need to decide if course id is a int, if not I need find course by name

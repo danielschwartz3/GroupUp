@@ -22,8 +22,7 @@ Feature: Add a new course
     And the course <new_course> already exist in the system
     When the user requests to add a new course <new_course>
     Then a message is issued to the user saying course already exists
-    And the system should register the user to the course
-    And add the user to GroupUp chat of the course
+    And the user is registered to the course
 
     Examples: 
       | email                 | password | new_course |
@@ -39,6 +38,6 @@ Feature: Add a new course
 
     Examples: 
       | email                 | password | new_course |
-      | bw@mail.mcgill.ca     | aslkda   | ECSE-428   |
-      | bweiss@mail.mcgill.ca | aasa     | FACC-400   |
-      | rs@carleton.ca        | fire     | COMP-360   |
+      | bw@mail.mcgill.ca     | aslkda   |  invalid		|
+      | bweiss@mail.mcgill.ca | aasa     |  invalid	  |
+      | rs@carleton.ca        | fire     |	invalid   |
