@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -497,27 +498,55 @@ public class StepDefinitions extends SpringWrapper {
 //	AccountService testAccountService = new AccountService();
 	List<Course> allCourses = null;
 	List<Course> requestCourses = null;
+	int numCourses = 0;
 //	Account testAccount = null;
 	//might have to come back to this one...
 //    @Given("^valid email (.+) and password (.+) $")
 //    public void valid_email_and_password(String email, String password) throws Throwable { //duplicate, ask shudy about how to remove 
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "Concordia", password); //must be valid
 //    }
+	
+	@Given("a user is logged in")
+	public void a_user_is_logged_in() {
+		testAccount = testAccountService.createStudentAccount(new Student(), "username", "name", "email@mail.mcgill.ca", "institutionName", "password");
+		testAccountService.LogIn(testAccount.email, testAccount.password);
+	}
 
     @Given("the following courses exist:")
-    public void the_following_courses_exist() throws Throwable { //get all the courses for later
-        allCourses = testCourseService.getAllCourses(); 
+    public void the_following_courses_exist(io.cucumber.datatable.DataTable dataTable) throws Throwable { //get all the courses for later
+        List<Map<String, String>> valueMaps = dataTable.asMaps();
+        for (Map<String, String> map : valueMaps) {
+        	numCourses++;
+        	String course = map.get("course");
+        	String semester = map.get("semester");
+        	String year = map.get("year");
+        	testCourseService.createCourse(course, "faculty", semester, year, "01", course);
+        }
+    	
+//    	allCourses = testCourseService.getAllCourses(); 
     }
 
-    @When("the user requests view available courses in all semester(s) in every year")
+    @When("the user requests view available courses in all semesters in every year")
     public void the_user_requests_view_available_courses_in_all_semesters_in_every_year() throws Throwable {
     	requestCourses = testCourseService.getAllCourses(); 
     }
     
+    @When("the user requests view available courses in {word} semester in {word} year")
+    public void the_user_requests_view_available_courses_in_semester_in_year(String semester, String year) throws Throwable {
+    	requestCourses = testCourseService.getCoursesByYearBySemester(year, semester); 
+    }
+    
 
-    @Then("the user will see:")
-    public void the_user_will_see() throws Throwable {
-        if (requestCourses == null) {//try to think of more assertive test
+    @Then("the user will see all the courses")
+    public void the_user_will_see_all_the_courses() throws Throwable {
+        if (requestCourses.size() != numCourses) {//try to think of more assertive test
+        	Assert.fail("The requested courses did not match the examples, should not be null");
+        }
+    }
+    
+    @Then("the user will see all the courses for that semester")
+    public void the_user_will_see_all_the_courses_for_that_semester() throws Throwable {
+        if (requestCourses.size() == 0) {//try to think of more assertive test
         	Assert.fail("The requested courses did not match the examples, should not be null");
         }
     }
