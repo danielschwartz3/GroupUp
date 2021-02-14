@@ -451,6 +451,8 @@ public class StepDefinitions extends SpringWrapper {
 //	CourseService testCourseService = new CourseService();
 //	Account testAccount = null;
 	Course c = null;
+	Student student;
+	Course testCourse;
 //    @Given("^valid email (.+) and password (.+) $") //find a way to remove duplicates 
 //    public void valid_email_and_password(String email, String password) throws Throwable {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid, since I am making this
@@ -458,27 +460,45 @@ public class StepDefinitions extends SpringWrapper {
 
     @Given("the user is registered for this {word}")
     public void the_user_is_registered_for_this(String course) throws Throwable {
-        throw new PendingException(); //ask about get enrolled course, or how to get courses registered for a user??
+    	testCourse = testCourseService.createCourse(course, "faculty", "WINTER", "2021", "01", course);
+    	student = (Student) testAccount.getUserRole();
+    	testCourseService.registerStudent(student, testCourse);
+//    	testCourse.addStudent(student);
+//    	student.addCourse(testCourse);
+//    	throw new PendingException(); //ask about get enrolled course, or how to get courses registered for a user??
     }
 
     @When("the user requests to deregister from this {word}")
     public void the_user_requests_to_deregister_from_this(String course) throws Throwable {
-    	throw new PendingException(); //id of course should be string?? 
+//    	throw new PendingException(); //id of course should be string??
+//    	testCourse.removeStudent(student);
+//    	student.removeCourse(testCourse);
+    	testCourseService.unregisterStudent(student, testCourse);
     }
 
     @When("the user requests to de-register from the {word} they are not registered for")
     public void the_user_requests_to_deregister_from_the_they_are_not_registered_for(String course) throws Throwable {
-        throw new PendingException();
+//        throw new PendingException();
+    	Course newCourse = testCourseService.createCourse(course, "faculty", "WINTER", "2021", "01", course);
+    	student = (Student) testAccount.getUserRole();
+    	try {
+    		testCourseService.unregisterStudent(student, newCourse);
+    	}
+    	catch(Exception e) {
+    		errorMessage = e.getMessage();
+    	}
     }
 
     @Then("they will no longer be enrolled")
     public void they_will_no_longer_be_enrolled() throws Throwable {
-        throw new PendingException();
+//        throw new PendingException();
+    	assertEquals(student.getCourses().size(), 0);
     }
 
     @Then("a message is issued saying that you are not enrolled in this course")
     public void a_message_is_issued_saying_that_you_are_not_enrolled_in_this_course() throws Throwable {
-        throw new PendingException();
+//        throw new PendingException();
+    	assertEquals("Student is not registered in the course", errorMessage);
     }
 
 //    @And("^the user is logged in$")

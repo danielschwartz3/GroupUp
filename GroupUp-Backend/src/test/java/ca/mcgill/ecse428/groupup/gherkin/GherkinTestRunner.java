@@ -6,7 +6,7 @@ import io.cucumber.junit.CucumberOptions;
 
 //Change the Feature to test
 @RunWith(Cucumber.class)
-@CucumberOptions(features = { "src/test/resources/ID022_View_Available_Courses.feature"}, glue= {"ca.mcgill.ecse428.groupup.gherkin"})
+@CucumberOptions(features = { "src/test/resources/ID012_Unregister_From_A_Course.feature"}, glue= {"ca.mcgill.ecse428.groupup.gherkin"})
 public class GherkinTestRunner {
 	
 }

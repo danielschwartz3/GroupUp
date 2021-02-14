@@ -3,16 +3,11 @@ Feature: Unregister from a course
   I would like to unregister from a course that I was previously registered for.
 
   Background: 
-    Given valid email <email> and password <password>
-    And the user is logged in
-      | user_name             | password |
-      | bw@mail.mcgill.ca     | aslkda   |
-      | bweiss@mail.mcgill.ca | aasa     |
-      | rs@cmail.carleton.ca  | fire     |
+    Given a user is logged in
 
   Scenario Outline: User attemps to deregister from a pre-registered course (Normal Flow)
     Given the user is registered for this <course>
-    When the user requests to deregister from this <course>
+    When the user requests to deregister from this course
     Then they will no longer be enrolled
     
     Examples:
