@@ -131,6 +131,11 @@ public class CourseService {
         }
         return course;
     }
+    @Transactional
+    public List<Course> getCourseByCourseID(String id) { //made this quickly for testing
+        List <Course> course = courseRepository.findByCourseID(id);
+        return course;
+    }
 
     @Transactional
     public List<Course> getCoursesByYearBySemester(String year, String semester) {
@@ -197,7 +202,7 @@ public class CourseService {
     }
 
     @Transactional
-    public List<Course> getEnrolledCourses(int id){
+    public List<Course> getEnrolledCourses(int id){ //shouldn't id for students be the email???
         return toList(courseRepository.findByStudentsId(id));
     }
 
