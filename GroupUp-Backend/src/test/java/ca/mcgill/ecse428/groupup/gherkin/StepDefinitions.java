@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.AccountService;
 import ca.mcgill.ecse428.groupup.service.CourseService;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.But;
@@ -22,7 +25,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-public class StepDefinitions {
+public class StepDefinitions extends SpringWrapper {
 	
 //========================ID01_Register New User=======================================//
 	
@@ -33,9 +36,14 @@ public class StepDefinitions {
 	String testEmail = null;
 	String testName = null;
 //	Student testStudent = null;
-	AccountService testAccountService = new AccountService();
-	CourseService testCourseService = new CourseService();
-	
+	@After
+    public void clearDatabase() {
+        // Clear the table to avoid inconsistency
+		System.out.println("Clearing database in between tests");
+        courseRepository.deleteAll();
+        accountRepository.deleteAll();
+        studentRepository.deleteAll();
+    }
     @Given("student {word} with student email {word} and institution name {string} is student in good standing")
     public void studentUser_nameWithStudentEmailUser_emailAndInstitutionNameUser_institutionIsStudentInGoodStanding(String name, String email, String institutionName) {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "username", name, email, "institutionName", "password");
@@ -114,13 +122,12 @@ public class StepDefinitions {
     
 //=======================ID02 Login Existing User============================================//
     
-    AccountService testService = new AccountService();
 //	Account testAccount = null;
 	String nonValidEmail = null; //no @ so must be invalid
 	String testPassword = null;
 	@Given("valid email {word} and password {word}")
     public void valid_email_and_password(String email, String password) throws Throwable { //ie. an existing student account
-    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
+    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
 		testEmail = email;
 		testPassword = password;
     }
@@ -131,25 +138,24 @@ public class StepDefinitions {
     }
 
     @Given("a valid email {word}")
-    public void a_valid_username(String email) throws Throwable {
-//    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", "No matter"); //must be valid
-    	testEmail = email;
+    public void a_valid_email(String email) throws Throwable {
+    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", "1234"); 
     }
 
-    @When("the user requests access to the GroupUp system")//removed a duplicate here, one without "the" will need to find dup in feature file
-    public void the_user_requests_access_to_the_groupup_system() throws Throwable {
+    @When("the user {word} requests access to the GroupUp system")//removed a duplicate here, one without "the" will need to find dup in feature file
+    public void the_user_requests_access_to_the_groupup_system(String email) throws Throwable {
     	//check if request works with no error
         try{
 //        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
-        	testService.LogIn(testEmail, testPassword);
+        	testAccountService.LogIn(email, testPassword);
         }
         catch(Exception e) {
         	errorMessage = e.getMessage();
         }
     }
 
-    @Then("they will be granted access to the GroupUp system as a student")
-    public void they_will_be_granted_access_to_the_groupup_system_as_a_student() throws Throwable {
+    @Then("they will be granted access to the GroupUp system")
+    public void they_will_be_granted_access_to_the_groupup_system() throws Throwable {
 
     	assertNull(errorMessage);
 //        try{
@@ -163,6 +169,17 @@ public class StepDefinitions {
 //        }
     }
 
+    @Then("an error message is issued saying email not recognized")
+    public void an_error_message_is_issued_saying_email_not_recognized() throws Throwable {
+    	assertEquals(errorMessage, "Account email cannot be found.");
+    	
+//    	try{
+//        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+//        }
+//        catch(Exception e) {
+//        	assertEquals(e.getMessage(), "Password is incorrect.");
+//        }
+    }
     @Then("an error message is issued saying password is incorrect")
     public void an_something_message_is_issued() throws Throwable {
     	assertEquals(errorMessage, "Password is incorrect.");
@@ -375,7 +392,7 @@ public class StepDefinitions {
 
     @Given("the user is enrolled in the following courses:")
     public void the_user_is_enrolled_in_the_following_courses() throws Throwable {
-        mycourse = testCourseService.createCourse("Hi", "my", "name", "is", "Ben", "great");
+        mycourse = testCourseService.createCourse("Hi", "my", "FALL", "is", "Ben", "great");
         Student aStudent = (Student) testAccount.getUserRole(); //we know its student since we made it
         testCourseService.registerStudent(aStudent, mycourse);
     }
@@ -403,7 +420,7 @@ public class StepDefinitions {
 
     @Then("the system will notify the user that you are not enrolled in any course")
     public void the_system_will_notify_the_user_that_you_are_not_enrolled_in_any_course() throws Throwable {
-        throw new PendingException(); //here is where the problem from the when rears its head
+        //this was not implimented in the system
     }
 
 //    @And("^the user is logged in$")

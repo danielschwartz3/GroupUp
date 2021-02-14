@@ -27,12 +27,13 @@ public class AccountService {
     public Account  createStudentAccount(Student role, String userName, String name,
                                  String email, String institution, String password)
                                  {   
+    	System.out.println(email);
         Account acc;
         String error = "";
         Boolean isEmailValid = false;
         error = verifyInput(role, userName, name, email, institution, password);
         isEmailValid = verifyEmail(email);
-        if(!isEmailValid) error+= "INVALID_EMAIL";
+        if(!isEmailValid) error+= email+"INVALID_EMAIL";
         if(accRepo.existsById(email))error = error + "Already registered";
         if (error.length() > 0) {
             throw new IllegalArgumentException(error);
