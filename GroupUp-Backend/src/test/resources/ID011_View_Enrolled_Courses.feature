@@ -24,4 +24,4 @@ Feature: View enrolled courses
   Scenario Outline: A user that is not enrolled in any courses attempts to view enrolled courses (Error Flow)
     Given the user is not enrolled in any courses
     When the user requests view enrolled courses
-    Then the system will notify the user "You are not enrolled in any course"
+    Then the system will notify the user that you are not enrolled in any course

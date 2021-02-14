@@ -14,6 +14,8 @@ Feature: Unregister from a course
     Given the user is registered for this <course>
     When the user requests to deregister from this <course>
     Then they will no longer be enrolled
+    
+    Examples:
       | course   |
       | ECSE-321 |
       | COMP-250 |
@@ -21,7 +23,9 @@ Feature: Unregister from a course
 
   Scenario Outline: User attempts to deregister from a course that they are not registered for (Error Flow)
     When the user requests to de-register from the <course> they are not registered for
-    Then a "User is not enrolled in this course" message is issued
+    Then a message is issued saying that you are not enrolled in this course
+    
+    Examples:
       | course   |
       | ECSE-222 |
       | COMP-202 |

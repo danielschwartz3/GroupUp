@@ -21,7 +21,7 @@ Feature: View available courses
       | COMP-360 | winter   | 2020 |
       | MECH-360 | summer   | 2021 |
       | FACC-300 | fall     | 2020 |
-    When the user requests view available courses in "all" semester(s) in "all" year
+    When the user requests view available courses in all semester(s) in every year
     Then the user will see:
       | course   | semester | year |
       | ECSE-428 | winter   | 2021 |
@@ -40,7 +40,7 @@ Feature: View available courses
       | COMP-360 | winter   | 2020 |
       | MECH-360 | summer   | 2021 |
       | FACC-300 | fall     | 2020 |
-    When the user requests view available courses in "winter" semester(s) in "2021" year
+    When the user requests view available courses in <semester> semester(s) in <year> year
     Then the user will see:
       | course   | semester | year |
       | ECSE-428 | winter   | 2021 |

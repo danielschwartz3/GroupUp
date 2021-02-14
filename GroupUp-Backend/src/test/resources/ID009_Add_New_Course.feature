@@ -25,7 +25,7 @@ So that I can join the GroupUp chat for the course
   Scenario Outline: User attempts to add a course that already exists (Alternative Flow)
   	Given the course <new_course> already exist in the system
      When the user requests to add a new course <new_course>
-     Then a "course already exist" message is issued to the user
+     Then a message is issued to the user saying course already exists
       And the system should register the user to the course
       And add the user to GroupUp chat of the course
       Examples:
@@ -37,7 +37,7 @@ So that I can join the GroupUp chat for the course
   Scenario Outline: User attempts to add an invalid new course name (Error Flow)
   	Given the course <new_course> is invalid format
      When the user requests to add a new course <new_course>
-     Then an error message "course name is invalid format" is issued to the user
+     Then an error message saying course name is invalid format is issued
       Examples:
       | new_course | 
       | ECSE 428   | 

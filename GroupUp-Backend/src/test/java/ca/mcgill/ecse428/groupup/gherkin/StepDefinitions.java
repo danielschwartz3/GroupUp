@@ -3,6 +3,7 @@ package ca.mcgill.ecse428.groupup.gherkin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 import java.util.Set;
@@ -116,65 +117,72 @@ public class StepDefinitions {
     AccountService testService = new AccountService();
 //	Account testAccount = null;
 	String nonValidEmail = null; //no @ so must be invalid
-    @Given("^valid email (.+) and password (.+) $")
+	String testPassword = null;
+	@Given("valid email {word} and password {word}")
     public void valid_email_and_password(String email, String password) throws Throwable { //ie. an existing student account
     	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
+		testEmail = email;
+		testPassword = password;
     }
 
-    @Given("^a non-recognized email (.+)$")
+    @Given("a non-recognized email {word}")
     public void a_nonrecognized_email(String email) throws Throwable {
-    	nonValidEmail = "Ben"; //no @ so must be invalid
+    	nonValidEmail = email; //no @ so must be invalid
     }
 
-    @Given("^a valid email (.+) $")
+    @Given("a valid email {word}")
     public void a_valid_username(String email) throws Throwable {
-    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", "No matter"); //must be valid
+//    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", "No matter"); //must be valid
+    	testEmail = email;
     }
 
-    @When("^the user requests access to the GroupUp system$")//removed a duplicate here, one without "the" will need to find dup in feature file
+    @When("the user requests access to the GroupUp system")//removed a duplicate here, one without "the" will need to find dup in feature file
     public void the_user_requests_access_to_the_groupup_system() throws Throwable {
     	//check if request works with no error
         try{
-        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+//        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+        	testService.LogIn(testEmail, testPassword);
         }
         catch(Exception e) {
-        	Assert.fail("Request was not inputed");
+        	errorMessage = e.getMessage();
         }
     }
 
-    @Then("^they will be granted access to the GroupUp system as a student$")
+    @Then("they will be granted access to the GroupUp system as a student")
     public void they_will_be_granted_access_to_the_groupup_system_as_a_student() throws Throwable {
-        try{
-        	Account tempAccount = testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
-        	if (tempAccount != testAccount) {
-        		Assert.fail();
-        	}
-        }
-        catch(Exception e) {
-        	Assert.fail("Request was not inputed");
-        }
+
+    	assertNull(errorMessage);
+//        try{
+//        	Account tempAccount = testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+//        	if (tempAccount != testAccount) {
+//        		Assert.fail();
+//        	}
+//        }
+//        catch(Exception e) {
+//        	Assert.fail("Request was not inputed");
+//        }
     }
 
-    @Then("^an \"([^\"]*)\" message is issued$")
-    public void an_something_message_is_issued(String strArg1) throws Throwable {
-        try{
-        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
-        }
-        catch(Exception e) {
-        	if (e.getMessage() != "Password is incorrect.") {
-        		Assert.fail("wrong error message");
-        	}
-        }
+    @Then("an error message is issued saying password is incorrect")
+    public void an_something_message_is_issued() throws Throwable {
+    	assertEquals(errorMessage, "Password is incorrect.");
+    	
+//    	try{
+//        	testService.LogIn(testAccount.getEmail(), testAccount.getPassword());
+//        }
+//        catch(Exception e) {
+//        	assertEquals(e.getMessage(), "Password is incorrect.");
+//        }
     }
 
-    @And("^a related student privileges (.+)$")
+    @And("a related student privileges")
     public void a_related_student_privileges() throws Throwable {
         if (!(testAccount.getUserRole() instanceof Student)) {
         	Assert.fail("Don't have student role");
         }
     }
 
-    @And("^a related admin privileges (.+)$")
+    @And("a related admin privileges")
     public void a_related_admin_privileges() throws Throwable {
         if (!(testAccount.getUserRole() instanceof Student)) {
         	Assert.fail("Don't have student role");
@@ -182,11 +190,12 @@ public class StepDefinitions {
     }
 
 
-    @But("^an incorrect corresponding password $")
+    @But("an incorrect corresponding password {word}")
     public void an_incorrect_corresponding_password(String password) throws Throwable {
-    	if (password == testAccount.password) {
-    		Assert.fail("password is not unqiue");
-    	}
+//    	if (password == testAccount.password) {
+//    		Assert.fail("password is not unqiue");
+//    	}
+    	testPassword = password;
     }
     
     
@@ -201,7 +210,7 @@ public class StepDefinitions {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
 //    }
     
-    @Given("^the course (.+) is invalid format$")
+    @Given("the course {word} is invalid format")
     public void the_course_is_invalid_format(String newcourse) throws Throwable {
         if (newcourse != "") { //really the only invalid format for a course item now
         	coursename = "";
@@ -210,67 +219,77 @@ public class StepDefinitions {
         	coursename = newcourse;
         }
     }
-    @Given("^the course (.+) already exist in the system$")
+    
+    @Given("the course {word} already exist in the system")
     public void the_course_already_exist_in_the_system(String newcourse) throws Throwable {
         testCourseService.createCourse(newcourse, "no matter", "no matter", "no matter", "no matter", "no matter");
     }
 
-    @When("^the user requests to add a new course (.+)$")
+    @When("the user requests to add a new course {word}")
     public void the_user_requests_to_add_a_new_course(String newcourse) throws Throwable {
     	try {
     		testCourseService.createCourse(newcourse, "no matter", "no matter", "no matter", "no matter", "no matter");
     	}
     	catch(Exception e) {
-    		error = e.getMessage();
-    		Assert.fail();
+    		errorMessage = e.getMessage();
+//    		Assert.fail();
     	}
     }
 
-    @Then("^the course (.+) is added to the system$")
+    @Then("the course {word} is added to the system")
     public void the_course_is_added_to_the_system(String newcourse) throws Throwable {
     	try {
-    		Course createdCourse = testCourseService.createCourse(newcourse, "no matter", "no matter", "no matter", "no matter", "no matter"); //create course needs an override method to take a student who is making it to also register
-    		if (createdCourse.getCourseID() != newcourse) {
-    			Assert.fail();
-    		}
+    		testCourseService.getCourseByCourseID(newcourse);
     	}
     	catch(Exception e) {
     		Assert.fail();
     	}
+    	
+//    	try {
+//    		Course createdCourse = testCourseService.createCourse(newcourse, "no matter", "no matter", "no matter", "no matter", "no matter"); //create course needs an override method to take a student who is making it to also register
+//    		if (createdCourse.getCourseID() != newcourse) {
+//    			Assert.fail();
+//    		}
+//    	}
+//    	catch(Exception e) {
+//    		Assert.fail();
+//    	}
     }
 
-    @Then("^a \"([^\"]*)\" message is issued to the user$")
-    public void a_something_message_is_issued_to_the_user(String strArg1) throws Throwable {
-    	if (!strArg1.equals(error)) {
-    		Assert.fail();
-    	}
+    @Then("a message is issued to the user saying course already exists")
+    public void a_message_is_issued_to_the_user_saying_course_already_exists() throws Throwable {
+    	assertEquals(errorMessage, "Course already exists");
+//    	if (!strArg1.equals(error)) {
+//    		Assert.fail();
+//    	}
     }
 
-    @Then("^an error message \"([^\"]*)\" is issued to the user$") //should be able to remove one of these
-    public void an_error_message_something_is_issued_to_the_user(String strArg1) throws Throwable {
-    	if (!strArg1.equals(error)) {
-    		Assert.fail();
-    	}
+    @Then("an error message saying course name is invalid format is issued") //should be able to remove one of these
+    public void an_error_message_saying_course_name_is_invalid_format_is_issued() throws Throwable {
+    	assertEquals(errorMessage, "Course name is invalid format");
+//    	if (!strArg1.equals(error)) {
+//    		Assert.fail();
+//    	}
     }
 
-    @And("^the user is logged in$")
+    @And("the user is logged in")
     public void the_user_is_logged_in() throws Throwable {
         testAccountService.LogIn(testAccount.getEmail(), testAccount.getPassword());
     }
 
 
-    @And("^the user is registered to the course$")
+    @And("the user is registered to the course")
     public void the_user_is_registered_to_the_course() throws Throwable {
         throw new PendingException(); //no mechanism to allow for this right now, register automatically during course creation
     }
 
 
-    @And("^the system should register the user to the course$") //remove dup -> also doesnt work for the same reason
+    @And("the system should register the user to the course") //remove dup -> also doesnt work for the same reason
     public void the_system_should_register_the_user_to_the_course() throws Throwable {
         throw new PendingException();
     }
 
-    @And("^add the user to GroupUp chat of the course$") //no service mechanism for this unless I didn't see it
+    @And("add the user to GroupUp chat of the course") //no service mechanism for this unless I didn't see it
     public void add_the_user_to_groupup_chat_of_the_course() throws Throwable {
         throw new PendingException();
     }
@@ -287,18 +306,18 @@ public class StepDefinitions {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
 //    }
 
-    @Given("^the course (.+) exist$")
+    @Given("the course {word} exist")
     public void the_course_exist(String course) throws Throwable { //duplicate 009
     	testCourseService.createCourse(course, "no matter", "no matter", "no matter", "no matter", "no matter");
     }
 
-    @When("^user (.+) requests register for course (.+)$") 
+    @When("user {word} requests register for course {word}") 
     public void user_requests_register_for_course(String email, String course) throws Throwable { //we need to decide if course id is a int, if not I need find course by name
     	mycourse = testCourseService.getCourseByCourseID(course).get(0);
         testCourseService.registerStudent((Student) testAccount.getUserRole(), mycourse);
     }
 
-    @Then("^the user will be registered undered the course$")
+    @Then("the user will be registered undered the course")
     public void the_user_will_be_registered_undered_the_course() throws Throwable {
         Student studentAccount = (Student) testAccount.getUserRole();
         if (!studentAccount.getCourses().contains(mycourse)) {
@@ -306,7 +325,7 @@ public class StepDefinitions {
         }
     }
 
-    @Then("^the user will be notified that user is not logged in$")
+    @Then("the user will be notified that user is not logged in")
     public void the_user_will_be_notified_that_user_is_not_logged_in() throws Throwable {
         try {
         	testCourseService.registerStudent((Student) testAccount.getUserRole(), mycourse);
@@ -316,7 +335,7 @@ public class StepDefinitions {
         }
     }
 
-    @Then("^the user will be notified that the course does not exist$")
+    @Then("the user will be notified that the course does not exist")
     public void the_user_will_be_notified_that_the_course_does_not_exist() throws Throwable {
         try {
         	testCourseService.registerStudent((Student) testAccount.getUserRole(), mycourse);
@@ -331,12 +350,12 @@ public class StepDefinitions {
 //        testAccountService.LogIn(testAccount.getEmail(), testAccount.getPassword());
 //    }
 
-    @And("^the user is not logged in$")
+    @And("the user is not logged in")
     public void the_user_is_not_logged_in() throws Throwable {
         testAccount = null;
     }
 
-    @And("^the course (.+) doesn't exist$")
+    @And("the course {word} doesn't exist")
     public void the_course_doesnt_exist(String course) throws Throwable {
         mycourse = null; //we know null isn't a registered course
     }
@@ -354,14 +373,14 @@ public class StepDefinitions {
 //    	testAccount = testService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid
 //    }
 
-    @Given("^the user is enrolled in the following courses:$")
+    @Given("the user is enrolled in the following courses:")
     public void the_user_is_enrolled_in_the_following_courses() throws Throwable {
         mycourse = testCourseService.createCourse("Hi", "my", "name", "is", "Ben", "great");
         Student aStudent = (Student) testAccount.getUserRole(); //we know its student since we made it
         testCourseService.registerStudent(aStudent, mycourse);
     }
 
-    @Given("^the user is not enrolled in any courses$")
+    @Given("the user is not enrolled in any courses")
     public void the_user_is_not_enrolled_in_any_courses() throws Throwable {
     	Student aStudent = (Student) testAccount.getUserRole();
     	for (Course aCourse: aStudent.getCourses()) {
@@ -369,21 +388,21 @@ public class StepDefinitions {
     	}
     }
 
-    @When("^the user requests view enrolled courses$")
+    @When("the user requests view enrolled courses")
     public void the_user_requests_view_enrolled_courses() throws Throwable {
     	Student aStudent = (Student) testAccount.getUserRole();
     	requestedCourses = aStudent.getCourses(); //really should be get enrolled courses, but I don;t know how to get student id
     }
 
-    @Then("^the user will see currently enrolled courses$")
+    @Then("the user will see currently enrolled courses")
     public void the_user_will_see_currently_enrolled_courses() throws Throwable {
         if (!requestedCourses.contains(mycourse)) {
         	Assert.fail("Course not found");
         }
     }
 
-    @Then("^the system will notify the user \"([^\"]*)\"$")
-    public void the_system_will_notify_the_user_something(String strArg1) throws Throwable {
+    @Then("the system will notify the user that you are not enrolled in any course")
+    public void the_system_will_notify_the_user_that_you_are_not_enrolled_in_any_course() throws Throwable {
         throw new PendingException(); //here is where the problem from the when rears its head
     }
 
@@ -404,28 +423,28 @@ public class StepDefinitions {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "McGill", password); //must be valid, since I am making this
 //    }
 
-    @Given("^the user is registered for this (.+)$")
+    @Given("the user is registered for this {word}")
     public void the_user_is_registered_for_this(String course) throws Throwable {
         throw new PendingException(); //ask about get enrolled course, or how to get courses registered for a user??
     }
 
-    @When("^the user requests to deregister from this (.+)$")
+    @When("the user requests to deregister from this {word}")
     public void the_user_requests_to_deregister_from_this(String course) throws Throwable {
     	throw new PendingException(); //id of course should be string?? 
     }
 
-    @When("^the user requests to de-register from the (.+) they are not registered for$")
+    @When("the user requests to de-register from the {word} they are not registered for")
     public void the_user_requests_to_deregister_from_the_they_are_not_registered_for(String course) throws Throwable {
         throw new PendingException();
     }
 
-    @Then("^they will no longer be enrolled$")
+    @Then("they will no longer be enrolled")
     public void they_will_no_longer_be_enrolled() throws Throwable {
         throw new PendingException();
     }
 
-    @Then("^a \"([^\"]*)\" message is issued$")
-    public void a_something_message_is_issued(String strArg1) throws Throwable {
+    @Then("a message is issued saying that you are not enrolled in this course")
+    public void a_message_is_issued_saying_that_you_are_not_enrolled_in_this_course() throws Throwable {
         throw new PendingException();
     }
 
@@ -453,18 +472,18 @@ public class StepDefinitions {
 //    	testAccount = testAccountService.createStudentAccount(new Student(), "No matter", "Ben", email, "Concordia", password); //must be valid
 //    }
 
-    @Given("^the following courses exist:$")
+    @Given("the following courses exist:")
     public void the_following_courses_exist() throws Throwable { //get all the courses for later
         allCourses = testCourseService.getAllCourses(); 
     }
 
-    @When("^the user requests view available courses in \"([^\"]*)\" semester(s) in \"([^\"]*)\" year$")
-    public void the_user_requests_view_available_courses_in_something_semesters_in_something_year(String strArg1, String strArg2) throws Throwable {
+    @When("the user requests view available courses in all semester(s) in every year")
+    public void the_user_requests_view_available_courses_in_all_semesters_in_every_year() throws Throwable {
     	requestCourses = testCourseService.getAllCourses(); 
     }
     
 
-    @Then("^the user will see:$")
+    @Then("the user will see:")
     public void the_user_will_see() throws Throwable {
         if (requestCourses == null) {//try to think of more assertive test
         	Assert.fail("The requested courses did not match the examples, should not be null");

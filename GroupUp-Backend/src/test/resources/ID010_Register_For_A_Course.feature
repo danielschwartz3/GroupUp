@@ -10,6 +10,8 @@ Feature: Register for a course
     And the user is logged in
     When user <email> requests register for course <course>
     Then the user will be registered undered the course
+    
+    Examples:
       | user_name             | password | course   |
       | bw@mail.mcgill.ca     | aslkda   | ECSE-428 |
       | bweiss@mail.mcgill.ca | aasa     | FACC-400 |
@@ -20,6 +22,8 @@ Feature: Register for a course
     And the user is not logged in
     When user <user_name> requests register for course <course>
     Then the user will be notified that user is not logged in
+    
+    Examples:
       | course   |
       | ECSE-428 |
       | FACC-400 |
@@ -31,6 +35,8 @@ Feature: Register for a course
     And the user is logged in
     When user <user_name> requests register for course <course>
     Then the user will be notified that the course does not exist
+    
+    Examples:
       | user_name     | password | course   |
       | B_Weiss       | aslkda   | LAME-101 |
       | Ben_Weiss     | aasa     | BIRD-101 |
