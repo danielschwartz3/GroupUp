@@ -19,13 +19,13 @@ Feature: Register new user
 
     Given John Doe uses email INVALID_EMAIL to request to be a registered user
     When John Doe requests user access to the GroupUp System
-    Then an "Unverified student request" message is issued
+    Then John Doe will be notified of an unverified student request
 
 
   Scenario: Existing user attempts to become a user (Error Flow)
 
     Given James Smith is a user of the GoupUp System
     When James Smith requests user access to the GroupUp System
-    Then an "Already registered" message is issued
+    Then James Smith will be notified that he is already registered
 
 
