@@ -13,11 +13,10 @@ function App() {
   return (
     <Provider store={ store }>
     <div className="App">
-      {/* <Login/> */}
-      {/* <Register/> */}
-
       <Navbar/>
-      {/* <AllCourses/> */}
+      {/*<Register/>*/}
+      {/*<Login/>*/}
+      <AllCourses/>
       <MyCourses/>
     </div>
     </Provider>
