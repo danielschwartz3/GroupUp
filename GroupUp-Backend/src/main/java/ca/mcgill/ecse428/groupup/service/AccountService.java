@@ -1,5 +1,8 @@
 package ca.mcgill.ecse428.groupup.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +27,13 @@ public class AccountService {
     public Account  createStudentAccount(Student role, String userName, String name,
                                  String email, String institution, String password)
                                  {   
+    	System.out.println(email);
         Account acc;
         String error = "";
         Boolean isEmailValid = false;
         error = verifyInput(role, userName, name, email, institution, password);
         isEmailValid = verifyEmail(email);
-        if(!isEmailValid) error+= "INVALID_EMAIL";
+        if(!isEmailValid) error+= email+"INVALID_EMAIL";
         if(accRepo.existsById(email))error = error + "Already registered";
         if (error.length() > 0) {
             throw new IllegalArgumentException(error);
@@ -126,5 +130,18 @@ public class AccountService {
             if(institution == null ||institution.trim().length()==0) error += "User institution cannot be empty";
             if(password == null || password.trim().length()==0) error += "Password cannot be empty";
         return error;
+    }
+    
+    @Transactional
+    public List<Account> getAllAccounts() {
+        return toList(accRepo.findAll());
+    }
+    
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<T>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
     }
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { connect } from 'react-redux';
+import { createCourseAction } from '../../redux';
 import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,6 +13,7 @@ const CreateCourses = (props) => {
     const [courseYear, setCourseYear] = useState('');
     const [courseSemester, setCourseSemester] = useState('');
     const [courseSection, setCourseSection] = useState('');
+    const [courseName, setCourseName] = useState('');
 
     function getModalStyle() {
         const top = 50;
@@ -37,27 +40,31 @@ const CreateCourses = (props) => {
             params: {
                 courseID: courseID,
                 faculty: courseFaculty,
-                year: courseYear,
-                semester: courseSemester,
+                id: null,
+                name: courseName,
                 section: courseSection,
+                semester: courseSemester,
+                year: courseYear,
             }
         }).then(function (response) {
             console.log(response);
             const newCourse = {
-                courseID: courseID,
-                faculty: courseFaculty,
-                year: courseYear,
-                semester: courseSemester,
-                section: courseSection,
+              courseID: courseID,
+              faculty: courseFaculty,
+              id: response.data.id,
+              name: courseName,
+              section: courseSection,
+              semester: courseSemester,
+              year: courseYear,
             }
-            const newCourses = [...props.courses, newCourse];
-            props.setCourses(newCourses);
+            props.createCourseAction(newCourse);
             handleCreateModal();
             setCourseID('');
             setCourseFaculty('');
             setCourseYear('');
             setCourseSemester('');
             setCourseSection('');
+            setCourseName('');
           })
           .catch(function (error) {
             console.log(error);
@@ -80,11 +87,12 @@ const CreateCourses = (props) => {
           <p id="simple-modal-description">
               Please enter the following information for the new course.
           </p>
-          <TextField onChange={e => setCourseID(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseId" label="Code" />
+          <TextField onChange={e => setCourseName(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseName" label="Name" />
+          <TextField onChange={e => setCourseID(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseID" label="Code" />
           <TextField onChange={e => setCourseSection(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseSection" label="Section" />
           <TextField onChange={e => setCourseSemester(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseSemester" label="Semester" />
           <TextField onChange={e => setCourseYear(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseYear" label="Year" />
-          <TextField onChange={e => setCourseFaculty(e.target.value)} style={{ margin: '1%', width: '92%' }} id="courseFaculty" label="Faculty" />
+          <TextField onChange={e => setCourseFaculty(e.target.value)} style={{ margin: '1%', width: '45%' }} id="courseFaculty" label="Faculty" />
           <Button style={{ width: '100%', marginTop: '5%' }} onClick={createCourse}>Create</Button>
         </div>
     );
@@ -106,4 +114,7 @@ const CreateCourses = (props) => {
 }
 
 
-export default CreateCourses;
+export default connect(
+  null,
+  { createCourseAction }
+)(CreateCourses);

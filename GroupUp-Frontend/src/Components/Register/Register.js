@@ -2,17 +2,15 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
 
 const URL = 'http://localhost:8080'
 
-
-const Login = (props) => {
+const Register = (props) => {
+    const [userName, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [institution, setInstitution] = useState('');
     const [password, setPassword] = useState('');
-    const { user } = props;
-
 
     function getModalStyle() {
         const top = 50;
@@ -34,40 +32,31 @@ const Login = (props) => {
     },
     }));
 
-    const Login = () => {
-      console.log(user);
-    //   var greg = {
-    //     userRole: "Student",
-    //     userName: "testStudent2",
-    //     name: "testName",
-    //     email: "testEmail@mail.mcgill.ca",
-    //     userInstitution: "testInstitution"
-    // }
-    //   props.intializeUserAction(greg);
-        axios.post(`${URL}/Login/`, null, {
+    const Register = () => {
+        axios.post(`${URL}/register/newStudent`, null, {
             params: {
+                userName: userName,
+                name: name,
                 email: email,
+                institution: institution,
                 password: password,
             }
         }).then(function (response) {
             console.log(response);
-            props.intializeUserAction(response.data);
-
-            axios.get(`${URL}/courses/enrolled/${email}/`).then((response) => {
-                props.initializeUserCoursesAction(response.data);
-            })
-
-            // const newStudent = {
-                
-            //     email: email,
-            //     password: password,
-            // }
+            const newStudent = {
+                userName: userName,
+                name: name,
+                email: email,
+                institution: institution,
+                password: password,
+            }
             // const newCourses = [...props.courses, newCourse];
             // props.setCourses(newCourses);
             handleCreateModal();
-            
+            setName('');
+            setUsername('');
             setEmail('');
-           
+            setInstitution('');
             setPassword('');
           })
           .catch(function (error) {
@@ -79,35 +68,38 @@ const Login = (props) => {
 
     const [modalStyle] = React.useState(getModalStyle);
 
-    const [createLoginModal, setCreateLoginModal] = useState(props.data);
+    const [createRegisterModal, setCreateRegisterModal] = useState(props.data);
 
     const handleCreateModal = () => {
-        setCreateLoginModal(!createLoginModal);
+        setCreateRegisterModal(!createRegisterModal);
     };
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
-          <h2 id="simple-modal-title">Login</h2>
+          <h2 id="simple-modal-title">Registration</h2>
           <p id="simple-modal-description">
-              Please enter your information to login.
+              Please enter the following information to register.
           </p>
           
-           <TextField onChange={e => setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
+          <TextField onChange={e => setName(e.target.value)} style={{ margin: '1%', width: '45%' }} id="name" label="Name" />
+          <TextField onChange={e => setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
+          <TextField onChange={e => setInstitution(e.target.value)} style={{ margin: '1%', width: '92%' }} id="institution" label="Institution" />
+          <TextField onChange={e => setUsername(e.target.value)} style={{ margin: '1%', width: '45%' }} id="userName" label="Username" />
           <TextField onChange={e => setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
           
-          <Button style={{ width: '100%', marginTop: '5%' }} onClick={Login}>Login</Button>
+          <Button style={{ width: '100%', marginTop: '5%' }} onClick={Register}>Register</Button>
         </div>
     );
       
 
     return (
         <div>
-          <Button onClick={handleCreateModal}>login</Button>
+          <Button onClick={handleCreateModal}>Register</Button>
           <Modal
-            open={Login}
+            open={Register}
             onClose={handleCreateModal}
-            aria-labelledby="Login"
-            aria-describedby="Please enter your information to login."
+            aria-labelledby="Registration"
+            aria-describedby="Please enter the following information to register for GroupUp"
           >
             {body}
           </Modal>
@@ -115,11 +107,5 @@ const Login = (props) => {
     );
 }
 
-const mapStateToProps = (state) => ({
-  user: state.user
-}); 
 
-export default connect(
-    mapStateToProps,
-    { intializeUserAction, initializeUserCoursesAction }
-)(Login);
+export default Register;

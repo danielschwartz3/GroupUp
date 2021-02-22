@@ -13,19 +13,19 @@ Feature: Register new user
       | user_name     | user_email            | user_institution    | password |
       | B_Weiss       | bw@mail.mcgill.ca     | McGill University   | aslkda   |
       | Ben_Weiss     | bweiss@mail.mcgill.ca | McGill University   | aasa     |
-      | Ryan_Schuette | rs@cmail.carleton.ca  | Carleton University | fire     |
+      | Ryan_Schuette | rs@mail.mcgill.ca  		| McGill University 	| fire     |
 
   Scenario: Non-student attempts to become a user (Error Flow)
 
     Given John Doe uses email INVALID_EMAIL to request to be a registered user
     When John Doe requests user access to the GroupUp System
-    Then an "Unverified student request" message is issued
+    Then John Doe will be notified of an invalid email
 
 
   Scenario: Existing user attempts to become a user (Error Flow)
 
     Given James Smith is a user of the GoupUp System
     When James Smith requests user access to the GroupUp System
-    Then an "Already registered" message is issued
+    Then James Smith will be notified that he is already registered
 
 
