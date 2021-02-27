@@ -94,7 +94,7 @@ public class AccountService {
         if(!oldEmail.equals(newEmail)){
             error += "You cannot change your email, please enter valid information!";
         }
-        if(oldAccount.getInstitution().equals(newInstitution)){
+        if(!oldAccount.getInstitution().equals(newInstitution)){
             error += "You cannot change your institution as it is linked to your email"+
                      " please enter valid information!";
         }
