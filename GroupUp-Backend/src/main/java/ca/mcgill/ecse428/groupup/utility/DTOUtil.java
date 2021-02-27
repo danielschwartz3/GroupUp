@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.groupup.utility;
 
 import ca.mcgill.ecse428.groupup.dto.AccountDTO;
 import ca.mcgill.ecse428.groupup.dto.CourseDTO;
+import ca.mcgill.ecse428.groupup.dto.StudentDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.model.Course;
@@ -53,6 +54,15 @@ public class DTOUtil {
             courseDtos.add(convertToDTO(course));
         }
         return courseDtos;
+    }
+    
+    public static StudentDTO convertToDTO(Student student){
+		if(student == null)throw new IllegalArgumentException("student is null");
+    	if(student.getAccount() == null)throw new IllegalArgumentException("student has no account.");
+    	Account acc = student.getAccount();
+    	StudentDTO dto = new StudentDTO(acc.getEmail(),acc.getUserName(),acc.getInstitution());
+    	return dto;
+    	
     }
 
 }

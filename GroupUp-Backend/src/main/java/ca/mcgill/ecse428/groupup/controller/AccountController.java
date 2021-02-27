@@ -40,32 +40,11 @@ public class AccountController {
         return DTOUtil.convertToDTO(acc);
     }
 
-  @PostMapping(value ={"/Login/","/Login/"})
+    @PostMapping(value ={"/Login/","/Login/"})
     public AccountDTO LogIn (@RequestParam("email")String email,
                             @RequestParam("password")String password)
                             throws IllegalArgumentException{
      Account acc = accountService.LogIn(email, password);                                  
-     return convertToDTO(acc);
+     return DTOUtil.convertToDTO(acc);
     }
-
-
-  
-    /**
-     * Helper method for Account controller
-     */
-    private AccountDTO convertToDTO(Account account){
-        if(account == null){
-            throw new IllegalArgumentException("No account");
-        }
-        String userRole = "";
-        if(account.getUserRole() instanceof Student){
-            userRole = "Student";
-        }else if (account.getUserRole() instanceof Admin){
-            userRole = "Admin";
-        }
-        AccountDTO accountDTO = new AccountDTO(userRole,account.getUserName(),account.getName(), 
-                                                account.getEmail(), account.getInstitution());
-        return accountDTO;
-    }
-    
 }

@@ -69,13 +69,13 @@ public class TestStudentPersistance {
 	
 	@Test
 	@Transactional
-	void testFindByCoursesCourseID() {
+	void testFindAllByCourses() {
 		Course newCourse = createSampleCourse();
 		Student newStudent = createSampleStudent();
 		newCourse.addStudent(newStudent);
 		newStudent.addCourse(newCourse);
 		newStudent = studentRepository.save(newStudent);
-		List<Student> studentList = studentRepository.findByCoursesCourseID(COURSEID);
+		List<Student> studentList = studentRepository.findAllByCourses(newCourse);
 		Student savedStudent = studentList.get(0);
 		assertNotNull(savedStudent);
 		checkStudentEqual(newStudent, savedStudent);
