@@ -79,7 +79,9 @@ public class AccountService {
     }
 
     @Transactional
-    public Account changeUserInformation(String oldEmail, Account updateAccount){
+    public Account changeUserInformation(String oldEmail, String newUserName,String newName,
+                                         String newEmail, String newInstitution, String newPassword)
+                                         {
         String error = "";
         UserRole role = null;
         Account oldAccount = accRepo.findById(oldEmail).orElse(null);
@@ -88,20 +90,19 @@ public class AccountService {
         }else{
             role = oldAccount.getUserRole();
         }
-        error = verifyInput(role, updateAccount.getUserName(), updateAccount.getName(),
-                            updateAccount.getEmail(), updateAccount.getInstitution(), 
-                            updateAccount.getPassword());
-        if(oldEmail.equals(updateAccount.getEmail())){
+        error = verifyInput(role, newUserName, newName, newEmail, newInstitution, newPassword); 
+        if(!oldEmail.equals(newEmail)){
             error += "You cannot change your email, please enter valid information!";
         }
-        if(oldAccount.getInstitution().equals(updateAccount.getInstitution())){
+        if(oldAccount.getInstitution().equals(newInstitution)){
             error += "You cannot change your institution as it is linked to your email"+
                      " please enter valid information!";
         }
         if(error.length()>0){
             throw new IllegalArgumentException(error);
         }
-        oldAccount = setAccountDetails(oldAccount, updateAccount);
+        oldAccount = setAccountDetails(oldAccount, newUserName, newName, newEmail, newInstitution,
+                                    newPassword);
         accRepo.save(oldAccount);
         return oldAccount;
     }
@@ -158,12 +159,14 @@ public class AccountService {
         return error;
     }
 
-    private Account setAccountDetails(Account acc, Account newDetails){
-        acc.setEmail(newDetails.getEmail());
-        acc.setInstitution(newDetails.getInstitution());
-        acc.setName(newDetails.getName());
-        acc.setPassword(newDetails.getPassword());
-        acc.setUserName(newDetails.getUserName());
+    private Account setAccountDetails(Account acc, String userName,String name,
+                                     String email, String institution, String password)
+                                     {
+        acc.setUserName(userName);
+        acc.setName(name);
+        acc.setEmail(email);
+        acc.setInstitution(institution);
+        acc.setPassword(password);
         return acc;
     }
 
