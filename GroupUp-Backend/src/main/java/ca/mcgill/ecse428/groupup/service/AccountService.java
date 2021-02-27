@@ -50,6 +50,7 @@ public class AccountService {
         accRepo.save(acc);
         return acc;
     }
+    
     @Transactional
     public Account  createAdminAccount(Admin role, String userName, String name,
                                  String email, String institution, String password)
@@ -77,7 +78,33 @@ public class AccountService {
         return acc;
     }
 
-
+    @Transactional
+    public Account changeUserInformation(String oldEmail, Account updateAccount){
+        String error = "";
+        UserRole role = null;
+        Account oldAccount = accRepo.findById(oldEmail).orElse(null);
+        if(oldAccount == null){
+            error += "No account associated with this email";
+        }else{
+            role = oldAccount.getUserRole();
+        }
+        error = verifyInput(role, updateAccount.getUserName(), updateAccount.getName(),
+                            updateAccount.getEmail(), updateAccount.getInstitution(), 
+                            updateAccount.getPassword());
+        if(oldEmail.equals(updateAccount.getEmail())){
+            error += "You cannot change your email, please enter valid information!";
+        }
+        if(oldAccount.getInstitution().equals(updateAccount.getInstitution())){
+            error += "You cannot change your institution as it is linked to your email"+
+                     " please enter valid information!";
+        }
+        if(error.length()>0){
+            throw new IllegalArgumentException(error);
+        }
+        oldAccount = setAccountDetails(oldAccount, updateAccount);
+        accRepo.save(oldAccount);
+        return oldAccount;
+    }
     
     @Transactional
     public Account LogIn(String email, String password) throws IllegalArgumentException{
@@ -104,8 +131,7 @@ public class AccountService {
     
    /**
     * Helper methods for service class
-    * @param email
-    * @return
+    * 
     */ 
     private Boolean verifyEmail(String email) {
         Boolean isValid = false;
@@ -131,7 +157,16 @@ public class AccountService {
             if(password == null || password.trim().length()==0) error += "Password cannot be empty";
         return error;
     }
-    
+
+    private Account setAccountDetails(Account acc, Account newDetails){
+        acc.setEmail(newDetails.getEmail());
+        acc.setInstitution(newDetails.getInstitution());
+        acc.setName(newDetails.getName());
+        acc.setPassword(newDetails.getPassword());
+        acc.setUserName(newDetails.getUserName());
+        return acc;
+    }
+
     @Transactional
     public List<Account> getAllAccounts() {
         return toList(accRepo.findAll());
