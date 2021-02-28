@@ -53,6 +53,16 @@ function reducer(state, action) {
             ...state,
             courses: [...state.courses, action.payload]
         };
+    case 'EDIT_COURSE':
+        const index = state.courses.findIndex((course) => course.id === action.payload.id);
+        console.log(index);
+        const newCourses = [...state.courses];
+        console.log(action.payload)
+        newCourses[index] = action.payload;
+        return { 
+            ...state,
+            courses: newCourses,
+        };
     case 'DELETE_COURSE':
         return {
             ...state,
@@ -100,6 +110,11 @@ export const getCoursesAction = (courses) => ({
 
 export const createCourseAction = (course) => ({
     type: 'CREATE_COURSE',
+    payload: course
+});
+
+export const editCourseAction = (course) => ({
+    type: 'EDIT_COURSE',
     payload: course
 });
 
