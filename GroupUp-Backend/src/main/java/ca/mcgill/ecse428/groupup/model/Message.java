@@ -1,12 +1,16 @@
 package ca.mcgill.ecse428.groupup.model;
 
-import java.sql.Date;
+import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 
 @Entity
 public class Message {
@@ -19,7 +23,11 @@ public class Message {
 	
 	@ManyToOne
 	private Chat location;
+	
+	@Basic
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date sendDate;
+	
 	private String content;
 	
 	public long getId() {
@@ -53,7 +61,7 @@ public class Message {
 	public void setSendDate(Date sendDate) {
 		this.sendDate = sendDate;
 	}
-	
+
 	public String getContent() {
 		return content;
 	}

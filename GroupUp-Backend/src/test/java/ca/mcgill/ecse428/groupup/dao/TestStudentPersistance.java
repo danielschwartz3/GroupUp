@@ -43,7 +43,6 @@ public class TestStudentPersistance {
 	
 	/**
 	 * The tear down process for every test
-	 * 
 	 */
 	@AfterEach
 	void clearDatabase() {
@@ -129,9 +128,7 @@ public class TestStudentPersistance {
 		Student student = new Student();
 		account.setUserRole(student);
 		student.setAccount(account);
-//		student.setId(ID);
 		student = studentRepository.save(student);
-		account = accountRepository.save(account);
 		assertNotNull(account);
 		return student;
 	}

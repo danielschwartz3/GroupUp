@@ -46,8 +46,7 @@ public class AccountService {
         acc.setPassword(password);
         acc.setUserRole(role);
         role.setAccount(acc);
-        stuRepo.save(role);
-        accRepo.save(acc);
+        stuRepo.save(role); // only need to save one due to cascade effect
         return acc;
     }
     

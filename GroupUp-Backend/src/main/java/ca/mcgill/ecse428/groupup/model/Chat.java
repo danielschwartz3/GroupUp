@@ -1,5 +1,6 @@
 package ca.mcgill.ecse428.groupup.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,9 +22,13 @@ public class Chat {
     @Id
     private long id;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Student> members;
+	
+	public Chat(){
+		members = new HashSet<>();
+	}
 	
 	public long getId() {
 		return id;

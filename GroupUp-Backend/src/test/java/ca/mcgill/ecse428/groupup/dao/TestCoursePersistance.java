@@ -132,7 +132,6 @@ public class TestCoursePersistance {
         account.setUserRole(newStudent);
         newStudent.setAccount(account);
         newStudent = studentRepository.save(newStudent);
-        account = accountRepository.save(account);
         assertNotNull(account);
         return newStudent;
     }
