@@ -1,8 +1,9 @@
 package ca.mcgill.ecse428.groupup.util;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.time.LocalDate;
 import java.util.Random;
+import java.util.TimeZone;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
@@ -15,7 +16,6 @@ public class TestUtil {
 	private static final Semester[] SEMESTERS = {Semester.FALL,Semester.WINTER,Semester.SUMMER};
 	private static final String[] YEARS = {"2019","2020","2021","2022"};
 	private static final String[] FALC = {"Engineering","Science","Art"};
-	
 	
 	public static Student generateStudentAccount(Random r) {
 		Student s = TestUtil.generateStudent(r);
@@ -67,11 +67,15 @@ public class TestUtil {
 		return str.toString();
 	}
 	
+	public static long getRandomNumber(long min, long max) {
+	    return (long)(Math.random() * (max - min)) + min;
+	}
+	
 	public static Date generateDate(Random random) {
-		int minDay = (int) LocalDate.of(2021, 1, 1).toEpochDay();
-		int maxDay = (int) LocalDate.of(2021, 2, 1).toEpochDay();
-		long randomDay = minDay + random.nextInt(maxDay - minDay);
-		Date date = new Date(randomDay); 
-		return date;
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		c.add(Calendar.MONTH, -1);
+		long min = c.getTimeInMillis();
+		long max = System.currentTimeMillis();
+		return new Date(getRandomNumber(min,max));
 	}
 }

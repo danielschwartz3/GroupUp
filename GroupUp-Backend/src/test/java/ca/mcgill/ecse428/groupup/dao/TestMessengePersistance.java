@@ -39,8 +39,8 @@ public class TestMessengePersistance {
 		//Clear the table
 		accountRepository.deleteAll();
 		messageRepository.deleteAll();
-		studentRepository.deleteAll();
 		chatRepository.deleteAll();
+		studentRepository.deleteAll();
 	}
 	
 	@Test
