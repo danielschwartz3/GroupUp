@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,12 +17,21 @@ import ca.mcgill.ecse428.groupup.model.Account;
 public class TestAccountPersistance {
 	@Autowired
 	AccountRepository accountRepository;
-    public static final String USERNAME = "sample_user1";
+    
+	public static final String USERNAME = "sample_user1";
     public static final String NAME = "John Doe"; //student Full-name
     public static final String EMAIL = "sample_user1@mail.mcgill.ca";
     public static final String INSTITUTION = "Mcgill University";
     public static final String PASSWORD = "samplepassword";
 	
+	/**
+	 * The tear down process for every test
+	 */
+	@AfterEach
+	void clearDatabase() {
+		//Clear the table
+		accountRepository.deleteAll();
+	}
     
 	@Test
 	@Transactional
