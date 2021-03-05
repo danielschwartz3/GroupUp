@@ -7,6 +7,7 @@ import MyCourses from './Components/Dashboard/MyCourses';
 import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import Navbar from './Components/Navbar/Navbar'
+import AllConversations from './Components/Messaging/AllConversations'
 
 function App() {
 
@@ -16,8 +17,9 @@ function App() {
       <Navbar/>
       {/*<Register/>*/}
       {/*<Login/>*/}
-      <AllCourses/>
-      <MyCourses/>
+      {/*<AllCourses/>*/}
+      {/*<MyCourses/>*/}
+      <AllConversations/>
     </div>
     </Provider>
   );

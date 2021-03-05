@@ -12,7 +12,8 @@ const initialState = {
     },
 
     registeredCourses: [],
-
+    focusedConversation: -1,
+    conversations: [],
     courses: [],
 };
 
@@ -83,6 +84,11 @@ function reducer(state, action) {
             ...state,
             registeredCourses: state.registeredCourses.filter((course) => course.id !== action.payload)
         };
+    case 'FOCUS_CONVERSATION':
+        return {
+            ...state,
+            focusedConversation: action.payload
+        };
     default:
       return state;
     }
@@ -135,5 +141,10 @@ export const registerCourseAction = (course) => ({
 
 export const unregisterCourseAction = (id) => ({
     type: 'UNREGISTER_COURSE',
+    payload: id
+});
+
+export const focusedConversationAction = (id) => ({
+    type: 'FOCUS_CONVERSATION',
     payload: id
 });
