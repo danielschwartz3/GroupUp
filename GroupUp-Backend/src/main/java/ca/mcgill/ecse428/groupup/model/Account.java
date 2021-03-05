@@ -6,11 +6,11 @@ import javax.persistence.*;
 @Entity
 public class Account{
     private UserRole userRole;
-    public String userName;
-    public String name; //student Full-name
-    public String email;
-    public String institution;
-    public String password;
+    private String userName;
+    private String name; //student Full-name
+    private String email;
+    private String institution;
+    private String password;
 
     public void setUserRole(UserRole userRole){
         this.userRole = userRole;

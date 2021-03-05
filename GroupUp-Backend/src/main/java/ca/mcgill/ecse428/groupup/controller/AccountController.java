@@ -2,6 +2,7 @@ package ca.mcgill.ecse428.groupup.controller;
 
 import ca.mcgill.ecse428.groupup.utility.DTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.AccountService;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class AccountController {
 
@@ -40,32 +42,24 @@ public class AccountController {
         return DTOUtil.convertToDTO(acc);
     }
 
-  @PostMapping(value ={"/Login/","/Login/"})
+    @PostMapping(value ={"/account/update", "/account/update/"})
+    public AccountDTO changeUserInformation(@RequestParam("email") String oldEmail,
+                                            @RequestParam("newUserName") String newUserName,
+                                            @RequestParam("newName") String newName,
+                                            @RequestParam("newEmail") String newEmail,
+                                            @RequestParam("newInstitution") String newInstitution,
+                                            @RequestParam("newPassword") String newPassword)
+        throws IllegalArgumentException {
+    Account acc = accountService.changeUserInformation(oldEmail, newUserName, newName, newEmail,
+                                                    newInstitution, newPassword);
+    return DTOUtil.convertToDTO(acc);
+    }
+    
+    @PostMapping(value ={"/Login/","/Login/"})
     public AccountDTO LogIn (@RequestParam("email")String email,
                             @RequestParam("password")String password)
                             throws IllegalArgumentException{
      Account acc = accountService.LogIn(email, password);                                  
-     return convertToDTO(acc);
+     return DTOUtil.convertToDTO(acc);
     }
-
-
-  
-    /**
-     * Helper method for Account controller
-     */
-    private AccountDTO convertToDTO(Account account){
-        if(account == null){
-            throw new IllegalArgumentException("No account");
-        }
-        String userRole = "";
-        if(account.getUserRole() instanceof Student){
-            userRole = "Student";
-        }else if (account.getUserRole() instanceof Admin){
-            userRole = "Admin";
-        }
-        AccountDTO accountDTO = new AccountDTO(userRole,account.getUserName(),account.getName(), 
-                                                account.getEmail(), account.getInstitution());
-        return accountDTO;
-    }
-    
 }

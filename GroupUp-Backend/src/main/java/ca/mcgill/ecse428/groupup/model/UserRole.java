@@ -14,7 +14,7 @@ public abstract class UserRole{
         this.account = account;
     }
 
-    @OneToOne(mappedBy="userRole", optional = false)
+    @OneToOne(mappedBy="userRole", optional = false, cascade = CascadeType.ALL)
     @JsonBackReference
     public Account getAccount(){
         return this.account;
