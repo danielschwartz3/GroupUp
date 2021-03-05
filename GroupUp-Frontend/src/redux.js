@@ -12,7 +12,8 @@ const initialState = {
     },
 
     registeredCourses: [],
-
+    focusedConversation: -1,
+    conversations: [],
     courses: [],
 };
 
@@ -53,6 +54,16 @@ function reducer(state, action) {
             ...state,
             courses: [...state.courses, action.payload]
         };
+    case 'EDIT_COURSE':
+        const index = state.courses.findIndex((course) => course.id === action.payload.id);
+        console.log(index);
+        const newCourses = [...state.courses];
+        console.log(action.payload)
+        newCourses[index] = action.payload;
+        return { 
+            ...state,
+            courses: newCourses,
+        };
     case 'DELETE_COURSE':
         return {
             ...state,
@@ -72,6 +83,11 @@ function reducer(state, action) {
         return {
             ...state,
             registeredCourses: state.registeredCourses.filter((course) => course.id !== action.payload)
+        };
+    case 'FOCUS_CONVERSATION':
+        return {
+            ...state,
+            focusedConversation: action.payload
         };
     default:
       return state;
@@ -103,6 +119,11 @@ export const createCourseAction = (course) => ({
     payload: course
 });
 
+export const editCourseAction = (course) => ({
+    type: 'EDIT_COURSE',
+    payload: course
+});
+
 export const deleteCourseAction = (id) => ({
     type: 'DELETE_COURSE',
     payload: id
@@ -120,5 +141,10 @@ export const registerCourseAction = (course) => ({
 
 export const unregisterCourseAction = (id) => ({
     type: 'UNREGISTER_COURSE',
+    payload: id
+});
+
+export const focusedConversationAction = (id) => ({
+    type: 'FOCUS_CONVERSATION',
     payload: id
 });

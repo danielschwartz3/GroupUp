@@ -516,7 +516,7 @@ public class StepDefinitions extends SpringWrapper {
 	@Given("a user is logged in")
 	public void a_user_is_logged_in() {
 		testAccount = testAccountService.createStudentAccount(new Student(), "username", "name", "email@mail.mcgill.ca", "institutionName", "password");
-		testAccountService.LogIn(testAccount.email, testAccount.password);
+		testAccountService.LogIn(testAccount.getEmail(), testAccount.getPassword());
 	}
 
     @Given("the following courses exist:")

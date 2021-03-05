@@ -1,7 +1,5 @@
 package ca.mcgill.ecse428.groupup.controller;
 
-import ca.mcgill.ecse428.groupup.dao.AccountRepository;
-import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.dto.CourseDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
@@ -23,10 +21,6 @@ public class CourseController {
     private CourseService courseService;
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private CourseRepository courseRepository;
 
     @PostMapping(value = {"/newcourse", "/newcourse/"})
     public CourseDTO createCourse(@RequestParam("courseID") String courseID, @RequestParam("faculty") String faculty,
@@ -40,7 +34,7 @@ public class CourseController {
     @PostMapping(value = {"/register/student/course", "/register/student/course/"})
     public CourseDTO registerStudent(@RequestParam("email") String email,
                                      @RequestParam("id") int id) {
-        Account account = accountRepository.findById(email).orElse(null);
+        Account account = accountService.getAccountByID(email);
         Student student = (Student) account.getUserRole();
         Course course = courseService.getCourseByID(id);
         course = courseService.registerStudent(student, course);
@@ -49,7 +43,7 @@ public class CourseController {
 
     @PostMapping(value = {"/unregister/student/course", "/unregister/student/course/"})
     public CourseDTO unregisterStudent(@RequestParam("email") String email, @RequestParam("id") int id) {
-        Account account = accountRepository.findById(email).orElse(null);
+        Account account = accountService.getAccountByID(email);
         Student student = (Student) account.getUserRole();
         Course course = courseService.getCourseByID(id);
         course = courseService.unregisterStudent(student, course);
