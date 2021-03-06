@@ -6,9 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.mcgill.ecse428.groupup.dto.AccountDTO;
 import ca.mcgill.ecse428.groupup.dto.StudentDTO;
+import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.CourseService;
@@ -32,4 +35,13 @@ public class StudentController {
 		for(Student student: classMembers)memberDto.add(DTOUtil.convertToDTO(student));
 		return memberDto;
 	}
+	
+    @GetMapping(value = {"/student/{email}", "/student/{email}/"})
+    public StudentDTO getCourseOfId(@PathVariable("email") String email) {
+        Student std = studentService.getStudentByEmail(email);
+        StudentDTO stdDTO = DTOUtil.convertToDTO(std);
+
+        return stdDTO;
+    }
+    
 }
