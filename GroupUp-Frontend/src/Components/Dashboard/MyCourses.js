@@ -45,8 +45,10 @@ const MyCourses = (props) => {
     }, [])
 
     const getData = async () => {
+        /*
         const response = await axios.get(`${URL}/courses/enrolled/jay.abi-saad@mail.mcgill.ca`);
         props.getRegisteredAction(response.data)
+        */
     }
 
     return (
