@@ -64,7 +64,7 @@ const Login = (props) => {
             // }
             // const newCourses = [...props.courses, newCourse];
             // props.setCourses(newCourses);
-            handleCreateModal();
+            props.handleCreateModal();
             
             setEmail('');
            
@@ -75,15 +75,15 @@ const Login = (props) => {
           });
     }
 
+    function switchToRegister() {
+      props.setEditProfile(false)
+      props.handleLoginModal()
+      props.handleCreateModal()
+    }
+
     const classes = useStyles();
 
     const [modalStyle] = React.useState(getModalStyle);
-
-    const [createLoginModal, setCreateLoginModal] = useState(props.data);
-
-    const handleCreateModal = () => {
-        setCreateLoginModal(!createLoginModal);
-    };
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
@@ -92,20 +92,20 @@ const Login = (props) => {
               Please enter your information to login.
           </p>
           
-           <TextField onChange={e => setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
+          <TextField onChange={e => setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
           <TextField onChange={e => setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
           
           <Button style={{ width: '100%', marginTop: '5%' }} onClick={Login}>Login</Button>
+          <Button style={{ width: '100%', marginTop: '5%' }} onClick={switchToRegister}>Register</Button>
         </div>
     );
       
 
     return (
         <div>
-          <Button onClick={handleCreateModal}>login</Button>
           <Modal
-            open={Login}
-            onClose={handleCreateModal}
+            open={props.createLoginModal}
+            onClose={props.handleLoginModal}
             aria-labelledby="Login"
             aria-describedby="Please enter your information to login."
           >

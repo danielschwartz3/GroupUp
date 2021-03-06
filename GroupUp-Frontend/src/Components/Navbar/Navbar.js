@@ -22,8 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
   const classes = useStyles();
+
+  function editProfile() {
+    props.setEditProfile(true)
+    props.handleCreateModal()
+  }
 
   return (
     <div className={classes.root}>
@@ -47,6 +52,7 @@ export default function ButtonAppBar() {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 color="inherit"
+                onClick={editProfile}
             >
                 <AccountCircle />
             </IconButton>
