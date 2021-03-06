@@ -4,6 +4,8 @@ import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
+// import { setCookie, getCookie, eraseCookie}  from '../../cookies';
+import Cookies from 'js-cookie'
 
 const URL = 'http://localhost:8080'
 
@@ -36,6 +38,8 @@ const Login = (props) => {
 
     const Login = () => {
       console.log(user);
+      Cookies.set("GroupUpUserEmailCookie", email, {expires: 1})
+      
     //   var greg = {
     //     userRole: "Student",
     //     userName: "testStudent2",
@@ -65,7 +69,6 @@ const Login = (props) => {
             // const newCourses = [...props.courses, newCourse];
             // props.setCourses(newCourses);
             handleCreateModal();
-            
             setEmail('');
            
             setPassword('');
