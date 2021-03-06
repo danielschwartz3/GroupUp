@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios'
+import { connect } from 'react-redux';
+import { intializeUserAction } from '../../redux';
 import Cookies from 'js-cookie'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar(props) {
+ function ButtonAppBar(props) {
   const classes = useStyles();
 
   const editProfile = async () => {
@@ -34,11 +36,19 @@ export default function ButtonAppBar(props) {
     props.handleCreateModal()
     if (Cookies.get("GroupUpUserEmailCookie") != 'undefined') {
       const response = await axios.get(URL + '/student/' + `${Cookies.get("GroupUpUserEmailCookie")}`);
+      var user = {
+        userRole: response.data,
+        userName: response.data.userName,
+        name: response.data.name,
+        email: props.email,
+        userInstitution: response.data.institution}
+      
+      props.intializeUserAction(user)
       console.log(response)
-      props.setName(response.data.name)
-      props.setEmail(props.email)
-      props.setInstitution(response.data.institution)
-      props.setUserName(response.data.userName)
+      // props.setName(response.data.name)
+      // props.setEmail(props.email)
+      // props.setInstitution(response.data.institution)
+      // props.setUserName(response.data.userName)
       console.log(Cookies.get("GroupUpUserEmailCookie"))
     }
   }
@@ -79,3 +89,8 @@ export default function ButtonAppBar(props) {
     </div>
   );
 }
+
+export default connect(
+  null,
+  { intializeUserAction }
+)(ButtonAppBar);
