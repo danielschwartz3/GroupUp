@@ -35,9 +35,9 @@ public class MessageController {
         return messageDTO;
     }
 
-    @GetMapping(value = {"/chats/{id}", "/chats/{id}/"})
-    public List<ChatDTO> getChatsForStudent(@PathVariable("id") int id) {
-        Student student = studentService.getStudentByID(id);
+    @GetMapping(value = {"/chats/{email}", "/chats/{email}/"})
+    public List<ChatDTO> getChatsForStudent(@PathVariable("email") String email) {
+        Student student = studentService.getStudentByEmail(email);
         List<Chat> chats = messageService.getChatsByStudent(student);
         List<ChatDTO> chatDTOs = new ArrayList<>();
         for (Chat chat : chats){
