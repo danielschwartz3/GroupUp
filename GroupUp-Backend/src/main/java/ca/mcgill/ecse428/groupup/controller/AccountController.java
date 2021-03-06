@@ -3,13 +3,17 @@ package ca.mcgill.ecse428.groupup.controller;
 import ca.mcgill.ecse428.groupup.utility.DTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.groupup.dto.AccountDTO;
+import ca.mcgill.ecse428.groupup.dto.CourseDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Admin;
+import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.AccountService;
 
@@ -61,5 +65,12 @@ public class AccountController {
                             throws IllegalArgumentException{
      Account acc = accountService.LogIn(email, password);                                  
      return DTOUtil.convertToDTO(acc);
+    }
+    
+    @GetMapping(value = {"/account/{email}", "/account/{email}/"})
+    public AccountDTO getAccountByEmail(@PathVariable("email") String email) {
+        Account acc = accountService.getAccountByID(email);
+        AccountDTO accDTO = DTOUtil.convertToDTO(acc);
+        return accDTO;
     }
 }

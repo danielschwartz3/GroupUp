@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios'
+import Cookies from 'js-cookie'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Logo from '../../Resources/Images/logo_transparent.png'
 import './Navbar.css'
+
+const URL = 'http://localhost:8080'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,8 +26,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
   const classes = useStyles();
+
+  const editProfile = async () => {
+    props.setEditProfile(true)
+    props.handleCreateModal()
+    if (Cookies.get("GroupUpUserEmailCookie", props.email) != 'undefined') {
+      const response = await axios.get(URL + '/student/' + `${Cookies.get("GroupUpUserEmailCookie", props.email)}`);
+      console.log(response)
+      props.setName(response.data.name)
+      props.setEmail(props.email)
+      props.setInstitution(response.data.institution)
+      props.setUserName(response.data.userName)
+      console.log(Cookies.get("GroupUpUserEmailCookie", props.email))
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -47,6 +65,7 @@ export default function ButtonAppBar() {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 color="inherit"
+                onClick={editProfile}
             >
                 <AccountCircle />
             </IconButton>
