@@ -32,14 +32,14 @@ export default function ButtonAppBar(props) {
   const editProfile = async () => {
     props.setEditProfile(true)
     props.handleCreateModal()
-    if (Cookies.get("GroupUpUserEmailCookie", props.email) != 'undefined') {
-      const response = await axios.get(URL + '/student/' + `${Cookies.get("GroupUpUserEmailCookie", props.email)}`);
+    if (Cookies.get("GroupUpUserEmailCookie") != 'undefined') {
+      const response = await axios.get(URL + '/student/' + `${Cookies.get("GroupUpUserEmailCookie")}`);
       console.log(response)
       props.setName(response.data.name)
       props.setEmail(props.email)
       props.setInstitution(response.data.institution)
       props.setUserName(response.data.userName)
-      console.log(Cookies.get("GroupUpUserEmailCookie", props.email))
+      console.log(Cookies.get("GroupUpUserEmailCookie"))
     }
   }
 
