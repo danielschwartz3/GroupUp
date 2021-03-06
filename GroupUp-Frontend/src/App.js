@@ -17,7 +17,7 @@ function App() {
   const [institution, setInstitution] = useState('');
   const [password, setPassword] = useState('');
   const [createRegisterModal, setCreateRegisterModal] = useState(false);
-  const [createLoginModal, setCreateLoginModal] = useState(Cookies.get('GroupUpUserEmailCookie', email) === undefined);
+  const [createLoginModal, setCreateLoginModal] = useState(Cookies.get('GroupUpUserEmailCookie') === undefined);
   const [editProfile, setEditProfile] = useState(false);
 
   const handleCreateModal = () => {
