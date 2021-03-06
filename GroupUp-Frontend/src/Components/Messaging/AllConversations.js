@@ -93,8 +93,10 @@ const AllConversations = (props) => {
     }, [])
 
     const getData = async () => {
+      /*
         const response = await axios.get(`${URL}/courses/enrolled/jay.abi-saad@mail.mcgill.ca`);
         props.getRegisteredAction(response.data)
+      */
     }
     if (props.focusedConversation != -1) {
       return (

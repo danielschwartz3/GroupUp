@@ -9,10 +9,6 @@ import Cookies from 'js-cookie'
 const URL = 'http://localhost:8080'
 
 const Login = (props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { user } = props;
-
 
   function getModalStyle() {
       const top = 50;
@@ -35,8 +31,7 @@ const Login = (props) => {
   }));
 
   const Login = () => {
-    console.log(user);
-    Cookies.set("GroupUpUserEmailCookie", email, {expires: 1})
+    Cookies.set("GroupUpUserEmailCookie", props.email, {expires: 1})
     
   //   var greg = {
   //     userRole: "Student",
@@ -48,14 +43,14 @@ const Login = (props) => {
   //   props.intializeUserAction(greg);
       axios.post(`${URL}/Login/`, null, {
           params: {
-              email: email,
-              password: password,
+              email: props.email,
+              password: props.password,
           }
       }).then(function (response) {
           console.log(response);
           props.intializeUserAction(response.data);
 
-          axios.get(`${URL}/courses/enrolled/${email}/`).then((response) => {
+          axios.get(`${URL}/courses/enrolled/${props.email}/`).then((response) => {
               props.initializeUserCoursesAction(response.data);
           })
 
@@ -66,10 +61,9 @@ const Login = (props) => {
           // }
           // const newCourses = [...props.courses, newCourse];
           // props.setCourses(newCourses);
-          props.handleCreateModal();
-          setEmail('');
-         
-          setPassword('');
+          props.handleLoginModal();
+          props.setEmail('');
+          props.setPassword('');
         })
         .catch(function (error) {
           console.log(error);
@@ -94,8 +88,8 @@ const Login = (props) => {
               Please enter your information to login.
           </p>
           
-          <TextField onChange={e => setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
-          <TextField onChange={e => setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
+          <TextField onChange={e => props.setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
+          <TextField onChange={e => props.setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
           
           <Button style={{ width: '100%', marginTop: '5%' }} onClick={Login}>Login</Button>
           <Button style={{ width: '100%', marginTop: '5%' }} onClick={switchToRegister}>Register</Button>

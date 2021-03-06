@@ -8,10 +8,16 @@ import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import Navbar from './Components/Navbar/Navbar'
 import AllConversations from './Components/Messaging/AllConversations'
+import Cookies, { set } from 'js-cookie'
 
 function App() {
+  const [userName, setUserName] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [institution, setInstitution] = useState('');
+  const [password, setPassword] = useState('');
   const [createRegisterModal, setCreateRegisterModal] = useState(false);
-  const [createLoginModal, setCreateLoginModal] = useState(true);
+  const [createLoginModal, setCreateLoginModal] = useState(Cookies.get('GroupUpUserEmailCookie') === undefined);
   const [editProfile, setEditProfile] = useState(false);
 
   const handleCreateModal = () => {
@@ -26,28 +32,52 @@ function App() {
     <Provider store={ store }>
     <div className="App">
       <Navbar
-        createRegisterModal={createRegisterModal}
-        handleCreateModal={handleCreateModal}
-        editProfile={editProfile}
-        setEditProfile={setEditProfile}
+      createRegisterModal={createRegisterModal}
+      handleCreateModal={handleCreateModal}
+      editProfile={editProfile}
+      setEditProfile={setEditProfile}
+      userName={userName}
+      setUserName={setUserName}
+      name={name}
+      setName={setName}
+      email={email}
+      setEmail={setEmail}
+      institution={institution}
+      password={password}
+      setPassword={setPassword}
+      setInstitution={setInstitution}
       />
 
       <Register
-        createRegisterModal={createRegisterModal}
-        handleCreateModal={handleCreateModal}
-        editProfile={editProfile}
+      createRegisterModal={createRegisterModal}
+      handleCreateModal={handleCreateModal}
+      editProfile={editProfile}
+      handleLoginModal={handleLoginModal}
+      userName={userName}
+      setUserName={setUserName}
+      name={name}
+      setName={setName}
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
+      institution={institution}
+      setInstitution={setInstitution}
       />
 
       <Login
-        createLoginModal={createLoginModal}
-        handleLoginModal={handleLoginModal}
-        handleCreateModal={handleCreateModal}
-        editProfile={editProfile}
-        setEditProfile={setEditProfile}
+      createLoginModal={createLoginModal}
+      handleLoginModal={handleLoginModal}
+      handleCreateModal={handleCreateModal}
+      editProfile={editProfile}
+      setEditProfile={setEditProfile}
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
       />
-      
-        {/*<AllCourses/>*/}
-        {/*<MyCourses/>*/}
+      {/*<AllCourses/>*/}
+      {/*<MyCourses/>*/}
       <AllConversations/>
     </div>
     </Provider>

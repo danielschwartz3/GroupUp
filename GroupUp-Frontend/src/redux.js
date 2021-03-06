@@ -2,13 +2,11 @@ import { createStore } from 'redux';
 
 const initialState = {
     user: {
-
         userRole: '',
         userName: '',
         name: '',
         email: '',
         userInstitution: ''
-
     },
 
     registeredCourses: [],
