@@ -2,6 +2,8 @@ package ca.mcgill.ecse428.groupup.service;
 
 import java.util.Date;
 import java.util.Random;
+import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse428.groupup.dao.MessageRepository;
+import ca.mcgill.ecse428.groupup.dao.ChatRepository;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -21,6 +24,8 @@ public class MessageService {
 	
 	@Autowired
 	private MessageRepository messageRepository;
+	@Autowired
+	private ChatRepository chatRepository;
 	
 	@Transactional
 	public Message createMessage(Student sender, Chat chat, String content) {
@@ -66,6 +71,12 @@ public class MessageService {
 		if(!messageRepository.existsById(id))return false;
 		messageRepository.deleteById(id);
 		return true;
+	}
+
+	@Transactional
+	public List<Chat> getChatsByStudent(Student student){
+		List <Chat> chats = chatRepository.findAllByMembers(student);
+		return chats;
 	}
 	
 }
