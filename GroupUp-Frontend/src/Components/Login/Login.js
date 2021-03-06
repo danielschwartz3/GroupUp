@@ -4,76 +4,77 @@ import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
+import Cookies from 'js-cookie'
 
 const URL = 'http://localhost:8080'
 
-
 const Login = (props) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const { user } = props;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { user } = props;
 
 
-    function getModalStyle() {
-        const top = 50;
-        const left = 50;
-      
-        return {
-          top: `${top}%`,
-          left: `${left}%`,
-          transform: `translate(-${top}%, -${left}%)`,
-        };
-    }
+  function getModalStyle() {
+      const top = 50;
+      const left = 50;
     
-    const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: 'absolute',
-        width: 500,
-        backgroundColor: 'white',
-        padding: theme.spacing(2, 4, 3),
-    },
-    }));
+      return {
+        top: `${top}%`,
+        left: `${left}%`,
+        transform: `translate(-${top}%, -${left}%)`,
+      };
+  }
+  
+  const useStyles = makeStyles((theme) => ({
+  paper: {
+      position: 'absolute',
+      width: 500,
+      backgroundColor: 'white',
+      padding: theme.spacing(2, 4, 3),
+  },
+  }));
 
-    const Login = () => {
-      console.log(user);
-    //   var greg = {
-    //     userRole: "Student",
-    //     userName: "testStudent2",
-    //     name: "testName",
-    //     email: "testEmail@mail.mcgill.ca",
-    //     userInstitution: "testInstitution"
-    // }
-    //   props.intializeUserAction(greg);
-        axios.post(`${URL}/Login/`, null, {
-            params: {
-                email: email,
-                password: password,
-            }
-        }).then(function (response) {
-            console.log(response);
-            props.intializeUserAction(response.data);
+  const Login = () => {
+    console.log(user);
+    Cookies.set("GroupUpUserEmailCookie", email, {expires: 1})
+    
+  //   var greg = {
+  //     userRole: "Student",
+  //     userName: "testStudent2",
+  //     name: "testName",
+  //     email: "testEmail@mail.mcgill.ca",
+  //     userInstitution: "testInstitution"
+  // }
+  //   props.intializeUserAction(greg);
+      axios.post(`${URL}/Login/`, null, {
+          params: {
+              email: email,
+              password: password,
+          }
+      }).then(function (response) {
+          console.log(response);
+          props.intializeUserAction(response.data);
 
-            axios.get(`${URL}/courses/enrolled/${email}/`).then((response) => {
-                props.initializeUserCoursesAction(response.data);
-            })
-
-            // const newStudent = {
-                
-            //     email: email,
-            //     password: password,
-            // }
-            // const newCourses = [...props.courses, newCourse];
-            // props.setCourses(newCourses);
-            props.handleCreateModal();
-            
-            setEmail('');
-           
-            setPassword('');
+          axios.get(`${URL}/courses/enrolled/${email}/`).then((response) => {
+              props.initializeUserCoursesAction(response.data);
           })
-          .catch(function (error) {
-            console.log(error);
-          });
-    }
+
+          // const newStudent = {
+              
+          //     email: email,
+          //     password: password,
+          // }
+          // const newCourses = [...props.courses, newCourse];
+          // props.setCourses(newCourses);
+          props.handleCreateModal();
+          setEmail('');
+         
+          setPassword('');
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
 
     function switchToRegister() {
       props.setEditProfile(false)
