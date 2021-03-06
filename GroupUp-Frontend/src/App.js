@@ -26,24 +26,28 @@ function App() {
     <Provider store={ store }>
     <div className="App">
       <Navbar
-      createRegisterModal={createRegisterModal}
-      handleCreateModal={handleCreateModal}
-      editProfile={editProfile}
-      setEditProfile={setEditProfile}
+        createRegisterModal={createRegisterModal}
+        handleCreateModal={handleCreateModal}
+        editProfile={editProfile}
+        setEditProfile={setEditProfile}
       />
 
       <Register
-      createRegisterModal={createRegisterModal}
-      handleCreateModal={handleCreateModal}
-      editProfile={editProfile}/>
+        createRegisterModal={createRegisterModal}
+        handleCreateModal={handleCreateModal}
+        editProfile={editProfile}
+      />
+
       <Login
-      createLoginModal={createLoginModal}
-      handleLoginModal={handleLoginModal}
-      handleCreateModal={handleCreateModal}
-      editProfile={editProfile}
-      setEditProfile={setEditProfile}/>
-      {/*<AllCourses/>*/}
-      {/*<MyCourses/>*/}
+        createLoginModal={createLoginModal}
+        handleLoginModal={handleLoginModal}
+        handleCreateModal={handleCreateModal}
+        editProfile={editProfile}
+        setEditProfile={setEditProfile}
+      />
+      
+        {/*<AllCourses/>*/}
+        {/*<MyCourses/>*/}
       <AllConversations/>
     </div>
     </Provider>

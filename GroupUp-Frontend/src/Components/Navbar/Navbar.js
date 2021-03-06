@@ -36,6 +36,11 @@ export default function ButtonAppBar(props) {
         <Toolbar className="navbar-container">
             <div className="navbar-btn-container">
               <img className="logo-style" src={Logo} />
+                <Button>
+                    <Typography variant="h6" className={classes.title}>
+                        Messages
+                    </Typography>
+                </Button>
                 <Button> 
                     <Typography variant="h6" className={classes.title}>
                         My Courses
