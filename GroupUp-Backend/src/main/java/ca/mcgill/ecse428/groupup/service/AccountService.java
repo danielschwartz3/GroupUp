@@ -79,7 +79,7 @@ public class AccountService {
 
     @Transactional
     public Account changeUserInformation(String oldEmail, String newUserName,String newName,
-                                         String newEmail, String newInstitution, String newPassword)
+                                         String newEmail, String newInstitution)
                                          {
         String error = "";
         UserRole role = null;
@@ -89,7 +89,7 @@ public class AccountService {
         }else{
             role = oldAccount.getUserRole();
         }
-        error = verifyInput(role, newUserName, newName, newEmail, newInstitution, newPassword); 
+        error = verifyInput(role, newUserName, newName, newEmail, newInstitution, "hack"); 
         if(!oldEmail.equals(newEmail)){
             error += "You cannot change your email, please enter valid information!";
         }
@@ -101,7 +101,7 @@ public class AccountService {
             throw new IllegalArgumentException(error);
         }
         oldAccount = setAccountDetails(oldAccount, newUserName, newName, newEmail, newInstitution,
-                                    newPassword);
+                                    "hack");
         accRepo.save(oldAccount);
         return oldAccount;
     }
@@ -126,7 +126,6 @@ public class AccountService {
         return acc;
     }
 
-    
     
     
    /**
@@ -165,7 +164,9 @@ public class AccountService {
         acc.setName(name);
         acc.setEmail(email);
         acc.setInstitution(institution);
-        acc.setPassword(password);
+        if(password != "hack") {
+            acc.setPassword(password);
+        }
         return acc;
     }
 

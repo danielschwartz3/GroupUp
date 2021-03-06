@@ -15,9 +15,25 @@ import Paper from '@material-ui/core/Paper';
 const URL = 'http://localhost:8080';
 
 const AllCourses = (props) => {
+    const [courseID, setCourseID] = useState('');
+    const [courseFaculty, setCourseFaculty] = useState('');
+    const [courseYear, setCourseYear] = useState('');
+    const [courseSemester, setCourseSemester] = useState('');
+    const [courseSection, setCourseSection] = useState('');
+    const [courseName, setCourseName] = useState('');
+    const [selectedId, setSelectedId] = useState(null);
     const [createCourseModal, setCreateCourseModal] = React.useState(false);
+    const [editMode, setEditMode] = React.useState(false);
 
     const handleCreateModal = () => {
+        setEditMode(false);
+        setCourseID('');
+        setCourseFaculty('');
+        setCourseYear('');
+        setCourseSemester('');
+        setCourseSection('');
+        setCourseName('');
+        setSelectedId(null);
         setCreateCourseModal(!createCourseModal);
     };
 
@@ -32,6 +48,19 @@ const AllCourses = (props) => {
         props.getCoursesAction(response.data)
     }
 
+    const editData = (id) => {
+        const course = courses.filter(course => id === course.id)[0];
+        handleCreateModal();
+        setCourseID(course.courseID);
+        setCourseFaculty(course.faculty);
+        setCourseYear(course.year);
+        setCourseSemester(course.semester);
+        setCourseSection(course.section);
+        setCourseName(course.name);
+        setSelectedId(course.id);
+        setEditMode(true);
+    }
+
     const removeData = (id) => {
         axios.delete(`${URL}/deletecourse/${id}`).then(() => {
             console.log(id);
@@ -40,6 +69,7 @@ const AllCourses = (props) => {
     }
 
     const registerCourse = (id) => {
+        /*
         axios.post(`${URL}/register/student/course/`, null, {
             params: {
                 email: 'jay.abi-saad@mail.mcgill.ca',
@@ -54,6 +84,7 @@ const AllCourses = (props) => {
           .catch(function (error) {
             console.log(error);
         });
+        */
     }
 
     return (
@@ -84,6 +115,9 @@ const AllCourses = (props) => {
                                         <Button className='button' color="primary" onClick={() => registerCourse(id)}>Register</Button>
                                     </TableCell>
                                     <TableCell align="right">
+                                        <Button className='button' onClick={() => editData(id)}>Edit</Button>
+                                    </TableCell>
+                                    <TableCell align="right">
                                         <Button className='button' color="secondary" onClick={() => removeData(id)}>Delete</Button>
                                     </TableCell>
                                     </TableRow>
@@ -101,6 +135,22 @@ const AllCourses = (props) => {
                 createCourseModal={createCourseModal}
                 setCreateCourseModal={setCreateCourseModal}
                 handleCreateModal={handleCreateModal}
+                courseID={courseID}
+                setCourseID={setCourseID}
+                courseFaculty={courseFaculty}
+                setCourseFaculty={setCourseFaculty}
+                courseYear={courseYear}
+                setCourseYear={setCourseYear}
+                courseSemester={courseSemester}
+                setCourseSemester={setCourseSemester}
+                courseSection={courseSection}
+                setCourseSection={setCourseSection}
+                courseName={courseName}
+                setCourseName={setCourseName}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+                editMode={editMode}
+                setEditMode={setEditMode}
             />
         </div>
     );
