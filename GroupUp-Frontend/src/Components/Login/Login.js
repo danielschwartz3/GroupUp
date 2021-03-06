@@ -73,6 +73,7 @@ const Login = (props) => {
         })
         .catch(function (error) {
           console.log(error);
+          Cookies.remove("GroupUpUserEmailCookie");
         });
   }
 
