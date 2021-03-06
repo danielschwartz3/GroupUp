@@ -51,11 +51,10 @@ public class AccountController {
                                             @RequestParam("newUserName") String newUserName,
                                             @RequestParam("newName") String newName,
                                             @RequestParam("newEmail") String newEmail,
-                                            @RequestParam("newInstitution") String newInstitution,
-                                            @RequestParam("newPassword") String newPassword)
+                                            @RequestParam("newInstitution") String newInstitution)
         throws IllegalArgumentException {
     Account acc = accountService.changeUserInformation(oldEmail, newUserName, newName, newEmail,
-                                                    newInstitution, newPassword);
+                                                    newInstitution);
     return DTOUtil.convertToDTO(acc);
     }
     

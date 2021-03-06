@@ -52,10 +52,4 @@ public class AccountDTO {
     public void setUserInstitution(String institution) {
         this.institution = institution;
     }
-
-
-
-
-
-
 }
