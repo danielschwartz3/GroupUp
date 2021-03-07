@@ -69,6 +69,7 @@ const AllCourses = (props) => {
     }
 
     const registerCourse = (id) => {
+        /*
         axios.post(`${URL}/register/student/course/`, null, {
             params: {
                 email: 'jay.abi-saad@mail.mcgill.ca',
@@ -83,6 +84,7 @@ const AllCourses = (props) => {
           .catch(function (error) {
             console.log(error);
         });
+        */
     }
 
     return (
@@ -156,7 +158,7 @@ const AllCourses = (props) => {
 
 const mapStateToProps = (state) => ({
     courses: state.courses,
-    email: state.email
+    email: state.user.email
 }); 
 
 export default connect(

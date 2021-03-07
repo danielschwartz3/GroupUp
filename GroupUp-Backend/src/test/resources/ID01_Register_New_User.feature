@@ -13,7 +13,7 @@ Feature: Register new user
       | user_name     | user_email            | user_institution    | password |
       | B_Weiss       | bw@mail.mcgill.ca     | McGill University   | aslkda   |
       | Ben_Weiss     | bweiss@mail.mcgill.ca | McGill University   | aasa     |
-      | Ryan_Schuette | rs@mail.mcgill.ca  		| McGill University 	| fire     |
+      | Ryan_Schuette | rs@mail.mcgill.ca  	  | McGill University 	| fire     |
 
   Scenario: Non-student attempts to become a user (Error Flow)
 
