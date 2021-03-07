@@ -44,6 +44,13 @@ public class StudentService {
 		return studentRepository.findAllByCourses(course);
 	}
 	
+	@Transactional
+	public List<Student> getStudentsByCourse(Student student, Course course){
+		if(course == null)throw new IllegalArgumentException("Course does not exist");
+		if(!course.getStudents().contains(student)) throw new IllegalArgumentException("Student is not registered in the course");
+		return studentRepository.findAllByCourses(course);
+	}
+	
     @Transactional
     public Student getStudentByEmail(String email) throws IllegalArgumentException{
         Account acc = accountRepository.findById(email).orElse(null);
