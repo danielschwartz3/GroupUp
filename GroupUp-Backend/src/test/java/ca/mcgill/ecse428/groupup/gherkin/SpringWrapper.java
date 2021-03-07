@@ -11,6 +11,7 @@ import ca.mcgill.ecse428.groupup.dao.StudentRepository;
 import ca.mcgill.ecse428.groupup.dao.ChatRepository;
 import ca.mcgill.ecse428.groupup.dao.MessageRepository;
 import ca.mcgill.ecse428.groupup.service.AccountService;
+import ca.mcgill.ecse428.groupup.service.StudentService;
 import ca.mcgill.ecse428.groupup.service.CourseService;
 import ca.mcgill.ecse428.groupup.service.ChatService;
 import ca.mcgill.ecse428.groupup.service.MessageService;
@@ -22,6 +23,8 @@ import io.cucumber.spring.CucumberContextConfiguration;
 public class SpringWrapper {
 	@Autowired
 	AccountService testAccountService;
+	@Autowired
+	StudentService testStudentService;
 	@Autowired
 	CourseService testCourseService;
 	@Autowired
