@@ -27,7 +27,8 @@ const useStyles = makeStyles({
     },
     messageContainer: {
       width: '100%',
-      display: 'flex'
+      display: 'flex',
+      justifyContent: 'flex-end'
     },
     messageBox: {
       width: '90%'
@@ -105,6 +106,16 @@ const AllConversations = (props) => {
 
   function submitMessage(e) {
     e.preventDefault()
+
+    conversations[0].messages.push(
+      {
+        message: text,
+        sender: name,
+        time: '12344'
+      }
+    )
+
+    // console.log(conversations[0].messages)
 
     console.log(text)
     setText('')
