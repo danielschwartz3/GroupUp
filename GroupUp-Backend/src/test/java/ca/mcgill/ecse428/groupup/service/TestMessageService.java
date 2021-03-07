@@ -13,9 +13,14 @@ import java.util.Random;
 
 import javax.transaction.Transactional;
 
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import ca.mcgill.ecse428.groupup.dao.*;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -23,15 +28,32 @@ import ca.mcgill.ecse428.groupup.util.TestUtil;
 
 @SpringBootTest
 public class TestMessageService {
-	
+	//service dependency
 	@Autowired
     private MessageService messageService;
-	
 	@Autowired
 	private StudentService studentService;
-	
 	@Autowired
 	private ChatService chatService;
+	//dao dependency
+	@Autowired
+	AccountRepository accountRepository;
+	@Autowired
+	StudentRepository studentRepository;
+	@Autowired
+	MessageRepository messageRepository;
+	@Autowired
+	ChatRepository chatRepository;
+	
+	@BeforeEach
+	@AfterEach
+	void clearDatabase() {
+		//Clear the table
+		messageRepository.deleteAll();
+		chatRepository.deleteAll();
+		studentRepository.deleteAll();
+		accountRepository.deleteAll();
+	}
 	
 	@Test
 	void testGetMessagePage() {
