@@ -13,11 +13,11 @@ import Paper from '@material-ui/core/Paper';
 const URL = 'http://localhost:8080';
 
 const Classmates = (props) => {
-    const [courseID, setCourseID] = useState('');
+    const [courseID, setCourseID] = useState('2');
     const [student, setStudent] = useState('');
 
     const handleCreateModal = () => {
-        setCourseID('');
+        setCourseID('2');
         setStudent('');
     };
 
@@ -28,7 +28,7 @@ const Classmates = (props) => {
     }, [])
 
     const getData = async () => {
-        const response = await axios.get(URL + '/courses/{courseID}/students/');
+        const response = await axios.get(`${URL}/courses/${courseID}/students`);
         props.getStudentAction(response.data)
     }
 
@@ -46,7 +46,7 @@ const Classmates = (props) => {
                         </TableRow>
                         </TableHead>
                             <TableBody>
-                                {students.map(({ courseID, student }) => (
+                                {students.map(({ student }) => (
                                     <TableRow key={courseID}>
                                     <TableCell component="th" scope="row">{courseID}</TableCell>
                                     <TableCell align="right">{student}</TableCell>

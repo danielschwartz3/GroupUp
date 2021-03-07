@@ -82,7 +82,8 @@ function App() {
       />
       {/*<AllCourses/>*/}
       {/*<MyCourses/>*/}
-      <AllConversations/>
+      {/* <AllConversations/> */}
+      <Classmates/>
 
     </div>
     </Provider>
