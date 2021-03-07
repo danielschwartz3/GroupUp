@@ -9,6 +9,8 @@ import Register from './Components/Register/Register'
 import Navbar from './Components/Navbar/Navbar'
 import AllConversations from './Components/Messaging/AllConversations'
 import Cookies, { set } from 'js-cookie'
+import Classmates from './Components/Classmates/Classmates'
+
 
 function App() {
   const [userName, setUserName] = useState('');
@@ -79,6 +81,7 @@ function App() {
       {/*<AllCourses/>*/}
       {/*<MyCourses/>*/}
       <AllConversations/>
+
     </div>
     </Provider>
   );
