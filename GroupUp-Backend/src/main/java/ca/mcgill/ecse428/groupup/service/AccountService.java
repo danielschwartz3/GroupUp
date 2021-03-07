@@ -91,11 +91,11 @@ public class AccountService {
         }
         error = verifyInput(role, newUserName, newName, newEmail, newInstitution, "hack"); 
         if(!oldEmail.equals(newEmail)){
-            error += "You cannot change your email, please enter valid information!";
+            error += "You cannot change your email, please enter valid information";
         }
         if(!oldAccount.getInstitution().equals(newInstitution)){
-            error += "You cannot change your institution as it is linked to your email"+
-                     " please enter valid information!";
+            error += "You cannot change your institution as it is linked to your email,"+
+                     " please enter valid information";
         }
         if(error.length()>0){
             throw new IllegalArgumentException(error);

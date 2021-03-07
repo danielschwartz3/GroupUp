@@ -22,8 +22,7 @@ public class Chat {
     @Id
     private long id;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JsonManagedReference
+	@ManyToMany
     private Set<Student> members;
 	
 	public Chat(){
