@@ -27,7 +27,7 @@ public class MessageController {
 
     //Date sendDate
     @PostMapping(value = {"/newmessage", "/newmessage/"})
-    public MessageDTO createCourse(@RequestParam("sender") Student sender,
+    public MessageDTO createMessage(@RequestParam("sender") Student sender,
                                   @RequestParam("location") Chat location, @RequestParam("content") String content)
                                  {
         Message message = messageService.createMessage(sender, location, content);
