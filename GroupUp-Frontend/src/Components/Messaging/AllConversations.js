@@ -25,6 +25,11 @@ const useStyles = makeStyles({
     table: {
       minWidth: 650
     },
+    chatContainer: {
+      height: '94vh',
+      display: 'flex',
+      flexDirection: 'column'
+    },
     messageContainer: {
       width: '100%',
       display: 'flex',
@@ -133,7 +138,7 @@ const AllConversations = (props) => {
 
     if (props.focusedConversation != -1) {
       return (
-         <div>
+         <div className={classes.chatContainer}>
             {/* <TableContainer component={Paper}>
                     <Table className={classes.table} size="small" aria-label="a dense table">
                         <TableHead>
