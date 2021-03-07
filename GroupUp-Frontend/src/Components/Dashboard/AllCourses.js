@@ -158,7 +158,7 @@ const AllCourses = (props) => {
 
 const mapStateToProps = (state) => ({
     courses: state.courses,
-    email: state.email
+    email: state.user.email
 }); 
 
 export default connect(

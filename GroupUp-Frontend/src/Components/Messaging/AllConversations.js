@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { unregisterCourseAction, getRegisteredAction, focusedConversationAction } from '../../redux';
@@ -13,15 +13,33 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Button } from '@material-ui/core';
+import { Button, Modal } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const URL = 'http://localhost:8080'
 
 const useStyles = makeStyles({
     table: {
       minWidth: 650
+    },
+    chatContainer: {
+      height: '94vh',
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    messageContainer: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end'
+    },
+    messageBox: {
+      width: '90%'
+    },
+    sendBtn: {
+      width: '10%'
     }
 });
 
@@ -56,29 +74,59 @@ const conversations = [
       [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
       {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
 ];
-const mapStateToProps = (state) => ({
-    registeredCourses: state.registeredCourses,
-    email: state.email,
-    conversations: state.conversations,
-    focusedConversation: state.focusedConversation
-}); 
 
 const AllConversations = (props) => {
     const classes = useStyles();
-    const { registeredCourses, email } = props;
+    const [modalOpen, setModalOpen] = useState(false);
+    const [text, setText] = useState('');
+
+    const { registeredCourses, email, name } = props;
+
+    useEffect(() => {
+      getData();
+    })
+
+    const getData = async () => {
+      const response = await axios.get(`${URL}/chats/${email}`);
+    }
+
+    function closeModal() {
+      setModalOpen(false);
+    }
+
+    const startNewConversation = () => {
+      console.log(true)
+      setModalOpen(true);
+      console.log(name)
+    }
 
     const removeConversation = (id) => {
         console.log(id)
         /*props.unregisterCourseAction(id)*/
     }
-   const newConversation = () => {
-        console.log("a whole bag of worms")
-        /*props.unregisterCourseAction(id)*/
-    }
-   const focusedConvo = (id) => {
-        props.focusedConversationAction(id);
-    }
-   const getConvo = (id) => {
+
+  const focusedConvo = (id) => {
+    props.focusedConversationAction(id);
+  }
+
+  function submitMessage(e) {
+    e.preventDefault()
+
+    conversations[0].messages.push(
+      {
+        message: text,
+        sender: name,
+        time: '12344'
+      }
+    )
+
+    // console.log(conversations[0].messages)
+
+    console.log(text)
+    setText('')
+  }
+
+  const getConvo = (id) => {
       var convo;
       for (convo in conversations) {
          if (conversations[convo].id == id) {
@@ -88,27 +136,17 @@ const AllConversations = (props) => {
       }
    }
 
-    useEffect(() => {
-        getData();
-    }, [])
-
-    const getData = async () => {
-      /*
-        const response = await axios.get(`${URL}/courses/enrolled/jay.abi-saad@mail.mcgill.ca`);
-        props.getRegisteredAction(response.data)
-      */
-    }
     if (props.focusedConversation != -1) {
       return (
-         <div>
-            <TableContainer component={Paper}>
+         <div className={classes.chatContainer}>
+            {/* <TableContainer component={Paper}>
                     <Table className={classes.table} size="small" aria-label="a dense table">
                         <TableHead>
                            <TableRow>
                               <TableCell alight="left">Conversations</TableCell>
                               <TableCell align="left">{ getConvo(props.focusedConversation).name }</TableCell>
                               <TableCell align="right">
-                              <Button className='button' color="primary" onClick={() => focusedConvo(-1)}>All Conversations</Button>
+                                <Button className='button' color="primary" onClick={() => focusedConvo(-1)}>All Conversations</Button>
                               </TableCell>
                            </TableRow>
                         </TableHead>
@@ -117,23 +155,24 @@ const AllConversations = (props) => {
                               <TableCell component="th" scope="row">
                               <List style={{width: "30%"}}>
                               {conversations && conversations.map(({ id, name, members, messages }) => (
-                                 <ListItem button onClick={() => focusedConvo(id)}>
-                                            <ListItemText
-                                              primary={name}
-                                              secondary={
-                                                <React.Fragment>
-                                                  <Typography
-                                                    component="span"
-                                                    variant="body2"
-                                                    className={classes.inline}
-                                                    color="textPrimary"
-                                                  >
-                                                    {messages[0].sender} 
-                                                  </Typography>
-                                                  : { messages[0].message } - { messages[0].timestamp }
-                                                </React.Fragment>
-                                              }
-                                            />
+                                //  <ListItem button onClick={() => focusedConvo(id)}>
+                                 <ListItem>
+                                    <ListItemText
+                                      primary={name}
+                                      secondary={
+                                        <React.Fragment>
+                                          <Typography
+                                            component="span"
+                                            variant="body2"
+                                            className={classes.inline}
+                                            color="textPrimary"
+                                          >
+                                            {messages[0].sender} 
+                                          </Typography>
+                                          : { messages[0].message } - { messages[0].timestamp }
+                                        </React.Fragment>
+                                      }
+                                    />
                                  </ListItem>
                               ))}
                               </List>
@@ -166,7 +205,59 @@ const AllConversations = (props) => {
                            </TableRow>
                         </TableBody> 
                     </Table> 
-            </TableContainer>
+            </TableContainer> */}
+            <div>
+              <TableContainer component={Paper}>
+                <Table className={classes.table} size="small" aria-label="a dense table">
+                    <TableHead>
+                       <TableRow>
+                          <TableCell align="left">{ getConvo(props.focusedConversation).name }</TableCell>
+                          <TableCell align="right">
+                            <Button className='button' color="primary" onClick={() => focusedConvo(-1)}>All Conversations</Button>
+                          </TableCell>
+                       </TableRow>
+                    </TableHead>
+                </Table>
+              </TableContainer>
+            </div>
+            <div className="d-flex flex-column flex-grow-1">
+              <div className="flex-grow-1 overflow-auto">
+                <div className="d-flex flex-column align-items-start justify-content-end px-3">
+                  {getConvo(props.focusedConversation).messages.map(({ message, sender, timestamp }) => (
+                    <div 
+                      key={timestamp}
+                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`}
+                    > {/* change id later! */}
+                      <div 
+                        className={`rounded px-2 py-1 ${sender == name ? 'bg-primary text-white' : 'border'}`}
+                      >
+                        {message}
+                      </div>
+                      <div
+                        className={`text-muted small ${sender == name ? 'text-right' : ''}`}
+                      >
+                        {sender == name ? 'You' : sender}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className={classes.messageContainer}>
+              <TextField
+                className={classes.messageBox}
+                id="message-container"
+                value={text}
+                onChange={e => setText(e.target.value)}
+                multiline
+                rows={2}
+                placeholder="Enter Message..."
+                variant="outlined"
+              />
+              <Button onClick={submitMessage} variant="outlined" color="primary" className='bg-primary text-white'>
+                Send
+              </Button>
+            </div>
         </div>
         );
    }
@@ -184,7 +275,7 @@ const AllConversations = (props) => {
                             <TableCell align="right"></TableCell>
                             <TableCell align="right">Participants</TableCell>
                             <TableCell align="right">
-                              <Button className='button' color='primary' onClick={() => newConversation()}>New Conversation</Button> {/*replace with image*/}
+                              <Button className='button' color='primary' onClick={() => startNewConversation()}>New Conversation</Button> {/*replace with image*/}
                            </TableCell> {/*replace with + image*/}
                         </TableRow>
                         </TableHead>
@@ -214,9 +305,23 @@ const AllConversations = (props) => {
                     </div>
                 }
             </TableContainer>
+
+            {/* <Modal show={modalOpen} onHide={closeModal}>
+                <div>
+                </div>
+            </Modal> */}
         </div>
     );
 }
+
+const mapStateToProps = (state) => ({
+  registeredCourses: state.registeredCourses,
+  email: state.user.email,
+  name: state.user.name,
+  conversations: state.conversations,
+  focusedConversation: state.focusedConversation
+}); 
+
 export default connect(
     mapStateToProps,
     { unregisterCourseAction, getRegisteredAction, focusedConversationAction }
