@@ -7,6 +7,7 @@ import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.service.StudentService;
+import ca.mcgill.ecse428.groupup.service.ChatService;
 import ca.mcgill.ecse428.groupup.service.MessageService;
 import ca.mcgill.ecse428.groupup.utility.DTOUtil;
 // import ca.mcgill.ecse428.groupup.utility.Semester;
@@ -23,6 +24,8 @@ public class MessageController {
     private MessageService messageService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private ChatService chatService;
 
 
     //Date sendDate
@@ -34,7 +37,14 @@ public class MessageController {
         MessageDTO messageDTO = new MessageDTO(message.getId(), message.getSender(), message.getLocation(), message.getSendDate(), message.getContent());
         return messageDTO;
     }
-
+    
+    @PostMapping(value = {"/newchat", "/newchat/"})
+    public ChatDTO createChat(@RequestParam("members") List<Student> students) {
+    	Chat chat = chatService.createChat(students);
+    	ChatDTO chatDTO = new ChatDTO(chat.getId(), chat.getMembers());
+    	return chatDTO;
+    }
+    
     @GetMapping(value = {"/chats/{id}", "/chats/{id}/"})
     public List<ChatDTO> getChatsForStudent(@PathVariable("id") int id) {
         Student student = studentService.getStudentByID(id);
