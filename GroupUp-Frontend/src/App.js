@@ -8,6 +8,7 @@ import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import Navbar from './Components/Navbar/Navbar'
 import AllConversations from './Components/Messaging/AllConversations'
+import Classmates from './Components/Classmates/Classmates'
 
 function App() {
 
@@ -15,11 +16,14 @@ function App() {
     <Provider store={ store }>
     <div className="App">
       <Navbar/>
-      {/*<Register/>*/}
+      {/* <Register/> */}
       {/*<Login/>*/}
-      {/*<AllCourses/>*/}
-      {/*<MyCourses/>*/}
-      <AllConversations/>
+      {/* <AllCourses/> */}
+      {/* <MyCourses/> */} 
+      {/* <AllConversations/> */}
+      <Classmates/>
+
+
     </div>
     </Provider>
   );
