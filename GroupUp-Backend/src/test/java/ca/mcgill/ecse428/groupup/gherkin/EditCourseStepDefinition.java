@@ -1,7 +1,11 @@
 package ca.mcgill.ecse428.groupup.gherkin;
 
+import ca.mcgill.ecse428.groupup.dao.AdminRepository;
+import ca.mcgill.ecse428.groupup.dao.CourseRepository;
 import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.utility.Semester;
+import io.cucumber.java.After;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.mcgill.ecse428.groupup.model.Account;
@@ -22,6 +26,12 @@ public class EditCourseStepDefinition {
 
     @Autowired
     private  CourseService courseService;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     private static Account adminAccount;
 
@@ -78,6 +88,13 @@ public class EditCourseStepDefinition {
         assertTrue(updatedCourse.getCourseName().equalsIgnoreCase(new_course_name));
     }
 
-
+    @Before
+    @After
+    public void clearDatabase() {
+        // Clear the table to avoid inconsistency
+        System.out.println("Clearing database in between tests");
+        courseRepository.deleteAll();
+        adminRepository.deleteAll();
+    }
 
 }
