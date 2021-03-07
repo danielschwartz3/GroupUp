@@ -20,8 +20,8 @@ function App() {
       {/*<Login/>*/}
       {/* <AllCourses/> */}
       {/* <MyCourses/> */} 
-      {/* <AllConversations/> */}
-      <Classmates/>
+      <AllConversations/>
+      {/* <Classmates/> */}
 
 
     </div>
