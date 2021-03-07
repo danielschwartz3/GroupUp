@@ -2,15 +2,13 @@ import { createStore } from 'redux';
 
 const initialState = {
     user: {
-
         userRole: '',
         userName: '',
-        name: '',
+        name: 'Edem Nuviadenu',
         email: '',
         userInstitution: ''
-
     },
-
+    students: [],
     registeredCourses: [],
     focusedConversation: -1,
     conversations: [],
@@ -84,6 +82,11 @@ function reducer(state, action) {
             ...state,
             registeredCourses: state.registeredCourses.filter((course) => course.id !== action.payload)
         };
+    case 'GET_REGISTERED_STUDENTS':
+        return {
+              ...state,
+                students: [...state.students, action.payload]
+            };
     case 'FOCUS_CONVERSATION':
         return {
             ...state,
@@ -132,6 +135,10 @@ export const deleteCourseAction = (id) => ({
 export const getRegisteredAction = (courses) => ({
     type: 'GET_REGISTERED_COURSES',
     payload: courses
+});
+export const getStudentAction = (students) => ({
+    type: 'GET_REGISTERED_STUDENTS',
+    payload: students
 });
 
 export const registerCourseAction = (course) => ({
