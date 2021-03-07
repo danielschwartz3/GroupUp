@@ -49,10 +49,10 @@ public class TestMessageService {
 	@AfterEach
 	void clearDatabase() {
 		//Clear the table
+		messageRepository.deleteAll();
+		chatRepository.deleteAll();
 		studentRepository.deleteAll();
 		accountRepository.deleteAll();
-		chatRepository.deleteAll();
-		messageRepository.deleteAll();
 	}
 	
 	@Test
@@ -64,22 +64,22 @@ public class TestMessageService {
 		Student s2 = TestUtil.generateStudentAccount(r);
 		s2 = studentService.createStudent(s2);
 		Chat chat = chatService.createChat(Arrays.asList(new Student[] {s,s2}));
-		// ArrayList<Message> history = new ArrayList<>(); 
-		// for(int i = 0 ; i < 50 ; i++) {
-		// 	String cnt = TestUtil.generateString(r, 20);
-		// 	Message msg = messageService.createMessage(s, chat, cnt);
-		// 	history.add(msg);
-		// 	try {
-		// 		Thread.sleep(200);
-		// 	} catch (InterruptedException e) {}
-		// }
-		// Collections.sort(history,(a,b)->{return ((Message)b).getSendDate().compareTo(((Message)a).getSendDate());});
-		// List<Message> page = messageService.getMessagesByChat(chat, 0).getContent();
-		// int i = 0;
-		// for(Message msg: page) {
-		// 	assertEquals(sdf.format(history.get(i).getSendDate()),sdf.format(msg.getSendDate()));
-		// 	i++;
-		// }
+		ArrayList<Message> history = new ArrayList<>(); 
+		for(int i = 0 ; i < 50 ; i++) {
+			String cnt = TestUtil.generateString(r, 20);
+			Message msg = messageService.createMessage(s, chat, cnt);
+			history.add(msg);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {}
+		}
+		Collections.sort(history,(a,b)->{return ((Message)b).getSendDate().compareTo(((Message)a).getSendDate());});
+		List<Message> page = messageService.getMessagesByChat(chat, 0).getContent();
+		int i = 0;
+		for(Message msg: page) {
+			assertEquals(sdf.format(history.get(i).getSendDate()),sdf.format(msg.getSendDate()));
+			i++;
+		}
 	}
 	
 

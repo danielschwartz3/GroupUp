@@ -22,7 +22,7 @@ public class ChatService {
 			throw new IllegalArgumentException("Chat member can not be less than 2.");
 		}
 		Chat chat = new Chat();
-		// for(Student s : students)chat.getMembers().add(s);
+		for(Student s : students)chat.getMembers().add(s);
 		chat = chatRepository.save(chat);
 		return chat;
 	}
