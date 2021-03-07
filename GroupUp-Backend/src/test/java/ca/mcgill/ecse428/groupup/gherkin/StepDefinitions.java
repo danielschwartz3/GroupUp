@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,11 +15,19 @@ import java.util.Set;
 import org.junit.Assert;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.model.Chat;
+import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.service.AccountService;
 import ca.mcgill.ecse428.groupup.service.CourseService;
+import ca.mcgill.ecse428.groupup.service.ChatService;
+import ca.mcgill.ecse428.groupup.service.MessageService;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
@@ -42,8 +53,11 @@ public class StepDefinitions extends SpringWrapper {
         // Clear the table to avoid inconsistency
 		System.out.println("Clearing database in between tests");
         courseRepository.deleteAll();
+        messageRepository.deleteAll();
+        chatRepository.deleteAll();
         accountRepository.deleteAll();
         studentRepository.deleteAll();
+
     }
     @Given("student {word} with student email {word} and institution name {string} is student in good standing")
     public void studentUser_nameWithStudentEmailUser_emailAndInstitutionNameUser_institutionIsStudentInGoodStanding(String name, String email, String institutionName) {
@@ -499,6 +513,95 @@ public class StepDefinitions extends SpringWrapper {
 //    }
     
     
+//============================ID019 Privately Message Another User================================//
+    
+    //Given a user is logged in
+    //And the user is registered for this course
+    
+    Chat testChat = null;
+    Message testMessage = null;
+    Student testStudent = null;
+    Student studentb = null;
+    
+    @And("studentb {word} is registered in the same course {word}")
+    public void studentb_is_registered_in_the_same_course(String email, String course) {
+    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
+    	studentb = (Student) accountb.getUserRole();
+    	//testCourse = testCourseService.createCourse(course, "faculty", semester, year, "01", course);
+    	testCourse.addStudent(studentb);
+    }
+    
+    @And("the user does not have an existing conversation with studentb {word}")
+    public void the_user_does_not_have_an_existing_conversation_with_studentb(String email) {
+    	List<Student> students = new ArrayList<Student>();
+    	students.add(testStudent);
+    	students.add(studentb);
+    	testChat = testChatService.createChat(students);
+    }
+
+    @When("the user tries to message studentb {word}")
+    public void the_user_tries_to_message_studentb(String email) {
+    	testMessage = testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
+    }
+    
+    @Then("studentb {word} should receive a new message")
+    public void studentb_should_receive_a_new_message(String email) throws Throwable{
+    	assertNotNull(testMessage.getContent());
+//    	assertNotEquals(0, testMessageService.getChatsByStudent(studentb).size());
+    }
+    
+    @And("the user has an existing conversation with studentb {word}")
+    public void the_user_has_an_existing_conversation_with_studentb(String email) {
+    	List<Student> students = new ArrayList<Student>();
+    	students.add(testStudent);
+    	students.add(studentb);
+    	testChat = testChatService.createChat(students);
+    }
+    
+    
+//============================ID021 View Chats with Other Users====================================//
+    
+    Page<Message> page = null;
+    //Given a user is logged in
+    
+    @And("the user has a history of messages with studentb {word}")
+    public void the_user_has_a_history_of_messages_with_studentb(String email) {
+    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
+    	studentb = (Student) accountb.getUserRole();
+    	List<Student> students = new ArrayList<Student>();
+    	students.add(testStudent);
+    	students.add(studentb);
+    	testChat = testChatService.createChat(students);
+    	testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
+    }
+    
+    @When("the user opens his conversation with studentb {word}")
+    public void the_user_opens_his_conversation_with_studentb(String email) {
+    	page = testMessageService.getMessagesByChat(testChat, 0);
+    }
+    
+    @Then("the user will see a display of all the past messages")
+    public void the_user_will_see_a_display_of_all_the_past_messages() {
+    	assertNotNull(page.getContent().get(0));
+    	assertEquals("Hello my name is Joe", page.getContent().get(0).getContent());
+    }
+    
+    @And("the user has no history of messages with studentb {word}")
+    public void the_user_has_no_history_of_messages_with_studentb(String email) {
+    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
+    	studentb = (Student) accountb.getUserRole();
+    	List<Student> students = new ArrayList<Student>();
+    	students.add(testStudent);
+    	students.add(studentb);
+    	testChat = testChatService.createChat(students);
+    }
+    
+    @Then("the user will see a display of an empty messaging inbox")
+    public void the_user_will_see_a_display_of_an_empty_messaging_inbox() {
+    	assertTrue(page.getContent().isEmpty());
+    }
+    
+    
 //=============================ID022 View Available Courses===============================//
     
 //    CourseService testCourseService = new CourseService();
@@ -516,6 +619,7 @@ public class StepDefinitions extends SpringWrapper {
 	@Given("a user is logged in")
 	public void a_user_is_logged_in() {
 		testAccount = testAccountService.createStudentAccount(new Student(), "username", "name", "email@mail.mcgill.ca", "institutionName", "password");
+		testStudent = (Student) testAccount.getUserRole();
 		testAccountService.LogIn(testAccount.getEmail(), testAccount.getPassword());
 	}
 
