@@ -400,6 +400,39 @@ public class StepDefinitions extends SpringWrapper {
     
     
     
+//======================================================ID013 View My Course Classmates List=======================================================//
+    
+    //Given a user is logged in
+    //Given the user is registered for this course
+    List<Student> classmates = null;
+    
+    @When("the user requests view the course classmates list")
+    public void the_user_requests_view_the_course_classmates_list() {
+    	try {
+    		classmates = testStudentService.getStudentsByCourse(testStudent, testCourse);
+    	}
+    	catch(Exception e) {
+    		errorMessage = e.getMessage();
+    	}
+    }
+    
+    @Then("the user will see the course classmates list")
+    public void the_user_will_see_the_course_classmates_list() {
+    	assertNotEquals(0, classmates.size());
+    }
+    
+    @Given("the user is not enrolled in course {word}")
+    public void  the_user_is_not_enrolled_in_course(String course) {
+    	testCourse = testCourseService.createCourse(course, "faculty", "WINTER", "2021", "01", course);
+    }
+    
+    @Then("the user will be notified that you are not enrolled in this course")
+    public void the_user_will_be_notified_that_you_are_not_enrolled_in_this_course() {
+    	assertEquals("Student is not registered in the course", errorMessage);
+    }
+    
+    
+    
 //=======================================================ID019 Privately Message Another User=======================================================//
     
     //Given a user is logged in
@@ -422,7 +455,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     }
 
     @When("the user tries to message studentb {word}")
@@ -441,7 +474,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     }
     
     
@@ -458,7 +491,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     	testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
     }
     
@@ -480,7 +513,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     }
     
     @Then("the user will see a display of an empty messaging inbox")

@@ -9,7 +9,8 @@ public class ChatDTO {
 
     private long id;
     private Set<Student> members;
-
+    private String name;
+    
     public ChatDTO() {};
 
     public ChatDTO(long id, Set<Student> members) {
@@ -17,6 +18,12 @@ public class ChatDTO {
         this.members = members;
     }
 
+    public ChatDTO(long id, String name, Set<Student> members) {
+        this.id = id;
+        this.members = members;
+        this.name = name;
+    }
+    
     public long getId() {
 		return id;
 	}
@@ -30,4 +37,11 @@ public class ChatDTO {
 		this.members = members;
 	}
     
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 }

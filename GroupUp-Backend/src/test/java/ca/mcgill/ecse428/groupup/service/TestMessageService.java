@@ -63,7 +63,7 @@ public class TestMessageService {
 		s = studentService.createStudent(s);
 		Student s2 = TestUtil.generateStudentAccount(r);
 		s2 = studentService.createStudent(s2);
-		Chat chat = chatService.createChat(Arrays.asList(new Student[] {s,s2}));
+		Chat chat = chatService.createChatWithoutName(Arrays.asList(new Student[] {s,s2}));
 		ArrayList<Message> history = new ArrayList<>(); 
 		for(int i = 0 ; i < 50 ; i++) {
 			String cnt = TestUtil.generateString(r, 20);
