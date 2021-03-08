@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,7 +25,8 @@ public class ChatController {
 	@Autowired
     private StudentService studentService;
 	
-    @PostMapping(value = {"/newchat", "/newchat/"})
+	
+    @PostMapping(value = {"/newchat", "/newchat/"}) // ************ NOTE: this creates a chat without a name
     public ChatDTO createChat(@RequestParam("members") List<String> emails) {
     	
     	List<Student> students = new ArrayList<Student>();
@@ -36,9 +38,28 @@ public class ChatController {
     		students.add(s);
     	}
     	
-    	Chat chat = chatService.createChat(students);
+    	Chat chat = chatService.createChatWithoutName(students);
     	
     	ChatDTO cDTO= new ChatDTO(chat.getId(), chat.getMembers());
+    	
+    	return cDTO;
+    }
+    
+    @PostMapping(value = {"/newchat/{name}", "/newchat/{name}/"})
+    public ChatDTO createChat(@PathVariable("name") String name, @RequestParam("members") List<String> emails) {
+    	
+    	List<Student> students = new ArrayList<Student>();
+    	Student s;
+    	
+    	// Get the list of students from their emails
+    	for (String email : emails) {
+    		s = studentService.getStudentByEmail(email);
+    		students.add(s);
+    	}
+    	
+    	Chat chat = chatService.createChat(name, students);
+    	
+    	ChatDTO cDTO= new ChatDTO(chat.getId(), chat.getName(), chat.getMembers());
     	
     	return cDTO;
     }

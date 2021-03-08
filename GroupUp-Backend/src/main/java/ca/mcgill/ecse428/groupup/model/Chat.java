@@ -36,6 +36,18 @@ public class Chat {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	private String name;
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 	public Set<Student> getMembers() {
 		return members;
 	}
