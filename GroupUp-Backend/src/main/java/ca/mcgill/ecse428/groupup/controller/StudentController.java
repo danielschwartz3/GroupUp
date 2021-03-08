@@ -28,7 +28,7 @@ public class StudentController {
 	private CourseService courseService;
 	
 	@GetMapping(value = {"/courses/{id}/students", "/courses/{id}/students/"})
-	public List<StudentDTO> getStudentsByCourseID(int id){
+	public List<StudentDTO> getStudentsByCourseID(@PathVariable("id")int id){
 		Course course = courseService.getCourseByID(id);
 		List<Student> classMembers = studentService.getStudentsByCourse(course);
 		List<StudentDTO> memberDto = new ArrayList<>();
