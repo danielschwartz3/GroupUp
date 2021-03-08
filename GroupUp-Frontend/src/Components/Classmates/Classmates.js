@@ -45,6 +45,7 @@ const Classmates = (props) => {
                         </TableRow>
                         </TableHead>
                             <TableBody>
+
                                 {students => (
                                     <TableRow key={courseID}>
                                     <TableCell component="th" scope="row">{courseID}</TableCell>

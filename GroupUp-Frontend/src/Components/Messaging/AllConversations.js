@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
     modalSubContainer: {
       display: 'flex',
       alignItems: 'center',
-      
     }
 }));
 
@@ -124,7 +123,6 @@ const conversations = [
       [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
       {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
 ];
-
 const names = [
   'Oliver Hansen',
   'Van Henry',
@@ -176,7 +174,7 @@ const AllConversations = (props) => {
       console.log(id)
       /*props.unregisterCourseAction(id)*/
   }
-
+  
   const focusedConvo = (id) => {
     props.focusedConversationAction(id);
   }
@@ -310,7 +308,6 @@ const AllConversations = (props) => {
                     </div>
                 }
             </TableContainer>
-
             <Modal
               open={open}
               onClose={handleClose}

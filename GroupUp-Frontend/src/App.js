@@ -84,7 +84,6 @@ function App() {
       {/*<MyCourses/>*/}
       <AllConversations/>
       {/* <Classmates/> */}
-
     </div>
     </Provider>
   );
