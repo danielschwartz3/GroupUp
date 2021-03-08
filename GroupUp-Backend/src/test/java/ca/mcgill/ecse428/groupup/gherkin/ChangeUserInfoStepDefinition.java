@@ -42,6 +42,8 @@ public class ChangeUserInfoStepDefinition extends SpringWrapper {
         // Clear the table to avoid inconsistency
 		System.out.println("Clearing database in between tests");
         courseRepository.deleteAll();
+        messageRepository.deleteAll();
+        chatRepository.deleteAll();
         accountRepository.deleteAll();
         studentRepository.deleteAll();
     }
