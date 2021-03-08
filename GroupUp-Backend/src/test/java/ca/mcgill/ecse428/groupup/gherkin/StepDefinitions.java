@@ -455,7 +455,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     }
 
     @When("the user tries to message studentb {word}")
@@ -474,7 +474,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     }
     
     
@@ -491,7 +491,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     	testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
     }
     
@@ -513,7 +513,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Student> students = new ArrayList<Student>();
     	students.add(testStudent);
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChatWithoutName(students);
     }
     
     @Then("the user will see a display of an empty messaging inbox")

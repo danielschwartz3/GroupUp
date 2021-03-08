@@ -28,7 +28,7 @@ const Classmates = (props) => {
     }, [])
 
     const getData = async () => {
-        const response = await axios.get(URL + '/courses/{courseID}/students/');
+        const response = await axios.get(`${URL}/courses/${courseID}/students`);
         props.getStudentAction(response.data)
     }
 
@@ -40,18 +40,18 @@ const Classmates = (props) => {
                     <Table size="small" aria-label="a dense table">
                         <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
                             <TableCell align="right">Course ID</TableCell>
                             <TableCell align="right">Student</TableCell>
                         </TableRow>
                         </TableHead>
                             <TableBody>
-                                {students.map(({ courseID, student }) => (
+
+                                {students => (
                                     <TableRow key={courseID}>
                                     <TableCell component="th" scope="row">{courseID}</TableCell>
-                                    <TableCell align="right">{student}</TableCell>
+                                    <TableCell align="right">{students}</TableCell>
                                     </TableRow>
-                                ))}
+                                )}
                             </TableBody> 
                     </Table> : 
                     <div>

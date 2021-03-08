@@ -40,7 +40,7 @@ public class MessageController {
 
     @PostMapping(value = {"/newchat", "/newchat/"})
     public ChatDTO createChat(@RequestParam("members") List<Student> students) {
-    	Chat chat = chatService.createChat(students);
+    	Chat chat = chatService.createChatWithoutName(students);
     	ChatDTO chatDTO = new ChatDTO(chat.getId(), chat.getMembers());
     	return chatDTO;
     }

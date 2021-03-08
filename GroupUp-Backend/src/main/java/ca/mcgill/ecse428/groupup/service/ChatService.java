@@ -17,7 +17,7 @@ public class ChatService {
 	ChatRepository chatRepository;
 	
 	@Transactional
-	public Chat createChat(List<Student> students) {
+	public Chat createChatWithoutName(List<Student> students) {
 		if(students == null || students.size() < 2) {
 			throw new IllegalArgumentException("Chat member can not be less than 2.");
 		}
@@ -26,4 +26,16 @@ public class ChatService {
 		chat = chatRepository.save(chat);
 		return chat;
 	}
+	
+	@Transactional
+	public Chat createChat(String name, List<Student> students) {
+		if(students == null || students.size() < 2) {
+			throw new IllegalArgumentException("Chat member can not be less than 2.");
+		}
+		Chat chat = new Chat();
+		for(Student s : students)chat.getMembers().add(s);
+		chat = chatRepository.save(chat);
+		return chat;
+	}
+	
 }
