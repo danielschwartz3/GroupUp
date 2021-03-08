@@ -3,9 +3,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { unregisterCourseAction, getRegisteredAction, focusedConversationAction } from '../../redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,7 +11,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button, Modal } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
@@ -173,7 +169,7 @@ const AllConversations = (props) => {
   }
 
   function createConversation() {
-    
+
   }
 
   const removeConversation = (id) => {
