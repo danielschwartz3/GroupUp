@@ -4,7 +4,7 @@ const initialState = {
     user: {
         userRole: '',
         userName: '',
-        name: 'Edem Nuviadenu',
+        name: '',
         email: '',
         userInstitution: ''
     },
