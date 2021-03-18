@@ -1,6 +1,8 @@
 package ca.mcgill.ecse428.groupup.service;
 
 import java.util.List;
+import java.util.ArrayList;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,12 @@ public class StudentService {
 		if(student == null) throw new IllegalArgumentException("Student is null");
 		student = studentRepository.save(student);
 		return student;
+	}
+
+	@Transactional
+	public List<Student> getAllStudents() {
+		List<Student> studentList = studentRepository.findAll();
+		return studentList;
 	}
 	
 	@Transactional
@@ -67,6 +75,22 @@ public class StudentService {
         }
         
         return std;
+    }
+
+
+	@Transactional
+    public List<Student> getStudentByName(String name) throws IllegalArgumentException{
+        List<Account> accounts = accountRepository.findByNameContaining(name);
+        List<Student> students = new ArrayList<>();
+		Student std;
+		for(Account account: accounts){
+			try{
+				std = (Student) account.getUserRole();
+				students.add(std);
+			} catch(Exception e){
+			}
+		}
+        return students;
     }
 	
 }
