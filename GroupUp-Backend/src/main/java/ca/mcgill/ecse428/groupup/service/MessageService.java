@@ -18,6 +18,8 @@ import ca.mcgill.ecse428.groupup.dao.ChatRepository;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.utility.Condition;
+
 
 @Service
 public class MessageService {
@@ -78,5 +80,17 @@ public class MessageService {
 		List <Chat> chats = chatRepository.findAllByMembers(student);
 		return chats;
 	}
+
+
+	@Transactional
+    public Message unsendMessage(long id) {
+        Message unsentMessage = messageRepository.findById(id).orElse(null);
+        if (!Condition.isValid(unsentMessage)) {
+            throw new IllegalArgumentException("Message with id: " + id + " does not exist");
+        }
+        unsentMessage.setContent("This message has been unsent");
+        messageRepository.save(unsentMessage);
+        return unsentMessage;
+    }
 	
 }

@@ -38,6 +38,13 @@ public class MessageController {
         return messageDTO;
     }
 
+    @PostMapping(value = {"/unsend/message", "/unsend/message/"})
+    public MessageDTO unsendMessage(@RequestParam("id") long id){
+        Message message = messageService.unsendMessage(id);
+        MessageDTO messageDTO = new MessageDTO(message.getId(), message.getSender(), message.getLocation(), message.getSendDate(), message.getContent());
+        return messageDTO;
+    }
+
     @PostMapping(value = {"/newchat", "/newchat/"})
     public ChatDTO createChat(@RequestParam("members") List<Student> students) {
     	Chat chat = chatService.createChatWithoutName(students);
