@@ -4,7 +4,7 @@ const initialState = {
     user: {
         userRole: '',
         userName: '',
-        name: 'Edem Nuviadenu',
+        name: '',
         email: '',
         userInstitution: ''
     },
@@ -33,8 +33,11 @@ function reducer(state, action) {
         return {
             ...state,
             user: {
+                userRole: '',
+                userName: '',
+                name: '',
                 email: '',
-                name: ''
+                userInstitution: '',
             }
         };
     case 'INITIALIZE_USER_COURSES':
