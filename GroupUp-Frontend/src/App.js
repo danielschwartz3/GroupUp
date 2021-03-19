@@ -75,10 +75,16 @@ function App() {
       handleCreateModal={handleCreateModal}
       editProfile={editProfile}
       setEditProfile={setEditProfile}
+      userName={userName}
+      setUserName={setUserName}
+      name={name}
+      setName={setName}
       email={email}
       setEmail={setEmail}
       password={password}
       setPassword={setPassword}
+      institution={institution}
+      setInstitution={setInstitution}
       />
       {/*<AllCourses/>*/}
       {/*<MyCourses/>*/}

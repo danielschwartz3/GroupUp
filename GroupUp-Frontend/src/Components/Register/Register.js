@@ -3,13 +3,12 @@ import axios from 'axios'
 import { Button, Modal, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { unintializeUserAction } from '../../redux';
+import { intializeUserAction, unintializeUserAction } from '../../redux';
 import Cookies from 'js-cookie'
 
 const URL = 'http://localhost:8080'
 
 const Register = (props) => {
-    const { user } = props;
 
     function getModalStyle() {
         const top = 50;
@@ -41,23 +40,18 @@ const Register = (props) => {
     const Edit = () => {
         axios.post(`${URL}/account/update`, null, {
             params: {
-                userName: props.userName,
-                name: props.name,
-                email: props.email,
-                institution: props.institution,
-                password: props.password,
+                email: Cookies.get("GroupUpUserEmailCookie"),
+                newUserName: props.userName,
+                newName: props.name,
+                newEmail: Cookies.get("GroupUpUserEmailCookie"),
+                newInstitution: props.institution
             }
         }).then(function (response) {
             console.log(response);
-            const newStudent = {
-                userName: props.userName,
-                name: props.name,
-                email: props.email,
-                institution: props.institution,
-                password: props.password,
-            }
-            // const newCourses = [...props.courses, newCourse];
-            // props.setCourses(newCourses);
+            props.setUserName(response.data.userName);
+            props.setName(response.data.name);
+            props.setEmail(response.data.userEmail);
+            props.setInstitution(response.data.userInstitution);
             props.handleCreateModal();
             props.setName('');
             props.setUsername('');
@@ -80,22 +74,12 @@ const Register = (props) => {
               password: props.password,
           }
       }).then(function (response) {
-          console.log(response);
-          const newStudent = {
-              userName: props.userName,
-              name: props.name,
-              email: props.email,
-              institution: props.institution,
-              password: props.password,
-          }
-          // const newCourses = [...props.courses, newCourse];
-          // props.setCourses(newCourses);
+          props.setUserName(response.data.userName);
+          props.setName(response.data.name);
+          props.setEmail(response.data.userEmail);
+          props.setInstitution(response.data.userInstitution);
           props.handleCreateModal();
-          props.setName('');
-          props.setUsername('');
-          props.setEmail('');
-          props.setInstitution('');
-          props.setPassword('');
+          Cookies.set("GroupUpUserEmailCookie", props.email, {expires: 1})
         })
         .catch(function (error) {
           console.log(error);
@@ -145,10 +129,10 @@ const Register = (props) => {
         <div style={modalStyle} className={classes.paper}>
           <EditActionHeading editProfile={props.editProfile} />
           
-          <TextField onChange={e => props.setName(e.target.value)} style={{ margin: '1%', width: '45%' }} id="name" label="Name" />
-          <TextField onChange={e => props.setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
-          <TextField onChange={e => props.setInstitution(e.target.value)} style={{ margin: '1%', width: '92%' }} id="institution" label="Institution" />
-          <TextField onChange={e => props.setUserName(e.target.value)} style={{ margin: '1%', width: '45%' }} id="userName" label="Username" />
+          <TextField value={props.name} onChange={e => props.setName(e.target.value)} style={{ margin: '1%', width: '45%' }} id="name" label="Name" />
+          <TextField value={props.email} onChange={e => props.setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
+          <TextField value={props.institution} onChange={e => props.setInstitution(e.target.value)} style={{ margin: '1%', width: '92%' }} id="institution" label="Institution" />
+          <TextField value={props.userName} onChange={e => props.setUserName(e.target.value)} style={{ margin: '1%', width: '45%' }} id="userName" label="Username" />
           <TextField onChange={e => props.setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
           
           <EditActionButton editProfile={props.editProfile} />
@@ -176,5 +160,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    { unintializeUserAction }
+    { intializeUserAction, unintializeUserAction }
 )(Register);

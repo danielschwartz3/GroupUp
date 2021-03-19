@@ -37,7 +37,7 @@ const AllCourses = (props) => {
         setCreateCourseModal(!createCourseModal);
     };
 
-    const { courses, email } = props;
+    const { courses, user } = props;
 
     useEffect(() => {
         getData();

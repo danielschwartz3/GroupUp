@@ -32,15 +32,7 @@ const Login = (props) => {
 
   const Login = () => {
     Cookies.set("GroupUpUserEmailCookie", props.email, {expires: 1})
-    
-  //   var greg = {
-  //     userRole: "Student",
-  //     userName: "testStudent2",
-  //     name: "testName",
-  //     email: "testEmail@mail.mcgill.ca",
-  //     userInstitution: "testInstitution"
-  // }
-  //   props.intializeUserAction(greg);
+
       axios.post(`${URL}/Login/`, null, {
           params: {
               email: props.email,
@@ -48,8 +40,19 @@ const Login = (props) => {
           }
       }).then(function (response) {
           console.log(response);
-          props.intializeUserAction(response.data);
+          const loggedInUser = {
+            userRole: response.data.userRole,
+            userName: response.data.userName,
+            name: response.data.name,
+            email: response.data.email,
+            userInstitution: response.data.userInstitution,
+          }
+          props.setUserName(response.data.userName);
+          props.setName(response.data.name);
+          props.setEmail(response.data.userEmail);
+          props.setInstitution(response.data.userInstitution);
 
+          //console.log(props.intializeUserAction(loggedInUser));
           axios.get(`${URL}/courses/enrolled/${props.email}/`).then((response) => {
               props.initializeUserCoursesAction(response.data);
           })
@@ -62,8 +65,8 @@ const Login = (props) => {
           // const newCourses = [...props.courses, newCourse];
           // props.setCourses(newCourses);
           props.handleLoginModal();
-          props.setEmail('');
-          props.setPassword('');
+          //props.setEmail('');
+          //props.setPassword('');
         })
         .catch(function (error) {
           console.log(error);
