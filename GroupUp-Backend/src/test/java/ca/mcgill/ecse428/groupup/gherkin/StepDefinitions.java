@@ -197,6 +197,43 @@ public class StepDefinitions extends SpringWrapper {
     }
     
     
+//=====================================================ID005 Query Student List=================================================================//
+    
+    //Given a user is logged in
+    List<Student> studentList;
+        
+    @Given("the following students exist:")
+    public void the_following_students_exist(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	for (Map<String, String> map : valueMaps) {
+    		String username = map.get("username");
+    		String email = map.get("email");
+    		String name = map.get("name");
+    		String institution = map.get("institution");
+    		testAccountService.createStudentAccount(new Student(), username, name, email, institution, "password");
+    	}
+    }
+    
+    @When("the user queries the student list")
+    public void the_user_queries_the_student_list() {
+    	studentList = testStudentService.getAllStudents();
+    }
+    
+    @Then("the student will see the list of students")
+    public void the_student_will_see_the_list_of_students() {
+    	assertEquals(studentList.size(), 4);
+    	Student student = studentList.get(1);
+    	assertEquals("B_Weiss22", student.account.getUserName());
+    	assertEquals("bw@mail.mcgill.ca", student.account.getEmail());
+    	assertEquals("Benjamin Weiss", student.account.getName());
+    	assertEquals("McGill University", student.account.getInstitution());
+    	student = studentList.get(2);
+    	assertEquals("B_Weiss44", student.account.getUserName());
+    	student = studentList.get(3);
+    	assertEquals("Ry_schu", student.account.getUserName());
+    }
+    
+    
     
 //======================================================ID009 Add New Course====================================================================//
 	String coursename = null;
