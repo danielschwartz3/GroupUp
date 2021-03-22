@@ -55,6 +55,7 @@ function App() {
       createRegisterModal={createRegisterModal}
       handleCreateModal={handleCreateModal}
       editProfile={editProfile}
+      setEditProfile={setEditProfile}
       handleLoginModal={handleLoginModal}
       userName={userName}
       setUserName={setUserName}
