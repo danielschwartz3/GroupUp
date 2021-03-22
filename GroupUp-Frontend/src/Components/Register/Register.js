@@ -35,6 +35,8 @@ const Register = (props) => {
       props.unintializeUserAction()
       props.handleCreateModal()
       props.handleLoginModal()
+      props.setEmail('')
+      props.setPassword('')
     }
 
     const Edit = () => {
@@ -86,6 +88,14 @@ const Register = (props) => {
       });
     }
 
+    const Login = () => {
+      props.setEditProfile(false)
+      props.setEmail('')
+      props.setPassword('')
+      props.handleLoginModal()
+      props.handleCreateModal()
+    }
+
     const classes = useStyles();
 
     const [modalStyle] = React.useState(getModalStyle);
@@ -122,7 +132,12 @@ const Register = (props) => {
           </div>
         );
       }
-      return <Button style={{ width: '100%', marginTop: '5%' }} onClick={Register}>Register</Button>;
+      return (
+        <div>
+            <Button style={{ width: '100%', marginTop: '5%' }} onClick={Register}>Register</Button>
+            <Button style={{ width: '100%', marginTop: '5%' }} onClick={Login}>Login</Button>
+        </div>
+      );
     }
 
     const body = (
@@ -147,6 +162,7 @@ const Register = (props) => {
             onClose={props.handleCreateModal}
             aria-labelledby="Registration"
             aria-describedby="Please enter the following information to register for GroupUp"
+            disableBackdropClick={props.editProfile ? false : true}
           >
             {body}
           </Modal>
