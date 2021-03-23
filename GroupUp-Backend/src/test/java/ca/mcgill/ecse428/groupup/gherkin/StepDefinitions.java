@@ -201,7 +201,7 @@ public class StepDefinitions extends SpringWrapper {
 //=====================================================ID005 Query Student List=================================================================//
     
     //Given a user is logged in
-    List<Student> studentList;
+    List<Student> studentList = new ArrayList<Student>();
         
     @Given("the following students exist:")
     public void the_following_students_exist(io.cucumber.datatable.DataTable dataTable) throws Throwable {
@@ -211,7 +211,8 @@ public class StepDefinitions extends SpringWrapper {
     		String email = map.get("email");
     		String name = map.get("name");
     		String institution = map.get("institution");
-    		testAccountService.createStudentAccount(new Student(), username, name, email, institution, "password");
+    		Account account = testAccountService.createStudentAccount(new Student(), username, name, email, institution, "password");
+    		studentList.add((Student) account.getUserRole());
     	}
     }
     
@@ -224,14 +225,14 @@ public class StepDefinitions extends SpringWrapper {
     public void the_student_will_see_the_list_of_students() {
     	assertEquals(studentList.size(), 4);
     	Student student = studentList.get(1);
-    	assertEquals("B_Weiss22", student.account.getUserName());
-    	assertEquals("bw@mail.mcgill.ca", student.account.getEmail());
-    	assertEquals("Benjamin Weiss", student.account.getName());
+    	assertEquals("B_Weiss44", student.account.getUserName());
+    	assertEquals("ben@mail.mcgill.ca", student.account.getEmail());
+    	assertEquals("Ben Weiss", student.account.getName());
     	assertEquals("McGill University", student.account.getInstitution());
     	student = studentList.get(2);
-    	assertEquals("B_Weiss44", student.account.getUserName());
-    	student = studentList.get(3);
     	assertEquals("Ry_schu", student.account.getUserName());
+    	student = studentList.get(3);
+    	assertEquals("dan_sch", student.account.getUserName());
     }
     
     
@@ -616,7 +617,6 @@ public class StepDefinitions extends SpringWrapper {
     
     Student daniel;
     Student ben;
-//    Message testMessage;
     
     @Given("a student with name Daniel Schwartz and email is logged in")
     public void a_student_with_name_Daniel_Schwartz_and_email_is_logged_in() {
@@ -635,8 +635,8 @@ public class StepDefinitions extends SpringWrapper {
     	testChat = testChatService.createChatWithoutName(students);
     }
     
-    @And("the following messages exist in the private chat:")
-    public void the_following_messages_exist_in_the_private_chat(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    @And("the following messages exist in the chat:")
+    public void the_following_messages_exist_in_the_chat(io.cucumber.datatable.DataTable dataTable) throws Throwable {
     	List<Map<String, String>> valueMaps = dataTable.asMaps();
         for (Map<String, String> map : valueMaps) {
         	String sender = map.get("sender_email");
@@ -647,7 +647,6 @@ public class StepDefinitions extends SpringWrapper {
         }
     }
     
-    //this only works if the last message sent is the desired message to unsend
     @When("the user Daniel tries to unsend the following message:")
     public void the_user_Daniel_tries_to_unsend_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
     	//get the desired message to delete
@@ -659,7 +658,6 @@ public class StepDefinitions extends SpringWrapper {
         	String date = map.get("date");	//date isnt needed to create a message
         	Student student = testStudentService.getStudentByEmail(sender);
         	
-//        	testMessage = testMessageService.createMessage(student, testChat, content);
         }
     	
     	page = testMessageService.getMessagesByChat(testChat, 0);
@@ -680,8 +678,8 @@ public class StepDefinitions extends SpringWrapper {
     	}
     }
     
-    @Then("the normal flow chat will have the following messages:")
-    public void the_normal_flow_chat_will_have_the_following_messages(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    @Then("the chat will have the following messages:")
+    public void the_chat_will_have_the_following_messages(io.cucumber.datatable.DataTable dataTable) throws Throwable {
     	page = testMessageService.getMessagesByChat(testChat, 0);
     	List<Message> messages = page.getContent();
     	
@@ -697,7 +695,18 @@ public class StepDefinitions extends SpringWrapper {
         Collections.reverse(contents);
         for(int i = 0; i < 3; i++) {
         	assertEquals(contents.get(i), messages.get(i).getContent());
-        	System.out.println(messages.get(i).getContent());
         }
     }
+    
+    //Given the following students exist
+    
+    @And("a group chat exists with those students")
+    public void a_group_chat_exists_with_those_students() {
+    	testChat = testChatService.createChatWithoutName(studentList);
+    }
+    
+    //And the following messages exist in the chat
+    //When the user Daniel tries to unsend the following message
+    //Then the chat will have the following messages
+    
 }
