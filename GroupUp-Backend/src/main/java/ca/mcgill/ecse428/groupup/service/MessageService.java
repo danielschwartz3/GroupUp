@@ -83,8 +83,14 @@ public class MessageService {
 
 
 	@Transactional
-    public Message unsendMessage(long id) {
+    public Message unsendMessage(long id, Student unsender) {
         Message unsentMessage = messageRepository.findById(id).orElse(null);
+        
+        //is there a better way to check if two instances of student are the same?
+        if (!unsentMessage.getSender().getAccount().getEmail().equals(unsender.getAccount().getEmail())) {
+        	String errorMessage = "You do not have permission to unsend this message";
+            throw new IllegalArgumentException(errorMessage);
+        }
         if (!Condition.isValid(unsentMessage)) {
             throw new IllegalArgumentException("Message with id: " + id + " does not exist");
         }

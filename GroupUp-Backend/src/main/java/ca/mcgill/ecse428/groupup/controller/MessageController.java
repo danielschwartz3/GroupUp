@@ -39,8 +39,9 @@ public class MessageController {
     }
 
     @PostMapping(value = {"/unsend/message", "/unsend/message/"})
-    public MessageDTO unsendMessage(@RequestParam("id") long id){
-        Message message = messageService.unsendMessage(id);
+    public MessageDTO unsendMessage(@RequestParam("id") long id,
+    								@RequestParam("unsender") Student unsender){
+        Message message = messageService.unsendMessage(id, unsender);
         MessageDTO messageDTO = new MessageDTO(message.getId(), message.getSender(), message.getLocation(), message.getSendDate(), message.getContent());
         return messageDTO;
     }

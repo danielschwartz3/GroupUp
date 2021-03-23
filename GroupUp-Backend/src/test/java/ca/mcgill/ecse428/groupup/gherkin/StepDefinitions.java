@@ -656,8 +656,7 @@ public class StepDefinitions extends SpringWrapper {
         	String sender = map.get("sender_email");
         	content = map.get("content");
         	String date = map.get("date");	//date isnt needed to create a message
-        	Student student = testStudentService.getStudentByEmail(sender);
-        	
+        	daniel = testStudentService.getStudentByEmail(sender);
         }
     	
     	page = testMessageService.getMessagesByChat(testChat, 0);
@@ -671,7 +670,7 @@ public class StepDefinitions extends SpringWrapper {
     	}
     	
     	try {
-    		testMessageService.unsendMessage(msgID);
+    		testMessageService.unsendMessage(msgID, daniel);
     	}
     	catch (Exception e) {
     		errorMessage = e.getMessage();
@@ -709,4 +708,37 @@ public class StepDefinitions extends SpringWrapper {
     //When the user Daniel tries to unsend the following message
     //Then the chat will have the following messages
     
+    @When("the user Ben tries to unsend the following message:")
+    public void the_user_Ben_tries_to_unsend_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	//get the desired message to delete
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	String content = null;
+    	for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	content = map.get("content");
+        	String date = map.get("date");	//date isnt needed to create a message
+        }
+    	
+    	page = testMessageService.getMessagesByChat(testChat, 0);
+    	List<Message> messages = page.getContent();
+    	long msgID = 0;
+    	//find the desired message to delete (assuming no other message has the same content in the chat)
+    	for (Message message : messages) {
+    		if(message.getContent().equals(content)) {
+    			msgID = message.getId();
+    		}
+    	}
+    	
+    	try {
+    		testMessageService.unsendMessage(msgID, ben);
+    	}
+    	catch (Exception e) {
+    		errorMessage = e.getMessage();
+    	}
+    }
+    
+    @And("an error message saying You do not have permission to unsend this message will be thrown")
+    public void an_error_message_saying_You_do_not_have_permission_to_unsend_this_message_will_be_thrown() {
+    	assertEquals("You do not have permission to unsend this message", errorMessage);
+    }
 }
