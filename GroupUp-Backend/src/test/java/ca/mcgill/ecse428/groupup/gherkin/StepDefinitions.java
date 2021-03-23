@@ -697,16 +697,10 @@ public class StepDefinitions extends SpringWrapper {
         }
     }
     
-    //Given the following students exist
-    
     @And("a group chat exists with those students")
     public void a_group_chat_exists_with_those_students() {
     	testChat = testChatService.createChatWithoutName(studentList);
     }
-    
-    //And the following messages exist in the chat
-    //When the user Daniel tries to unsend the following message
-    //Then the chat will have the following messages
     
     @When("the user Ben tries to unsend the following message:")
     public void the_user_Ben_tries_to_unsend_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
@@ -718,7 +712,7 @@ public class StepDefinitions extends SpringWrapper {
         	content = map.get("content");
         	String date = map.get("date");	//date isnt needed to create a message
         }
-    	
+    	ben = testStudentService.getStudentByEmail("ben@mail.mcgill.ca");
     	page = testMessageService.getMessagesByChat(testChat, 0);
     	List<Message> messages = page.getContent();
     	long msgID = 0;
