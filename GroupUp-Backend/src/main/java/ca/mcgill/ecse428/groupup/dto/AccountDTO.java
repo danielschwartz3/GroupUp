@@ -5,17 +5,17 @@ public class AccountDTO {
     String userRole;
     String userName;
     String name;
-    String email;
-    String institution;
+    String userEmail;
+    String userInstitution;
 
     public AccountDTO() {};
 
-    public AccountDTO(String userRole, String userName, String name, String email, String institution) {
+    public AccountDTO(String userRole, String userName, String name, String userEmail, String userInstitution) {
         this.userRole = userRole;
         this.userName = userName;
         this.name = name;
-        this.email = email;
-        this.institution = institution;
+        this.userEmail = userEmail;
+        this.userInstitution = userInstitution;
     }
 
     public String getUserRole() {
@@ -39,17 +39,17 @@ public class AccountDTO {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserEmail() {
+        return userEmail;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getUserInstitution() {
-        return institution;
+        return userInstitution;
     }
-    public void setUserInstitution(String institution) {
-        this.institution = institution;
+    public void setUserInstitution(String userInstitution) {
+        this.userInstitution = userInstitution;
     }
 }
