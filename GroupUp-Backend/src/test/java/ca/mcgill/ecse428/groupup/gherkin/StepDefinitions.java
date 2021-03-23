@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -613,5 +614,90 @@ public class StepDefinitions extends SpringWrapper {
     
 //===============================================================ID051 Unsend A Message===============================================================//
     
-
+    Student daniel;
+    Student ben;
+//    Message testMessage;
+    
+    @Given("a student with name Daniel Schwartz and email is logged in")
+    public void a_student_with_name_Daniel_Schwartz_and_email_is_logged_in() {
+    	Account adaniel = testAccountService.createStudentAccount(new Student(), "username", "Daniel Schwartz", "dan@mail.mcgill.ca", "institutionName", "password");
+    	daniel = (Student) adaniel.getUserRole();
+    	testAccountService.LogIn("dan@mail.mcgill.ca", "password");
+    }
+    
+    @And("a chat exists between him and a student Ben Weiss")
+    public void a_chat_exists_between_him_and_a_student_Ben_Weiss() {
+    	Account aben = testAccountService.createStudentAccount(new Student(), "username", "Ben Weiss", "ben@mail.mcgill.ca", "institutionName", "password");
+    	ben = (Student) aben.getUserRole();
+    	List<Student> students = new ArrayList<Student>();
+    	students.add(daniel);
+    	students.add(ben);
+    	testChat = testChatService.createChatWithoutName(students);
+    }
+    
+    @And("the following messages exist in the private chat:")
+    public void the_following_messages_exist_in_the_private_chat(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+        for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	String content = map.get("content");
+        	String date = map.get("date");	//date isnt needed to create a message
+        	Student student = testStudentService.getStudentByEmail(sender);
+        	testMessage = testMessageService.createMessage(student, testChat, content);
+        }
+    }
+    
+    //this only works if the last message sent is the desired message to unsend
+    @When("the user Daniel tries to unsend the following message:")
+    public void the_user_Daniel_tries_to_unsend_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	//get the desired message to delete
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	String content = null;
+    	for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	content = map.get("content");
+        	String date = map.get("date");	//date isnt needed to create a message
+        	Student student = testStudentService.getStudentByEmail(sender);
+        	
+//        	testMessage = testMessageService.createMessage(student, testChat, content);
+        }
+    	
+    	page = testMessageService.getMessagesByChat(testChat, 0);
+    	List<Message> messages = page.getContent();
+    	long msgID = 0;
+    	//find the desired message to delete (assuming no other message has the same content in the chat)
+    	for (Message message : messages) {
+    		if(message.getContent().equals(content)) {
+    			msgID = message.getId();
+    		}
+    	}
+    	
+    	try {
+    		testMessageService.unsendMessage(msgID);
+    	}
+    	catch (Exception e) {
+    		errorMessage = e.getMessage();
+    	}
+    }
+    
+    @Then("the normal flow chat will have the following messages:")
+    public void the_normal_flow_chat_will_have_the_following_messages(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	page = testMessageService.getMessagesByChat(testChat, 0);
+    	List<Message> messages = page.getContent();
+    	
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	List<String> contents = new ArrayList<String>();
+        for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	String content = map.get("content");
+        	String date = map.get("date");	//date isnt needed to create a message
+        	contents.add(content);
+        }
+        //since getting the list from page gives back most recent to latest need to reverse order
+        Collections.reverse(contents);
+        for(int i = 0; i < 3; i++) {
+        	assertEquals(contents.get(i), messages.get(i).getContent());
+        	System.out.println(messages.get(i).getContent());
+        }
+    }
 }

@@ -88,7 +88,7 @@ public class MessageService {
         if (!Condition.isValid(unsentMessage)) {
             throw new IllegalArgumentException("Message with id: " + id + " does not exist");
         }
-        unsentMessage.setContent("This message has been unsent");
+        unsentMessage.setContent("This message has been unsent.");
         messageRepository.save(unsentMessage);
         return unsentMessage;
     }
