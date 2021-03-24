@@ -17,7 +17,7 @@ public class ReactionService {
 	private ReactionRepository reactionRepository;
 
 	@Transactional
-    public Boolean reactToMessage(String reactionType, Student reactor, Message reactionMessage){
+    public void reactToMessage(String reactionType, Student reactor, Message reactionMessage){
         Boolean wasReacted = false;
 		Reaction reaction = reactionRepository.findByReactorAndReactionMessage(reactor, reactionMessage);                                     
 		for(ReactionType rt : ReactionType.values()){
@@ -26,24 +26,25 @@ public class ReactionService {
                 wasReacted = true;
 			}
 		}
+        if(!wasReacted){
+            throw new IllegalArgumentException("Unable to react to this message.");
+        }
 		reaction.setReactionDate(new Date(System.currentTimeMillis()));
 		reaction.setReactionMessage(reactionMessage);
 		reaction.setReactor(reactor);
 		reactionRepository.save(reaction);
-		return wasReacted;
+        return;
 	}
 
     @Transactional
-	public Boolean unReactToMessage(Student reactor, Message reactionMessage){
-        Boolean wasRemoved = false;
+	public void unReactToMessage(Student reactor, Message reactionMessage){
         Reaction reaction = reactionRepository.findByReactorAndReactionMessage(reactor, reactionMessage);
         if(reaction == null){
-            wasRemoved = true;
+            throw new IllegalArgumentException("You have not reacted to this message.");
         }else{
             reactionRepository.deleteById(reaction.getId());
-            wasRemoved = reactionRepository.existsById(reaction.getId());
         }
-        return wasRemoved;
+        return;
 	}
 
     @Transactional

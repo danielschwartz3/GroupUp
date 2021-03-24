@@ -98,5 +98,10 @@ public class MessageService {
         messageRepository.save(unsentMessage);
         return unsentMessage;
     }
+
+	@Transactional
+	public Message getMessageById(long id){
+		return messageRepository.findById(id).orElse(null);
+	}
 	
 }
