@@ -2,7 +2,9 @@ package ca.mcgill.ecse428.groupup.dto;
 
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.model.Chat;
+import ca.mcgill.ecse428.groupup.model.Reaction;
 import java.util.Date;
+import java.util.List;
 
 
 
@@ -12,13 +14,15 @@ public class MessageDTO {
     private Chat location;
     private Date sendDate;
 	private String content;
+    private List<Reaction> reactions;
     public MessageDTO() {};
 
-    public MessageDTO(long id, Student sender, Chat location, Date sendDate, String content) {
+    public MessageDTO(long id, Student sender, Chat location, Date sendDate, String content, List<Reaction> reactions) {
         this.id = id;
         this.sender = sender;
         this.sendDate = sendDate;
         this.content = content;
+        this.reactions = reactions;
     }
 
     public long getId() {
@@ -59,6 +63,13 @@ public class MessageDTO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<Reaction> getReactions(){
+        return this.reactions;
+    }
+    public void setReactions(List<Reaction> reactions){
+        this.reactions = reactions;
     }
     
 }
