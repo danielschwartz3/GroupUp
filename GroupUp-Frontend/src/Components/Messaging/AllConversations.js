@@ -16,8 +16,10 @@ import Paper from '@material-ui/core/Paper';
 import { Button, Modal } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import LikeButton from './LikeButton';
 import TextField from '@material-ui/core/TextField';
 import 'bootstrap/dist/css/bootstrap.min.css'
+
 
 const URL = 'http://localhost:8080'
 
@@ -60,6 +62,20 @@ function lastMessage(messages) {
       return ""
    }
 }
+
+// class Likes extends Component{
+//   state = {
+//     count: 0
+//   }
+
+//   render() {
+//     return {
+//       <div>
+//       <button> Likes: (this.state.count)</button>
+//       <div>
+//     }
+//   }
+// }
  
  {/*going to need to do some work to get database data into this formate
  static only for visualize to be replaced with state variable conversations and data*/} 
@@ -238,6 +254,7 @@ const AllConversations = (props) => {
                       >
                         {sender == name ? 'You' : sender}
                       </div>
+                      <LikeButton />
                     </div>
                   ))}
                 </div>
