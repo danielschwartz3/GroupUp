@@ -39,12 +39,6 @@ const useStyles = makeStyles((theme) => ({
       props.setName(response.data.name);
       props.setEmail(Cookies.get("GroupUpUserEmailCookie"));
       props.setInstitution(response.data.institution);
-      //props.intializeUserAction(user)
-      // props.setName(response.data.name)
-      // props.setEmail(props.email)
-      // props.setInstitution(response.data.institution)
-      // props.setUserName(response.data.userName)
-      console.log(Cookies.get("GroupUpUserEmailCookie"))
     }
     props.handleCreateModal();
   }
