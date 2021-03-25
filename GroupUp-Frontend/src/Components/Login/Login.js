@@ -37,8 +37,7 @@ const Login = (props) => {
 
   const Login = () => {
     if (checkEmail() && props.email !== "" && props.password !== "") {
-      setEmailErrorText('')
-      setPasswordErrorText('')
+      clearErrorText()
       axios.post(`${URL}/Login/`, null, {
           params: {
               email: props.email,
@@ -58,6 +57,7 @@ const Login = (props) => {
               props.initializeUserCoursesAction(response.data);
           })
           props.handleLoginModal();
+          clearFields()
         }
         })
         .catch(function (error) {
@@ -87,6 +87,19 @@ const Login = (props) => {
       props.setEditProfile(false)
       props.handleLoginModal()
       props.handleCreateModal()
+      clearErrorText()
+      clearFields()
+    }
+
+    function clearErrorText() {
+      setEmailErrorText('')
+      setPasswordErrorText('')
+      setLoginErrorText('')
+    }
+
+    function clearFields() {
+      props.setEmail('')
+      props.setPassword('')
     }
 
     function checkEmail() {
