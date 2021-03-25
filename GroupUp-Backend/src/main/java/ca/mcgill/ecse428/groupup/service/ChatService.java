@@ -15,27 +15,40 @@ import ca.mcgill.ecse428.groupup.model.Student;
 public class ChatService {
 	@Autowired
 	ChatRepository chatRepository;
-	
+
 	@Transactional
 	public Chat createChatWithoutName(List<Student> students) {
-		if(students == null || students.size() < 2) {
+		if (students == null || students.size() < 2) {
 			throw new IllegalArgumentException("Chat member can not be less than 2.");
 		}
 		Chat chat = new Chat();
-		for(Student s : students)chat.getMembers().add(s);
+		for (Student s : students)
+			chat.getMembers().add(s);
 		chat = chatRepository.save(chat);
 		return chat;
 	}
-	
+
 	@Transactional
 	public Chat createChat(String name, List<Student> students) {
-		if(students == null || students.size() < 2) {
+		if (students == null || students.size() < 2) {
 			throw new IllegalArgumentException("Chat member can not be less than 2.");
 		}
 		Chat chat = new Chat();
-		for(Student s : students)chat.getMembers().add(s);
+		for (Student s : students)
+			chat.getMembers().add(s);
 		chat = chatRepository.save(chat);
 		return chat;
 	}
-	
+
+	@Transactional
+	public Chat findChatByID(long id) throws IllegalArgumentException {
+
+		Chat chat = chatRepository.findById(id).orElse(null);
+
+		if (chat == null) {
+			throw new IllegalArgumentException("Chat cannot be found.");
+		}
+
+		return chat;
+	}
 }
