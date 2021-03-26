@@ -64,7 +64,7 @@ public class Account{
     public String getPassword(){
         return this.password;
     }
-
+    @OneToOne
 	public Session getSession() {
 		return session;
 	}
