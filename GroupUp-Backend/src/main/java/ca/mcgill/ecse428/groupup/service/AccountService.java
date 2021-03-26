@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ca.mcgill.ecse428.groupup.dao.AccountRepository;
 import ca.mcgill.ecse428.groupup.dao.AdminRepository;
+import ca.mcgill.ecse428.groupup.dao.SessionRepository;
 import ca.mcgill.ecse428.groupup.dao.StudentRepository;
 import ca.mcgill.ecse428.groupup.model.*;
 import ca.mcgill.ecse428.groupup.utility.Condition;
@@ -24,6 +25,8 @@ public class AccountService {
     StudentRepository stuRepo;
     @Autowired
     AdminRepository adminRepo;
+    @Autowired
+    SessionRepository sessionRepo;
 
     @Transactional
     public Account  createStudentAccount(Student role, String userName, String name,
@@ -115,6 +118,23 @@ public class AccountService {
 		} else if(!acc.getPassword().equals(password)) {
             throw new IllegalArgumentException("Password is incorrect.");
 		}
+        Session sess = new Session();
+        sessionRepo.save(sess);
+        acc.setSession(sess);
+        return acc;
+    }
+    
+    @Transactional
+    public Account Logout(String email, String password) throws IllegalArgumentException{
+        Account acc = accRepo.findById(email).orElse(null);
+        if(acc == null) {
+			throw new IllegalArgumentException("Account email cannot be found.");
+		} else if(!acc.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Password is incorrect.");
+		}
+        Session sess = acc.getSession();
+        sessionRepo.delete(sess);
+        acc.setSession(null);
         return acc;
     }
 

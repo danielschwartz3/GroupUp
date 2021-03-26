@@ -11,6 +11,7 @@ public class Account{
     private String email;
     private String institution;
     private String password;
+    private Session session;
 
     public void setUserRole(UserRole userRole){
         this.userRole = userRole;
@@ -63,4 +64,12 @@ public class Account{
     public String getPassword(){
         return this.password;
     }
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
+	}
 }

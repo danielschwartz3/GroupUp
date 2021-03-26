@@ -7,6 +7,7 @@ public class AccountDTO {
     String name;
     String userEmail;
     String userInstitution;
+    String session;
 
     public AccountDTO() {};
 
@@ -16,6 +17,7 @@ public class AccountDTO {
         this.name = name;
         this.userEmail = userEmail;
         this.userInstitution = userInstitution;
+        this.session = null;
     }
 
     public String getUserRole() {
@@ -52,4 +54,12 @@ public class AccountDTO {
     public void setUserInstitution(String userInstitution) {
         this.userInstitution = userInstitution;
     }
+
+	public String getSession() {
+		return session;
+	}
+
+	public void setSession(String session) {
+		this.session = session;
+	}
 }

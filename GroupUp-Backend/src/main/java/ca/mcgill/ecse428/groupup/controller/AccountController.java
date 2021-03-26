@@ -66,6 +66,14 @@ public class AccountController {
      return DTOUtil.convertToDTO(acc);
     }
     
+    @PostMapping(value ={"/Logout/","/Logout/"})
+    public AccountDTO Logout (@RequestParam("email")String email,
+                            @RequestParam("password")String password)
+                            throws IllegalArgumentException{
+     Account acc = accountService.Logout(email, password);                                  
+     return DTOUtil.convertToDTO(acc);
+    }
+    
     @GetMapping(value = {"/account/{email}", "/account/{email}/"})
     public AccountDTO getAccountByEmail(@PathVariable("email") String email) {
         Account acc = accountService.getAccountByID(email);
