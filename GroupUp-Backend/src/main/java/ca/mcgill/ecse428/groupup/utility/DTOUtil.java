@@ -4,14 +4,10 @@ import ca.mcgill.ecse428.groupup.dto.AccountDTO;
 import ca.mcgill.ecse428.groupup.dto.ChatDTO;
 import ca.mcgill.ecse428.groupup.dto.CourseDTO;
 import ca.mcgill.ecse428.groupup.dto.MessageDTO;
-import ca.mcgill.ecse428.groupup.dto.UserDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
-import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Message;
-import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.model.UserRole;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,22 +53,11 @@ public class DTOUtil {
     return courseDtos;
   }
 
-  public static UserDTO convertToDTO(UserRole role) {
-    if (role == null)
-      throw new IllegalArgumentException("User is null");
-    if (role.getAccount() == null)
-      throw new IllegalArgumentException("User has no account.");
-    Account acc = role.getAccount();
-    UserDTO dto = new UserDTO(acc.getEmail(), acc.getUserName(), acc.getInstitution());
-    return dto;
-
-  }
-
   public static ChatDTO convertToDTO(Chat chat) {
     ChatDTO dto = new ChatDTO();
     dto.setId(chat.getId());
     Set<String> members = new HashSet<>();
-    for(Account m : chat.getMembers())
+    for (Account m : chat.getMembers())
       members.add(m.getUserName());
     dto.setMembers(members);
     dto.setChatName(chat.getName());
@@ -90,11 +75,12 @@ public class DTOUtil {
     dto.setSendDate(message.getSendDate());
     return dto;
   }
-  
+
   public static List<MessageDTO> convertToMessageDTOs(List<Message> messages) {
-    if (messages == null)throw new IllegalArgumentException("message list is null");
+    if (messages == null)
+      throw new IllegalArgumentException("message list is null");
     List<MessageDTO> dtos = new ArrayList<>();
-    for(Message message: messages)
+    for (Message message : messages)
       dtos.add(convertToDTO(message));
     return dtos;
   }

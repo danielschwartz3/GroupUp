@@ -27,8 +27,11 @@ public class ChatService {
   }
 
   @Transactional
-  public Chat findChatById(long id) {
+  public Chat findChatByID(long id) throws IllegalArgumentException {
     Chat chat = chatRepository.findById(id).orElse(null);
+    if (chat == null) {
+      throw new IllegalArgumentException("Chat cannot be found.");
+    }
     return chat;
   }
 }

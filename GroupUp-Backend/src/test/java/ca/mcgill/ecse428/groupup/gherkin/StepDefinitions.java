@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -195,6 +196,44 @@ public class StepDefinitions extends SpringWrapper {
     @But("an incorrect corresponding password {word}")
     public void an_incorrect_corresponding_password(String password) throws Throwable {
     	testPassword = password;
+    }
+    
+    
+//=====================================================ID005 Query Student List=================================================================//
+    
+    //Given a user is logged in
+    List<Student> studentList = new ArrayList<Student>();
+        
+    @Given("the following students exist:")
+    public void the_following_students_exist(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	for (Map<String, String> map : valueMaps) {
+    		String username = map.get("username");
+    		String email = map.get("email");
+    		String name = map.get("name");
+    		String institution = map.get("institution");
+    		Account account = testAccountService.createStudentAccount(new Student(), username, name, email, institution, "password");
+    		studentList.add((Student) account.getUserRole());
+    	}
+    }
+    
+    @When("the user queries the student list")
+    public void the_user_queries_the_student_list() {
+    	studentList = testStudentService.getAllStudents();
+    }
+    
+    @Then("the student will see the list of students")
+    public void the_student_will_see_the_list_of_students() {
+    	assertEquals(studentList.size(), 4);
+    	Student student = studentList.get(1);
+    	assertEquals("B_Weiss44", student.account.getUserName());
+    	assertEquals("ben@mail.mcgill.ca", student.account.getEmail());
+    	assertEquals("Ben Weiss", student.account.getName());
+    	assertEquals("McGill University", student.account.getInstitution());
+    	student = studentList.get(2);
+    	assertEquals("Ry_schu", student.account.getUserName());
+    	student = studentList.get(3);
+    	assertEquals("dan_sch", student.account.getUserName());
     }
     
     
@@ -571,5 +610,125 @@ public class StepDefinitions extends SpringWrapper {
         	Assert.fail("The requested courses did not match the examples, should not be null");
         }
     }
-
+    
+    
+//===============================================================ID051 Unsend A Message===============================================================//
+    
+    Student daniel;
+    Student ben;
+    
+    @Given("a student with name Daniel Schwartz and email is logged in")
+    public void a_student_with_name_Daniel_Schwartz_and_email_is_logged_in() {
+    	Account adaniel = testAccountService.createStudentAccount(new Student(), "danieluser", "Daniel Schwartz", "dan@mail.mcgill.ca", "institutionName", "password");
+    	daniel = (Student) adaniel.getUserRole();
+    	testAccountService.LogIn("dan@mail.mcgill.ca", "password");
+    }
+    
+    @And("a chat exists between him and a student Ben Weiss")
+    public void a_chat_exists_between_him_and_a_student_Ben_Weiss() {
+    	Account aben = testAccountService.createStudentAccount(new Student(), "benuser", "Ben Weiss", "ben@mail.mcgill.ca", "institutionName", "password");
+    	ben = (Student) aben.getUserRole();
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(daniel.getAccount());
+    	students.add(ben.getAccount());
+    	testChat = testChatService.createChat(students, "A new Chat");
+    }
+    
+    @And("the following messages exist in the chat:")
+    public void the_following_messages_exist_in_the_chat(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+        for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	String content = map.get("content");
+        	Account student = testAccountService.getAccountByID(sender);
+        	System.out.println(student);
+        	testMessage = testMessageService.createMessage(student, testChat, content);
+        }
+    }
+    
+    @When("the user Daniel tries to unsend the following message:")
+    public void the_user_Daniel_tries_to_unsend_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	//get the desired message to delete
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	String content = null;
+    	for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	content = map.get("content");
+        	daniel = testStudentService.getStudentByEmail(sender);
+        }
+    	
+    	List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
+    	long msgID = 0;
+    	//find the desired message to delete (assuming no other message has the same content in the chat)
+    	for (Message message : messages) {
+    		if(message.getContent().equals(content)) {
+    			msgID = message.getId();
+    		}
+    	}
+    	
+    	try {
+    		testMessageService.unsendMessage(msgID, daniel.getAccount().getUserName());
+    	}
+    	catch (Exception e) {
+    		errorMessage = e.getMessage();
+    	}
+    }
+    
+    @Then("the chat will have the following messages:")
+    public void the_chat_will_have_the_following_messages(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+        List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
+    	
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	List<String> contents = new ArrayList<String>();
+        for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	String content = map.get("content");
+        	contents.add(content);
+        }
+        for(int i = 0; i < 3; i++) {
+        	assertEquals(contents.get(i), messages.get(i).getContent());
+        }
+    }
+    
+    @And("a group chat exists with those students")
+    public void a_group_chat_exists_with_those_students() {
+    
+      List<Account> members = new ArrayList<>();
+      for(Student student : studentList)
+        members.add(student.getAccount());
+      testChat = testChatService.createChat(members, "Group Chat");
+    }
+    
+    @When("the user Ben tries to unsend the following message:")
+    public void the_user_Ben_tries_to_unsend_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	//get the desired message to delete
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	String content = null;
+    	for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	content = map.get("content");
+        	String date = map.get("date");	//date isnt needed to create a message
+        }
+    	ben = testStudentService.getStudentByEmail("ben@mail.mcgill.ca");
+    	List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
+    	long msgID = 0;
+    	//find the desired message to delete (assuming no other message has the same content in the chat)
+    	for (Message message : messages) {
+    		if(message.getContent().equals(content)) {
+    			msgID = message.getId();
+    		}
+    	}
+    	
+    	try {
+    		testMessageService.unsendMessage(msgID, ben.getAccount().getUserName());
+    	}
+    	catch (Exception e) {
+    		errorMessage = e.getMessage();
+    	}
+    }
+    
+    @And("an error message saying You do not have permission to unsend this message will be thrown")
+    public void an_error_message_saying_You_do_not_have_permission_to_unsend_this_message_will_be_thrown() {
+    	assertEquals("You do not have permission to unsend this message", errorMessage);
+    }
 }

@@ -3,9 +3,7 @@ package ca.mcgill.ecse428.groupup.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Random;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,12 +18,10 @@ import ca.mcgill.ecse428.groupup.dao.ChatRepository;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
-import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.model.UserRole;
+import ca.mcgill.ecse428.groupup.utility.Condition;
 
 @Service
 public class MessageService {
-
   @Autowired
   private MessageRepository messageRepository;
   @Autowired
@@ -43,7 +39,10 @@ public class MessageService {
     if (content == null || content.length() == 0) {
       error += "Conent can not be empty";
     }
-    if(!chat.getMembers().contains(sender)) {
+    for(Account account : chat.getMembers())
+      System.out.println(account);
+    System.out.println(sender);
+    if (!chat.getMembers().contains(sender)) {
       error += "sender not authorized in this chat.";
     }
     if (error.length() != 0) {
@@ -113,4 +112,24 @@ public class MessageService {
     return chats;
   }
 
+  @Transactional
+  public Message unsendMessage(long id, String userName) {
+    Message unsentMessage = messageRepository.findById(id).orElse(null);
+    // is there a better way to check if two instances of student are the same?
+    if (!unsentMessage.getSender().getUserName().equals(userName)) {
+      String errorMessage = "You do not have permission to unsend this message";
+      throw new IllegalArgumentException(errorMessage);
+    }
+    if (!Condition.isValid(unsentMessage)) {
+      throw new IllegalArgumentException("Message with id: " + id + " does not exist");
+    }
+    unsentMessage.setContent("This message has been unsent.");
+    messageRepository.save(unsentMessage);
+    return unsentMessage;
+  }
+
+  @Transactional
+  public Message getMessageById(long id) {
+    return messageRepository.findById(id).orElse(null);
+  }
 }

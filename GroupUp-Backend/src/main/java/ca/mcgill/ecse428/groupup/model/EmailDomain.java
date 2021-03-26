@@ -1,14 +1,15 @@
 package ca.mcgill.ecse428.groupup.model;
 
 public enum EmailDomain {
-    MCGILL("mail.mcgill.ca"),
-    CARLETON("carleton.ca");
+  MCGILL("mail.mcgill.ca"), CARLETON("carleton.ca");
 
-    String domain;
+  String domain;
 
-    EmailDomain(String domain){
-        this.domain = domain;
-    }
+  EmailDomain(String domain) {
+    this.domain = domain;
+  }
 
-    public String getDomain(){return domain;}
+  public String getDomain() {
+    return domain;
+  }
 }

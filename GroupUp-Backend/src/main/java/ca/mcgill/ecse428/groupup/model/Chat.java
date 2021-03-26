@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Chat {
-
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Id
   private long id;

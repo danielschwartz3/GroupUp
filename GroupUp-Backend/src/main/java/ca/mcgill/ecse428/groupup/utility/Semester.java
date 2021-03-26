@@ -8,6 +8,6 @@ import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 
 public enum Semester {
-    FALL, WINTER, SUMMER;
+  FALL, WINTER, SUMMER;
 
 }

@@ -33,6 +33,7 @@ function App() {
   return (
     <Provider store={ store }>
     <div className="App">
+
       <Navbar
       createRegisterModal={createRegisterModal}
       handleCreateModal={handleCreateModal}
@@ -67,6 +68,7 @@ function App() {
       setInstitution={setInstitution}
       />
 
+
       <Login
       createLoginModal={createLoginModal}
       handleLoginModal={handleLoginModal}
@@ -81,7 +83,7 @@ function App() {
       {/*<AllCourses/>*/}
       {/*<MyCourses/>*/}
       <AllConversations/>
-
+      {/* <Classmates/> */}
     </div>
     </Provider>
   );
