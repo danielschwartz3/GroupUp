@@ -1,5 +1,7 @@
 package ca.mcgill.ecse428.groupup.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
 import java.util.List;
@@ -15,68 +17,97 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse428.groupup.dao.MessageRepository;
 import ca.mcgill.ecse428.groupup.dao.ChatRepository;
+import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.model.UserRole;
 
 @Service
 public class MessageService {
-	
-	@Autowired
-	private MessageRepository messageRepository;
-	@Autowired
-	private ChatRepository chatRepository;
-	
-	@Transactional
-	public Message createMessage(Student sender, Chat chat, String content) {
-		String error = "";
-		if(sender == null) {
-			error+="Sender can not emtpy";
-		}if(chat==null) {
-			error+="Chat can not be empty";
-		}if(content == null || content.length() == 0) {
-			error+="Conent can not be empty";
-		}
-		if (error.length() != 0) {
-            throw new IllegalArgumentException(error);
-        }
-		Random r = new Random();
-		Message msg = new Message();
-		msg.setSendDate(new Date(System.currentTimeMillis()));
-		msg.setSender(sender);
-		msg.setLocation(chat);
-		msg.setContent(content);
-		msg = messageRepository.save(msg);
-		return msg;
-	}
-	
-	
-	/**
-	 * Get message by chat, this method will get the message in descending order of time. 
-	 * Page 1 will be the newest messages and last page will be the oldest messages.
-	 * @param chat
-	 * @param pageNo
-	 * @return
-	 */
-	@Transactional
-	public Page<Message> getMessagesByChat(Chat chat, int pageNo){
-		Sort sort = Sort.by(Sort.Order.desc("SendDate"));
-		Pageable pgb = PageRequest.of(pageNo, 20, sort); //20 message per page
-		Page<Message> page = messageRepository.findByLocation(chat,pgb);
-		return page;
-	}
-	
-	@Transactional
-	public boolean deleteMessage(long id) {
-		if(!messageRepository.existsById(id))return false;
-		messageRepository.deleteById(id);
-		return true;
-	}
 
-	@Transactional
-	public List<Chat> getChatsByStudent(Student student){
-		List <Chat> chats = chatRepository.findAllByMembers(student);
-		return chats;
-	}
-	
+  @Autowired
+  private MessageRepository messageRepository;
+  @Autowired
+  private ChatRepository chatRepository;
+
+  @Transactional
+  public Message createMessage(Account sender, Chat chat, String content) {
+    String error = "";
+    if (sender == null) {
+      error += "Sender can not emtpy";
+    }
+    if (chat == null) {
+      error += "Chat can not be empty";
+    }
+    if (content == null || content.length() == 0) {
+      error += "Conent can not be empty";
+    }
+    if (error.length() != 0) {
+      throw new IllegalArgumentException(error);
+    }
+    Message msg = new Message();
+    msg.setSendDate(new Date(System.currentTimeMillis()));
+    msg.setSender(sender);
+    msg.setLocation(chat);
+    msg.setContent(content);
+    msg = messageRepository.save(msg);
+    return msg;
+  }
+
+
+  /**
+   * Get message by chat, this method will get the message in descending order of time. Page 1 will
+   * be the newest messages and last page will be the oldest messages.
+   * 
+   * @param chat
+   * @param pageNo
+   * @return
+   */
+  @Transactional
+  public List<Message> getMessagesByChatBeforeMessageId(Chat chat, long id) {
+    Sort sort = Sort.by(Sort.Order.desc("id"));
+    Pageable pgb = PageRequest.of(0, 40, sort); // 40 message per page
+    Page<Message> pages = messageRepository.findByLocationAndIdLessThan(chat, id, pgb);
+    List<Message> messages = new ArrayList<Message>();
+    for (Message message : pages.getContent())
+      messages.add(message);
+    Collections.reverse(messages);
+    return messages;
+  }
+
+  @Transactional
+  public List<Message> getMessagesByChatAfterMessageId(Chat chat, long id) {
+    Sort sort = Sort.by(Sort.Order.asc("id"));
+    Pageable pgb = PageRequest.of(0, 40, sort); // 40 message per page
+    Page<Message> messages = messageRepository.findByLocationAndIdGreaterThan(chat, id, pgb);
+    return messages.getContent();
+  }
+
+  @Transactional
+  public List<Message> getLatestMessagesByChat(Chat chat) {
+    Sort sort = Sort.by(Sort.Order.desc("id"));
+    Pageable pgb = PageRequest.of(0, 40, sort); // 40 message per page
+    Page<Message> pages = messageRepository.findByLocation(chat, pgb);
+    List<Message> messages = new ArrayList<Message>();
+    for (Message message : pages.getContent())
+      messages.add(message);
+    Collections.reverse(messages);
+    return messages;
+  }
+
+  @Transactional
+  public boolean deleteMessage(long id) {
+    if (!messageRepository.existsById(id))
+      return false;
+    messageRepository.deleteById(id);
+    return true;
+  }
+
+  @Transactional
+  public List<Chat> getChatsByUser(Account user) {
+    List<Chat> chats = chatRepository.findAllByMembers(user);
+    return chats;
+  }
+
 }

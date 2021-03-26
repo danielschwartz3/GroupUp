@@ -1,14 +1,14 @@
 package ca.mcgill.ecse428.groupup.dto;
 
-public class StudentDTO {
+public class UserDTO {
 	String userName;
-	String institution;
 	String email;
+	String userType;
 	
-	public StudentDTO(String email, String userName, String institution){
+	public UserDTO(String email, String userName,String type){
 		this.userName = userName;
-		this.institution = institution;
 		this.email = email;
+		this.userType = type;
 	}
 
 	public String getEmail() {
@@ -25,13 +25,5 @@ public class StudentDTO {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public String getInstitution() {
-		return institution;
-	}
-
-	public void setInstitution(String institution) {
-		this.institution = institution;
 	}
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse428.groupup.dao.StudentRepository;
-import ca.mcgill.ecse428.groupup.dto.StudentDTO;
+import ca.mcgill.ecse428.groupup.dto.UserDTO;
 import ca.mcgill.ecse428.groupup.dao.AccountRepository;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
@@ -57,15 +57,12 @@ public class StudentService {
         if (acc == null) {
             throw new IllegalArgumentException("The Account with email: " + email + " does not exist.");
         }
-        
         Student std;
-        
         try {
         	std = (Student) acc.getUserRole();
         } catch(Exception e) {
         	throw new IllegalArgumentException("This email is not associated with a student account.");
         }
-        
         return std;
     }
 	

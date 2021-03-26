@@ -1,20 +1,18 @@
 package ca.mcgill.ecse428.groupup.dto;
 
-import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.model.Chat;
 import java.util.Date;
 
 
 
 public class MessageDTO {
     private long id;
-    private Student sender;
-    private Chat location;
+    private String sender;
+    private long location;
     private Date sendDate;
 	private String content;
     public MessageDTO() {};
 
-    public MessageDTO(long id, Student sender, Chat location, Date sendDate, String content) {
+    public MessageDTO(long id, String sender, long location, Date sendDate, String content) {
         this.id = id;
         this.sender = sender;
         this.sendDate = sendDate;
@@ -29,19 +27,19 @@ public class MessageDTO {
         this.id = id;
     }
 
-    public Student getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(Student sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public Chat getLocation() {
+    public long getLocation() {
         return location;
     }
 
-    public void setLocation(Chat location) {
+    public void setLocation(long location) {
         this.location = location;
     }
 

@@ -29,4 +29,8 @@ public abstract class UserRole{
     public int getId(){
         return this.id;
     }
+    
+    public String userType() {
+      return "General";
+    }
 }

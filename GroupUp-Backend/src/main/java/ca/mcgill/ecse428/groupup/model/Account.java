@@ -26,7 +26,7 @@ public class Account{
         this.userName = username;
     }
 
-
+    @Column(unique=true)
     public String getUserName(){
         return userName;
     }

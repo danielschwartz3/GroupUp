@@ -19,7 +19,7 @@ public class Message {
 	private long id;
 	
 	@ManyToOne
-	private Student sender;
+	private Account sender;
 	
 	@ManyToOne
 	private Chat location;
@@ -38,11 +38,11 @@ public class Message {
 		this.id = id;
 	}
 	
-	public Student getSender() {
+	public Account getSender() {
 		return sender;
 	}
 	
-	public void setSender(Student sender) {
+	public void setSender(Account sender) {
 		this.sender = sender;
 	}
 	

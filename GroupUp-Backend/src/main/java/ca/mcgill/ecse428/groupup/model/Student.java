@@ -43,4 +43,10 @@ public class Student extends UserRole{
 		// TODO Auto-generated constructor stub
 		this.courses = new HashSet<>();
 	}
+	
+	@Override
+	public String userType() {
+      return "Student";
+    }
+	
 }

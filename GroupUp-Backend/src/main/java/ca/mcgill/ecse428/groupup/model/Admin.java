@@ -5,5 +5,8 @@ import javax.persistence.*;
 @DiscriminatorValue("Admin")
 public class Admin extends UserRole{
 //attributes unique to this class added later
-
+  @Override
+  public String userType() {
+    return "Admin";
+  }
 }

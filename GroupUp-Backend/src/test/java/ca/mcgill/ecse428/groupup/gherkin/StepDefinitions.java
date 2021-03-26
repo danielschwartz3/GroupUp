@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.model.UserRole;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.service.AccountService;
@@ -441,26 +442,25 @@ public class StepDefinitions extends SpringWrapper {
     Chat testChat = null;
     Message testMessage = null;
     Student testStudent = null;
-    Student studentb = null;
+    Account studentb = null;
     
     @And("studentb {word} is registered in the same course {word}")
     public void studentb_is_registered_in_the_same_course(String email, String course) {
-    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
-    	studentb = (Student) accountb.getUserRole();
-    	testCourse.addStudent(studentb);
+        studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
+    	testCourse.addStudent((Student)studentb.getUserRole());
     }
     
     @And("the user does not have an existing conversation with studentb {word}")
     public void the_user_does_not_have_an_existing_conversation_with_studentb(String email) {
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChat(students,"Test Chat");
     }
 
     @When("the user tries to message studentb {word}")
     public void the_user_tries_to_message_studentb(String email) {
-    	testMessage = testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
+    	testMessage = testMessageService.createMessage(testStudent.getAccount(), testChat, "Hello my name is Joe");
     }
     
     @Then("studentb {word} should receive a new message")
@@ -471,54 +471,53 @@ public class StepDefinitions extends SpringWrapper {
     
     @And("the user has an existing conversation with studentb {word}")
     public void the_user_has_an_existing_conversation_with_studentb(String email) {
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+        List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
+    	studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChat(students,"Test Chat");
     }
     
     
     
 //=================================================ID021 View Chats with Other Users==========================================================//
     
-    Page<Message> page = null;
+    List<Message> messages = null;
     //Given a user is logged in
     
     @And("the user has a history of messages with studentb {word}")
     public void the_user_has_a_history_of_messages_with_studentb(String email) {
-    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
-    	studentb = (Student) accountb.getUserRole();
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+        studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
-    	testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
+    	testChat = testChatService.createChat(students,"Test Chat");
+    	testMessageService.createMessage(testStudent.getAccount(), testChat, "Hello my name is Joe");
     }
     
     @When("the user opens his conversation with studentb {word}")
     public void the_user_opens_his_conversation_with_studentb(String email) {
-    	page = testMessageService.getMessagesByChat(testChat, 0);
+      messages = testMessageService.getLatestMessagesByChat(testChat);
     }
     
     @Then("the user will see a display of all the past messages")
     public void the_user_will_see_a_display_of_all_the_past_messages() {
-    	assertNotNull(page.getContent().get(0));
-    	assertEquals("Hello my name is Joe", page.getContent().get(0).getContent());
+    	assertNotNull(messages.get(0));
+    	assertEquals("Hello my name is Joe", messages.get(0).getContent());
     }
     
     @And("the user has no history of messages with studentb {word}")
     public void the_user_has_no_history_of_messages_with_studentb(String email) {
-    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
-    	studentb = (Student) accountb.getUserRole();
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+        studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
     	students.add(studentb);
-    	testChat = testChatService.createChat(students);
+    	testChat = testChatService.createChat(students,"Test Chat");
     }
     
     @Then("the user will see a display of an empty messaging inbox")
     public void the_user_will_see_a_display_of_an_empty_messaging_inbox() {
-    	assertTrue(page.getContent().isEmpty());
+    	assertTrue(messages.isEmpty());
     }
     
     

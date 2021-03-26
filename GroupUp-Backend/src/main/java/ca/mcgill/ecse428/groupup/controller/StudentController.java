@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.groupup.dto.AccountDTO;
-import ca.mcgill.ecse428.groupup.dto.StudentDTO;
+import ca.mcgill.ecse428.groupup.dto.UserDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -28,18 +28,18 @@ public class StudentController {
 	private CourseService courseService;
 	
 	@GetMapping(value = {"/courses/{id}/students", "/courses/{id}/students/"})
-	public List<StudentDTO> getStudentsByCourseID(int id){
+	public List<UserDTO> getStudentsByCourseID(int id){
 		Course course = courseService.getCourseByID(id);
 		List<Student> classMembers = studentService.getStudentsByCourse(course);
-		List<StudentDTO> memberDto = new ArrayList<>();
+		List<UserDTO> memberDto = new ArrayList<>();
 		for(Student student: classMembers)memberDto.add(DTOUtil.convertToDTO(student));
 		return memberDto;
 	}
 	
     @GetMapping(value = {"/student/{email}", "/student/{email}/"})
-    public StudentDTO getCourseOfId(@PathVariable("email") String email) {
+    public UserDTO getCourseOfId(@PathVariable("email") String email) {
         Student std = studentService.getStudentByEmail(email);
-        StudentDTO stdDTO = DTOUtil.convertToDTO(std);
+        UserDTO stdDTO = DTOUtil.convertToDTO(std);
 
         return stdDTO;
     }

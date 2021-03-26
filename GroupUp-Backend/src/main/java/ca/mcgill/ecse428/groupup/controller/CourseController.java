@@ -86,20 +86,20 @@ public class CourseController {
     @GetMapping(value = {"/coursesbyyear", "/coursesbyyear/"})
     public List<CourseDTO> getCourseOfYear(@RequestParam("year") String year) {
         List<Course> courses = courseService.getCoursesByYear(year);
-        return DTOUtil.convertToDTO(courses);
+        return DTOUtil.convertToCourseDTOs(courses);
     }
 
     @GetMapping(value = {"/coursesbysemester", "/coursesbysemester/"})
     public List<CourseDTO> getCourseOfSemester(@RequestParam("semester") String semester) {
         List<Course> courses = courseService.getCoursesBySemester(semester.toUpperCase());
-        return DTOUtil.convertToDTO(courses);
+        return DTOUtil.convertToCourseDTOs(courses);
     }
 
     @GetMapping(value = {"courses/byYearAndSemester", "courses/byYearAndSemester/"})
     public List<CourseDTO> getCoursesByYearBySemester(@RequestParam("year") String year,
                                                       @RequestParam("semester") String semester) {
         List<Course> courses = courseService.getCoursesByYearBySemester(year, semester.toUpperCase());
-        return DTOUtil.convertToDTO(courses);
+        return DTOUtil.convertToCourseDTOs(courses);
     }
 
     @GetMapping(value = {"courses/byYearAndSemesterAndSection", "courses/byYearAndSemesterAndSection/"})
@@ -107,7 +107,7 @@ public class CourseController {
                                                                @RequestParam("semester") String semester,
                                                                @RequestParam("section") String section) {
         List<Course> courses = courseService.getCoursesByYearBySemesterBySection(year, semester, section);
-        return DTOUtil.convertToDTO(courses);
+        return DTOUtil.convertToCourseDTOs(courses);
     }
 
     @PutMapping(value = {"/updatecourse/{id}", "/updatecourse/{id}/"})

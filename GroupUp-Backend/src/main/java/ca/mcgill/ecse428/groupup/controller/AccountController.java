@@ -21,55 +21,50 @@ import ca.mcgill.ecse428.groupup.service.AccountService;
 @RestController
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+  @Autowired
+  private AccountService accountService;
 
-    @PostMapping(value = {"/register/newStudent", "/register/newStudent/"})
-    public AccountDTO createStudentAccount(@RequestParam("userName") String userName,
-                                           @RequestParam("name") String name,
-                                           @RequestParam("email") String email,
-                                           @RequestParam("institution") String institution,
-                                           @RequestParam("password") String password)
-            throws IllegalArgumentException {
-        Account acc = accountService.createStudentAccount(new Student(), userName, name, email, institution, password);
-        return DTOUtil.convertToDTO(acc);
-    }
-
-    @PostMapping(value = {"/register/newAdmin", "/register/newAdmin/"})
-    public AccountDTO createAdminAccount(@RequestParam("userName") String userName,
-                                         @RequestParam("name") String name,
-                                         @RequestParam("email") String email,
-                                         @RequestParam("institution") String institution,
-                                         @RequestParam("password") String password)
-            throws IllegalArgumentException {
-        Account acc = accountService.createAdminAccount(new Admin(), userName, name, email, institution, password);
-        return DTOUtil.convertToDTO(acc);
-    }
-
-    @PostMapping(value ={"/account/update", "/account/update/"})
-    public AccountDTO changeUserInformation(@RequestParam("email") String oldEmail,
-                                            @RequestParam("newUserName") String newUserName,
-                                            @RequestParam("newName") String newName,
-                                            @RequestParam("newEmail") String newEmail,
-                                            @RequestParam("newInstitution") String newInstitution)
-        throws IllegalArgumentException {
-    Account acc = accountService.changeUserInformation(oldEmail, newUserName, newName, newEmail,
-                                                    newInstitution);
+  @PostMapping(value = {"/register/newStudent", "/register/newStudent/"})
+  public AccountDTO createStudentAccount(@RequestParam("userName") String userName,
+      @RequestParam("name") String name, @RequestParam("email") String email,
+      @RequestParam("institution") String institution, @RequestParam("password") String password)
+      throws IllegalArgumentException {
+    Account acc = accountService.createStudentAccount(new Student(), userName, name, email,
+        institution, password);
     return DTOUtil.convertToDTO(acc);
-    }
-    
-    @PostMapping(value ={"/Login/","/Login/"})
-    public AccountDTO LogIn (@RequestParam("email")String email,
-                            @RequestParam("password")String password)
-                            throws IllegalArgumentException{
-     Account acc = accountService.LogIn(email, password);                                  
-     return DTOUtil.convertToDTO(acc);
-    }
-    
-    @GetMapping(value = {"/account/{email}", "/account/{email}/"})
-    public AccountDTO getAccountByEmail(@PathVariable("email") String email) {
-        Account acc = accountService.getAccountByID(email);
-        AccountDTO accDTO = DTOUtil.convertToDTO(acc);
-        return accDTO;
-    }
+  }
+
+  @PostMapping(value = {"/register/newAdmin", "/register/newAdmin/"})
+  public AccountDTO createAdminAccount(@RequestParam("userName") String userName,
+      @RequestParam("name") String name, @RequestParam("email") String email,
+      @RequestParam("institution") String institution, @RequestParam("password") String password)
+      throws IllegalArgumentException {
+    Account acc = accountService.createAdminAccount(new Admin(), userName, name, email, institution,
+        password);
+    return DTOUtil.convertToDTO(acc);
+  }
+
+  @PostMapping(value = {"/account/update", "/account/update/"})
+  public AccountDTO changeUserInformation(@RequestParam("email") String oldEmail,
+      @RequestParam("newUserName") String newUserName, @RequestParam("newName") String newName,
+      @RequestParam("newEmail") String newEmail,
+      @RequestParam("newInstitution") String newInstitution) throws IllegalArgumentException {
+    Account acc = accountService.changeUserInformation(oldEmail, newUserName, newName, newEmail,
+        newInstitution);
+    return DTOUtil.convertToDTO(acc);
+  }
+
+  @PostMapping(value = {"/Login/", "/Login/"})
+  public AccountDTO LogIn(@RequestParam("email") String email,
+      @RequestParam("password") String password) throws IllegalArgumentException {
+    Account acc = accountService.LogIn(email, password);
+    return DTOUtil.convertToDTO(acc);
+  }
+
+  @GetMapping(value = {"/account/{email}", "/account/{email}/"})
+  public AccountDTO getAccountByEmail(@PathVariable("email") String email) {
+    Account acc = accountService.getAccountByID(email);
+    AccountDTO accDTO = DTOUtil.convertToDTO(acc);
+    return accDTO;
+  }
 }

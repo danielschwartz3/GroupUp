@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.model.UserRole;
 import ca.mcgill.ecse428.groupup.model.Account;
 
 @SpringBootTest
@@ -75,8 +76,7 @@ public class TestChatPersistance {
 	void testFindChatByMember() {
 		Chat newChat = createSampleChat();
 		chatRepository.save(newChat);
-//		Set<Student> students = newChat.getMembers();
-		List<Chat> chats = chatRepository.findAllByMembers(testStudent);
+		List<Chat> chats = chatRepository.findAllByMembers(testStudent.getAccount());
 		assertEquals(1, chats.size());
 		checkChatEqual(chats.get(0), newChat);
 	}
@@ -87,26 +87,11 @@ public class TestChatPersistance {
 	}
 	
 	Chat createSampleChat() {
-//		Student student = createSampleStudent();
-		testStudent = createSampleStudent();
-//		Account account = new Account();
-//        account.setEmail("test@mail.mcgill.ca");
-//        account.setInstitution("Institution");
-//        account.setName("testFullname");
-//        account.setPassword("password");
-//        account.setUserName("testusername");
-//        Student newStudent = new Student();
-//        account.setUserRole(newStudent);
-//        newStudent.setAccount(account);
-//        newStudent = studentRepository.save(newStudent);
-        
-		Set<Student> students = new HashSet<Student>();
-		students.add(testStudent);
-        
+		testStudent = createSampleStudent();      
+		Set<Account> students = new HashSet<Account>();
+		students.add(testStudent.getAccount());
 		Chat chat = new Chat();
-//		chat.setId(CHAT_ID);	automatically generated id?
 		chat.setMembers(students);
-		
 		return chat;
 	}
 	
