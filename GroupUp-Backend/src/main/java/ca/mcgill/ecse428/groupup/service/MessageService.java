@@ -18,6 +18,8 @@ import ca.mcgill.ecse428.groupup.dao.ChatRepository;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.model.Student;
+import ca.mcgill.ecse428.groupup.utility.Condition;
+
 
 @Service
 public class MessageService {
@@ -77,6 +79,29 @@ public class MessageService {
 	public List<Chat> getChatsByStudent(Student student){
 		List <Chat> chats = chatRepository.findAllByMembers(student);
 		return chats;
+	}
+
+
+	@Transactional
+    public Message unsendMessage(long id, Student unsender) {
+        Message unsentMessage = messageRepository.findById(id).orElse(null);
+        
+        //is there a better way to check if two instances of student are the same?
+        if (!unsentMessage.getSender().getAccount().getEmail().equals(unsender.getAccount().getEmail())) {
+        	String errorMessage = "You do not have permission to unsend this message";
+            throw new IllegalArgumentException(errorMessage);
+        }
+        if (!Condition.isValid(unsentMessage)) {
+            throw new IllegalArgumentException("Message with id: " + id + " does not exist");
+        }
+        unsentMessage.setContent("This message has been unsent.");
+        messageRepository.save(unsentMessage);
+        return unsentMessage;
+    }
+
+	@Transactional
+	public Message getMessageById(long id){
+		return messageRepository.findById(id).orElse(null);
 	}
 	
 }
