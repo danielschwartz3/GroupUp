@@ -43,6 +43,9 @@ public class MessageService {
     if (content == null || content.length() == 0) {
       error += "Conent can not be empty";
     }
+    if(!chat.getMembers().contains(sender)) {
+      error += "sender not authorized in this chat.";
+    }
     if (error.length() != 0) {
       throw new IllegalArgumentException(error);
     }
