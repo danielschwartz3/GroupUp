@@ -35,13 +35,28 @@ public class StudentController {
 		for(Student student: classMembers)memberDto.add(DTOUtil.convertToDTO(student));
 		return memberDto;
 	}
-	
+
+	@GetMapping(value = {"/all/students", "/all/students/"})
+	public List<StudentDTO> getAllStudents(){
+		List<Student> students = studentService.getAllStudents();
+		List<StudentDTO> studentsDto = new ArrayList<>();
+		for(Student student: students)studentsDto.add(DTOUtil.convertToDTO(student));
+		return studentsDto;
+	}
+
     @GetMapping(value = {"/student/{email}", "/student/{email}/"})
-    public StudentDTO getCourseOfId(@PathVariable("email") String email) {
+    public StudentDTO getStudentByEmail(@PathVariable("email") String email) {
         Student std = studentService.getStudentByEmail(email);
         StudentDTO stdDTO = DTOUtil.convertToDTO(std);
-
         return stdDTO;
+    }
+
+	@GetMapping(value = {"/student/{name}", "/student/{name}/"})
+    public List<StudentDTO> getStudentByName(@PathVariable("name") String name) {
+        List<Student> students = studentService.getStudentByName(name);
+		List<StudentDTO> studentsDto = new ArrayList<>();
+		for(Student student: students)studentsDto.add(DTOUtil.convertToDTO(student));
+		return studentsDto;
     }
     
 }
