@@ -237,6 +237,7 @@ const AllConversations = (props) => {
                         className={`rounded px-2 py-1 ${sender == name ? 'bg-primary text-white' : 'border'}`}
                       >
                         {message}
+                        
                       </div>
                       <div
                         className={`text-muted small ${sender == name ? 'text-right' : ''}`}
