@@ -12,7 +12,7 @@ import ca.mcgill.ecse428.groupup.model.Reaction;
 public interface ReactionRepository extends CrudRepository<Reaction, Long> {
 
   Reaction findByReactorAndReactionMessage(Account reactor, Message reactionMessage);
-
   List<Reaction> findAllByReactionMessage(Message reactionMessage);
+  void deleteAllByReactionMessage(Message reactionMessage);
 
 }

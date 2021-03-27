@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse428.groupup.dao.MessageRepository;
 import ca.mcgill.ecse428.groupup.dao.ChatRepository;
+import ca.mcgill.ecse428.groupup.dao.ReactionRepository;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
@@ -26,6 +27,8 @@ public class MessageService {
   private MessageRepository messageRepository;
   @Autowired
   private ChatRepository chatRepository;
+  @Autowired
+  private ReactionRepository reactionRepository;
 
   @Transactional
   public Message createMessage(Account sender, Chat chat, String content) {
@@ -102,8 +105,18 @@ public class MessageService {
   public boolean deleteMessage(long id) {
     if (!messageRepository.existsById(id))
       return false;
+    Message msg = messageRepository.findById(id).orElse(null);
+    deleteAllReactions(msg);
     messageRepository.deleteById(id);
     return true;
+  }
+
+  @Transactional
+  public void deleteAllReactions(Message reactionMessage){
+    if(reactionMessage == null){
+      throw new IllegalArgumentException("Reaction cannot be deleted from null message");
+    }
+    reactionRepository.deleteAllByReactionMessage(reactionMessage);
   }
 
   @Transactional
