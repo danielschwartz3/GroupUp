@@ -1,6 +1,7 @@
 package ca.mcgill.ecse428.groupup.controller;
 
 import ca.mcgill.ecse428.groupup.dto.MessageDTO;
+import ca.mcgill.ecse428.groupup.dto.ReactionDTO;
 import ca.mcgill.ecse428.groupup.dto.MessageRequestBody;
 import ca.mcgill.ecse428.groupup.dto.AccountDTO;
 import ca.mcgill.ecse428.groupup.dto.ChatDTO;
@@ -91,9 +92,10 @@ public class MessageController {
     Account user = accountService.getAccountByID(email);
     Message message = messageService.getMessageById(id);
     reactionService.reactToMessage(reaction, user, message);
-    List<Reaction> reactions = reactionService.getAllReactionsToMessage(message);
+    List<Reaction> reactions  = reactionService.getAllReactionsToMessage(message);
+    List<ReactionDTO> reactionsDTO = convertToReactionDTOs(reactions);
     MessageDTO messageDTO = convertToDTO(message);
-    messageDTO.setReactions(reactions);
+    messageDTO.setReactions(reactionsDTO);
     return messageDTO;
   }
 
@@ -104,8 +106,9 @@ public class MessageController {
     Message message = messageService.getMessageById(id);
     reactionService.unReactToMessage(student, message);
     List<Reaction> reactions = reactionService.getAllReactionsToMessage(message);
+    List<ReactionDTO> reactionsDTO = convertToReactionDTOs(reactions);
     MessageDTO messageDTO = convertToDTO(message);
-    messageDTO.setReactions(reactions);
+    messageDTO.setReactions(reactionsDTO);
     return messageDTO;
   }
 

@@ -68,7 +68,6 @@ public class ReactionService {
     return allReactions;
   }
 
-
   private <T> List<T> toList(Iterable<T> iterable) {
     List<T> resultList = new ArrayList<T>();
     for (T t : iterable) {

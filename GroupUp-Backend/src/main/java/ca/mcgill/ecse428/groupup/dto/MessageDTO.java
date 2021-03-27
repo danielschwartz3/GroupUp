@@ -12,12 +12,12 @@ public class MessageDTO {
   private long location;
   private Date sendDate;
   private String content;
-  private List<Reaction> reactions;
+  private List<ReactionDTO> reactions;
 
   public MessageDTO() {};
 
   public MessageDTO(long id, String sender, long location, Date sendDate, String content,
-      List<Reaction> reactions) {
+      List<ReactionDTO> reactions) {
     this.id = id;
     this.sender = sender;
     this.sendDate = sendDate;
@@ -65,11 +65,11 @@ public class MessageDTO {
     this.content = content;
   }
 
-  public List<Reaction> getReactions() {
+  public List<ReactionDTO> getReactions() {
     return this.reactions;
   }
 
-  public void setReactions(List<Reaction> reactions) {
+  public void setReactions(List<ReactionDTO> reactions) {
     this.reactions = reactions;
   }
 

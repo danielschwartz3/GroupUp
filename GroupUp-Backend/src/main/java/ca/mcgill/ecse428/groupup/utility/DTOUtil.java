@@ -4,10 +4,13 @@ import ca.mcgill.ecse428.groupup.dto.AccountDTO;
 import ca.mcgill.ecse428.groupup.dto.ChatDTO;
 import ca.mcgill.ecse428.groupup.dto.CourseDTO;
 import ca.mcgill.ecse428.groupup.dto.MessageDTO;
+import ca.mcgill.ecse428.groupup.dto.ReactionDTO;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Message;
+import ca.mcgill.ecse428.groupup.model.Reaction;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -82,6 +85,25 @@ public class DTOUtil {
     List<MessageDTO> dtos = new ArrayList<>();
     for (Message message : messages)
       dtos.add(convertToDTO(message));
+    return dtos;
+  }
+  
+  public static ReactionDTO convertToDTO(Reaction reaction){
+    if(reaction == null)
+    throw new IllegalArgumentException("reaction is null");
+    ReactionDTO dto = new ReactionDTO();
+    dto.setId(reaction.getId());
+    dto.setReactor(reaction.getReactor().getUserName());
+    dto.setReactionDate(reaction.getReactionDate());
+    return dto;
+  }
+
+  public static List<ReactionDTO> convertToReactionDTOs(List<Reaction> reactions){
+    if(reactions == null)
+      throw new IllegalArgumentException("reaction list is null");
+    List<ReactionDTO> dtos = new ArrayList<>();
+    for (Reaction reaction : reactions)
+      dtos.add(convertToDTO(reaction));
     return dtos;
   }
 
