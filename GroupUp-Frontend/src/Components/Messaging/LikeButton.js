@@ -10,33 +10,49 @@ import Cookies from 'js-cookie'
 const URL = 'http://localhost:8080'
 
 
-  const LikeButton = () => {
-    if (this.state.liked) {
-      axios.post(`${URL}/message/react/`, null, {
-          params: {
-              email: props.email,
-              reaction: props.reaction,
-              messageID: props.messageID,
-          }
-      }).then(function (response) {
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      axios.post(`${URL}/message/unreact/`, null, {
-        params: {
-            email: props.email,
-            reaction: props.reaction,
-            messageID: props.messageID,
-        }
-    }).then(function (response) {
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-  }
+  // const Like = () => {
+  //   if (this.state.liked) {
+  //     axios.post(`${URL}/message/react/`, null, {
+  //         params: {
+  //             email: props.email,
+  //             reaction: props.reaction,
+  //             messageID: props.messageID,
+  //         }
+  //     }).then(function (response) {
+
+  //       axios.get(`${URL}/message/reactors/`, null, {
+  //         params: {
+  //             messageID: props.messageID,
+  //         }
+  //         }).then(function (response) {
+  //         //store all reactors
+  //           })
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       });
+  //   } else {
+  //     axios.post(`${URL}/message/unreact/`, null, {
+  //       params: {
+  //           email: props.email,
+  //           reaction: props.reaction,
+  //           messageID: props.messageID,
+  //       }
+  //           }).then(function (response) {
+  //            axios.get(`${URL}/message/reactors/`, null, {
+  //              params: {
+  //               messageID: props.messageID,
+  //             }
+  //              }).then(function (response) {
+  //              //store all reactors
+  //              })
+
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  //   }
+  // }
 
   
 class LikeButton extends React.Component {
@@ -52,15 +68,21 @@ class LikeButton extends React.Component {
       this.setState({
         liked: !this.state.liked
       });
-      //if liked = false, rest call
+    
       }
     
     render() {
       const label = this.state.liked ? 'Unlike' : 'Like'
       return (
         <div className="customContainer">
-          <button className="btn btn-primary" onClick={this.handleClick}>
-            {label}</button>
+          <div class="btn-group">
+              <button type="button" class="btn btn-primary"onClick={this.handleClick}>{label}</button>
+              <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+              <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu">
+              </div>
+          </div>
         </div>
         
       );

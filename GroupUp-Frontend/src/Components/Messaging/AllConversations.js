@@ -231,20 +231,21 @@ const AllConversations = (props) => {
                   {getConvo(props.focusedConversation).messages.map(({ message, sender, timestamp }) => (
                     <div 
                       key={timestamp}
-                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`}
+                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`} 
                     > {/* change id later! */}
                       <div 
                         className={`rounded px-2 py-1 ${sender == name ? 'bg-primary text-white' : 'border'}`}
                       >
-                        {message}
+                        {message} 
                         
                       </div>
+                      <LikeButton/>
                       <div
                         className={`text-muted small ${sender == name ? 'text-right' : ''}`}
                       >
                         {sender == name ? 'You' : sender}
                       </div>
-                      <LikeButton />
+                      
                     </div>
                   ))}
                 </div>
