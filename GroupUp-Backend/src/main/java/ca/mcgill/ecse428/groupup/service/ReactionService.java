@@ -20,8 +20,10 @@ public class ReactionService {
   @Transactional
   public void reactToMessage(String reactionType, Account reactor, Message reactionMessage) {
     Boolean wasReacted = false;
-    Reaction reaction =
-        reactionRepository.findByReactorAndReactionMessage(reactor, reactionMessage);
+    Reaction reaction = reactionRepository.findByReactorAndReactionMessage(reactor, reactionMessage);
+    if(reaction == null){
+      reaction = new Reaction();
+    }
     for (ReactionType rt : ReactionType.values()) {
       if (reactionType.equals(rt.toString())) {
         reaction.setReactionType(rt);
@@ -40,8 +42,7 @@ public class ReactionService {
 
   @Transactional
   public void unReactToMessage(Account reactor, Message reactionMessage) {
-    Reaction reaction =
-        reactionRepository.findByReactorAndReactionMessage(reactor, reactionMessage);
+    Reaction reaction = reactionRepository.findByReactorAndReactionMessage(reactor, reactionMessage);
     if (reaction == null) {
       throw new IllegalArgumentException("You have not reacted to this message.");
     } else {

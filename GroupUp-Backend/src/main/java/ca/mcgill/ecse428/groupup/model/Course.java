@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.GeneratorType;
 
 @Entity
 public class Course {

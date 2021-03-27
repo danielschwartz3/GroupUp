@@ -5,33 +5,21 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.model.UserRole;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
-import ca.mcgill.ecse428.groupup.service.AccountService;
-import ca.mcgill.ecse428.groupup.service.CourseService;
-import ca.mcgill.ecse428.groupup.service.ChatService;
-import ca.mcgill.ecse428.groupup.service.MessageService;
+
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.But;
@@ -681,7 +669,7 @@ public class StepDefinitions extends SpringWrapper {
     	List<Map<String, String>> valueMaps = dataTable.asMaps();
     	List<String> contents = new ArrayList<String>();
         for (Map<String, String> map : valueMaps) {
-        	String sender = map.get("sender_email");
+        	map.get("sender_email");
         	String content = map.get("content");
         	contents.add(content);
         }
@@ -705,9 +693,9 @@ public class StepDefinitions extends SpringWrapper {
     	List<Map<String, String>> valueMaps = dataTable.asMaps();
     	String content = null;
     	for (Map<String, String> map : valueMaps) {
-        	String sender = map.get("sender_email");
+        	map.get("sender_email");
         	content = map.get("content");
-        	String date = map.get("date");	//date isnt needed to create a message
+        	map.get("date");	//date isnt needed to create a message
         }
     	ben = testStudentService.getStudentByEmail("ben@mail.mcgill.ca");
     	List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);

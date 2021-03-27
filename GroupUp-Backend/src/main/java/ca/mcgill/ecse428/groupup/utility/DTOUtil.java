@@ -94,6 +94,7 @@ public class DTOUtil {
     ReactionDTO dto = new ReactionDTO();
     dto.setId(reaction.getId());
     dto.setReactor(reaction.getReactor().getUserName());
+    dto.setReactionType(reaction.getReactionType().toString());
     dto.setReactionDate(reaction.getReactionDate());
     return dto;
   }

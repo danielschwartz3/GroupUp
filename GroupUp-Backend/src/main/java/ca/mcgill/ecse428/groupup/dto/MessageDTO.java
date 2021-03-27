@@ -1,6 +1,5 @@
 package ca.mcgill.ecse428.groupup.dto;
 
-import ca.mcgill.ecse428.groupup.model.Reaction;
 import java.util.Date;
 import java.util.List;
 
