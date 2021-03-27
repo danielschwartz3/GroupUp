@@ -33,24 +33,14 @@ const useStyles = makeStyles((theme) => ({
 
   const editProfile = async () => {
     props.setEditProfile(true)
-    props.handleCreateModal()
     if (Cookies.get("GroupUpUserEmailCookie") != 'undefined') {
       const response = await axios.get(URL + '/student/' + `${Cookies.get("GroupUpUserEmailCookie")}`);
-      var user = {
-        userRole: response.data,
-        userName: response.data.userName,
-        name: response.data.name,
-        email: props.email,
-        userInstitution: response.data.institution}
-      
-      props.intializeUserAction(user)
-      console.log(response)
-      // props.setName(response.data.name)
-      // props.setEmail(props.email)
-      // props.setInstitution(response.data.institution)
-      // props.setUserName(response.data.userName)
-      console.log(Cookies.get("GroupUpUserEmailCookie"))
+      props.setUserName(response.data.userName);
+      props.setName(response.data.name);
+      props.setEmail(Cookies.get("GroupUpUserEmailCookie"));
+      props.setInstitution(response.data.institution);
     }
+    props.handleCreateModal();
   }
 
   return (
@@ -90,7 +80,12 @@ const useStyles = makeStyles((theme) => ({
   );
 }
 
+const mapStateToProps = (state) => ({
+  user: state.user
+}); 
+
+
 export default connect(
-  null,
+  mapStateToProps,
   { intializeUserAction }
 )(ButtonAppBar);

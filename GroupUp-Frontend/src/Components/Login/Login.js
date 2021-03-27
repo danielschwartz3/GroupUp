@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Button, Modal, TextField } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
@@ -9,6 +10,10 @@ import Cookies from 'js-cookie'
 const URL = 'http://localhost:8080'
 
 const Login = (props) => {
+
+  const [emailErrorText, setEmailErrorText] = useState('');
+  const [passwordErrorText, setPasswordErrorText] = useState('');
+  const [loginErrorText, setLoginErrorText] = useState('');
 
   function getModalStyle() {
       const top = 50;
@@ -31,50 +36,75 @@ const Login = (props) => {
   }));
 
   const Login = () => {
-    Cookies.set("GroupUpUserEmailCookie", props.email, {expires: 1})
-    
-  //   var greg = {
-  //     userRole: "Student",
-  //     userName: "testStudent2",
-  //     name: "testName",
-  //     email: "testEmail@mail.mcgill.ca",
-  //     userInstitution: "testInstitution"
-  // }
-  //   props.intializeUserAction(greg);
+    if (checkEmail() && props.email !== "" && props.password !== "") {
+      clearErrorText()
       axios.post(`${URL}/Login/`, null, {
           params: {
               email: props.email,
               password: props.password,
           }
       }).then(function (response) {
+        if (response.status === 200) {
           console.log(response);
-          props.intializeUserAction(response.data);
+          setLoginErrorText('')
+          Cookies.set("GroupUpUserEmailCookie", props.email, {expires: 1})
+          props.setUserName(response.data.userName);
+          props.setName(response.data.name);
+          props.setEmail(response.data.userEmail);
+          props.setInstitution(response.data.userInstitution);
 
           axios.get(`${URL}/courses/enrolled/${props.email}/`).then((response) => {
               props.initializeUserCoursesAction(response.data);
           })
-
-          // const newStudent = {
-              
-          //     email: email,
-          //     password: password,
-          // }
-          // const newCourses = [...props.courses, newCourse];
-          // props.setCourses(newCourses);
           props.handleLoginModal();
-          props.setEmail('');
-          props.setPassword('');
+          clearFields()
+        }
         })
         .catch(function (error) {
           console.log(error);
-          Cookies.remove("GroupUpUserEmailCookie");
+          setLoginErrorText("Email or password are not correct")
         });
+    } else {
+      if (props.email === "") {
+        setEmailErrorText("Please enter an email")
+      } else {
+        setEmailErrorText('')
+      }
+      
+      if (props.email !== "" && !checkEmail()) {
+        setEmailErrorText("Format should be @mail.mcgill.ca")
+      }
+
+      if (props.password === "") {
+        setPasswordErrorText("Please enter a password")
+      } else {
+        setPasswordErrorText('')
+      }
+    }
   }
 
     function switchToRegister() {
       props.setEditProfile(false)
       props.handleLoginModal()
       props.handleCreateModal()
+      clearErrorText()
+      clearFields()
+    }
+
+    function clearErrorText() {
+      setEmailErrorText('')
+      setPasswordErrorText('')
+      setLoginErrorText('')
+    }
+
+    function clearFields() {
+      props.setEmail('')
+      props.setPassword('')
+    }
+
+    function checkEmail() {
+      const regex = /\S+@mail\.mcgill\.ca/;
+      return regex.test(props.email) ? true : false;
     }
 
     const classes = useStyles();
@@ -87,9 +117,11 @@ const Login = (props) => {
           <p id="simple-modal-description">
               Please enter your information to login.
           </p>
+
+          {loginErrorText.length !== 0 ? <Alert style={{ marginBottom: '5%' }}  severity="error">{loginErrorText}</Alert> : null}
           
-          <TextField onChange={e => props.setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
-          <TextField onChange={e => props.setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
+          <TextField error={emailErrorText.length === 0 ? false : true} helperText={emailErrorText} value={props.email} onChange={e => props.setEmail(e.target.value)} style={{ margin: '1%', width: '45%' }} id="email" label="Email" />
+          <TextField error={passwordErrorText.length === 0 ? false : true} helperText={passwordErrorText} value={props.password} onChange={e => props.setPassword(e.target.value)} style={{ margin: '1%', width: '45%' }} id="password" label="Password" />
           
           <Button style={{ width: '100%', marginTop: '5%' }} onClick={Login}>Login</Button>
           <Button style={{ width: '100%', marginTop: '5%' }} onClick={switchToRegister}>Register</Button>
@@ -104,6 +136,7 @@ const Login = (props) => {
             onClose={props.handleLoginModal}
             aria-labelledby="Login"
             aria-describedby="Please enter your information to login."
+            disableBackdropClick
           >
             {body}
           </Modal>

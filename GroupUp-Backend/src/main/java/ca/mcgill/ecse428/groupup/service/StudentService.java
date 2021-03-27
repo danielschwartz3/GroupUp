@@ -1,6 +1,8 @@
 package ca.mcgill.ecse428.groupup.service;
 
 import java.util.List;
+import java.util.ArrayList;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,12 @@ public class StudentService {
 		student = studentRepository.save(student);
 		return student;
 	}
+
+	@Transactional
+	public List<Student> getAllStudents() {
+		List<Student> studentList = studentRepository.findAll();
+		return studentList;
+	}
 	
 	@Transactional
 	public Student getStudentByID(int id) {
@@ -41,6 +49,13 @@ public class StudentService {
 	@Transactional
 	public List<Student> getStudentsByCourse(Course course){
 		if(course == null)throw new IllegalArgumentException("Course does not exist");
+		return studentRepository.findAllByCourses(course);
+	}
+	
+	@Transactional
+	public List<Student> getStudentsByCourse(Student student, Course course){
+		if(course == null)throw new IllegalArgumentException("Course does not exist");
+		if(!course.getStudents().contains(student)) throw new IllegalArgumentException("Student is not registered in the course");
 		return studentRepository.findAllByCourses(course);
 	}
 	
@@ -60,6 +75,22 @@ public class StudentService {
         }
         
         return std;
+    }
+
+
+	@Transactional
+    public List<Student> getStudentByName(String name) throws IllegalArgumentException{
+        List<Account> accounts = accountRepository.findByNameContaining(name);
+        List<Student> students = new ArrayList<>();
+		Student std;
+		for(Account account: accounts){
+			try{
+				std = (Student) account.getUserRole();
+				students.add(std);
+			} catch(Exception e){
+			}
+		}
+        return students;
     }
 	
 }

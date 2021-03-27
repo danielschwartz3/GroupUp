@@ -10,6 +10,8 @@ import ca.mcgill.ecse428.groupup.dao.AccountRepository;
 import ca.mcgill.ecse428.groupup.dao.AdminRepository;
 import ca.mcgill.ecse428.groupup.dao.StudentRepository;
 import ca.mcgill.ecse428.groupup.model.*;
+import ca.mcgill.ecse428.groupup.utility.Condition;
+
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -76,32 +78,31 @@ public class AccountService {
         accRepo.save(acc);
         return acc;
     }
-
     @Transactional
     public Account changeUserInformation(String oldEmail, String newUserName,String newName,
                                          String newEmail, String newInstitution)
                                          {
         String error = "";
-        UserRole role = null;
         Account oldAccount = accRepo.findById(oldEmail).orElse(null);
-        if(oldAccount == null){
+        if(!Condition.isValid(oldAccount)){
             error += "No account associated with this email";
-        }else{
-            role = oldAccount.getUserRole();
+            throw new IllegalArgumentException(error);
         }
-        error = verifyInput(role, newUserName, newName, newEmail, newInstitution, "hack"); 
-        if(!oldEmail.equals(newEmail)){
-            error += "You cannot change your email, please enter valid information!";
+        oldAccount = setPreliminaryInfo(oldAccount, newUserName, newName);
+        if(Condition.isValid(oldEmail) && Condition.isValid(newEmail)){
+            if(!oldEmail.equals(newEmail)){
+                error += "You cannot change your email, please enter valid information";
+            }
         }
-        if(!oldAccount.getInstitution().equals(newInstitution)){
-            error += "You cannot change your institution as it is linked to your email"+
-                     " please enter valid information!";
+        if(Condition.isValid(newInstitution)){
+            if(!oldAccount.getInstitution().equals(newInstitution)){
+                error += "You cannot change your institution as it is linked to your email,"+
+                    " please enter valid information";
+            }
         }
         if(error.length()>0){
             throw new IllegalArgumentException(error);
         }
-        oldAccount = setAccountDetails(oldAccount, newUserName, newName, newEmail, newInstitution,
-                                    "hack");
         accRepo.save(oldAccount);
         return oldAccount;
     }
@@ -157,15 +158,12 @@ public class AccountService {
         return error;
     }
 
-    private Account setAccountDetails(Account acc, String userName,String name,
-                                     String email, String institution, String password)
-                                     {
-        acc.setUserName(userName);
-        acc.setName(name);
-        acc.setEmail(email);
-        acc.setInstitution(institution);
-        if(password != "hack") {
-            acc.setPassword(password);
+    private Account setPreliminaryInfo(Account acc, String newUserName, String newName){
+        if(Condition.isValid(newUserName)){
+            acc.setUserName(newUserName);
+        }
+        if(Condition.isValid(newName)){
+            acc.setName(newName);
         }
         return acc;
     }

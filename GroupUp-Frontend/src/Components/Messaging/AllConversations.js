@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { unregisterCourseAction, getRegisteredAction, focusedConversationAction } from '../../redux';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,16 +11,19 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button, Modal } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import LikeButton from './LikeButton';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 const URL = 'http://localhost:8080'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     table: {
       minWidth: 650
     },
@@ -42,8 +42,25 @@ const useStyles = makeStyles({
     },
     sendBtn: {
       width: '10%'
+    },
+    paper: {
+      position: 'absolute',
+      width: 400,
+      backgroundColor: theme.palette.background.paper,
+      border: '2px solid #000',
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+      maxWidth: 300,
+    },
+    modalSubContainer: {
+      display: 'flex',
+      alignItems: 'center',
     }
-});
+}));
 
 function createData(id, name, members, messages) {
    if (name) {
@@ -54,6 +71,7 @@ function createData(id, name, members, messages) {
       return { id, name, members, messages};
    }
 }
+
 function lastMessage(messages) {
    if (messages.length != 0) {
       return messages[0].message
@@ -63,19 +81,36 @@ function lastMessage(messages) {
    }
 }
 
-// class Likes extends Component{
-//   state = {
-//     count: 0
-//   }
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
 
-//   render() {
-//     return {
-//       <div>
-//       <button> Likes: (this.state.count)</button>
-//       <div>
-//     }
-//   }
-// }
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
  
  {/*going to need to do some work to get database data into this formate
  static only for visualize to be replaced with state variable conversations and data*/} 
@@ -90,37 +125,58 @@ const conversations = [
       [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
       {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
 ];
+const names = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
 
 const AllConversations = (props) => {
-    const classes = useStyles();
-    const [modalOpen, setModalOpen] = useState(false);
-    const [text, setText] = useState('');
+  const classes = useStyles();
+  const theme = useTheme();
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+  const [personName, setPersonName] = React.useState([]);
+  const [text, setText] = useState('');
 
-    const { registeredCourses, email, name } = props;
+  const { registeredCourses, email, name } = props;
 
-    useEffect(() => {
-      getData();
-    })
+  useEffect(() => {
+    getData();
+  })
 
-    const getData = async () => {
-      const response = await axios.get(`${URL}/chats/${email}`);
-    }
+  const getData = async () => {
+    const response = await axios.get(`${URL}/chats/${email}`);
+  }
 
-    function closeModal() {
-      setModalOpen(false);
-    }
+  const handleChange = (event) => {
+    setPersonName(event.target.value);
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    const startNewConversation = () => {
-      console.log(true)
-      setModalOpen(true);
-      console.log(name)
-    }
+  const startNewConversation = () => {
+    setOpen(true);
+  }
 
-    const removeConversation = (id) => {
-        console.log(id)
-        /*props.unregisterCourseAction(id)*/
-    }
+  function createConversation() {
 
+  }
+
+  const removeConversation = (id) => {
+      console.log(id)
+      /*props.unregisterCourseAction(id)*/
+  }
+  
   const focusedConvo = (id) => {
     props.focusedConversationAction(id);
   }
@@ -155,73 +211,6 @@ const AllConversations = (props) => {
     if (props.focusedConversation != -1) {
       return (
          <div className={classes.chatContainer}>
-            {/* <TableContainer component={Paper}>
-                    <Table className={classes.table} size="small" aria-label="a dense table">
-                        <TableHead>
-                           <TableRow>
-                              <TableCell alight="left">Conversations</TableCell>
-                              <TableCell align="left">{ getConvo(props.focusedConversation).name }</TableCell>
-                              <TableCell align="right">
-                                <Button className='button' color="primary" onClick={() => focusedConvo(-1)}>All Conversations</Button>
-                              </TableCell>
-                           </TableRow>
-                        </TableHead>
-                        <TableBody>
-                           <TableRow>
-                              <TableCell component="th" scope="row">
-                              <List style={{width: "30%"}}>
-                              {conversations && conversations.map(({ id, name, members, messages }) => (
-                                //  <ListItem button onClick={() => focusedConvo(id)}>
-                                 <ListItem>
-                                    <ListItemText
-                                      primary={name}
-                                      secondary={
-                                        <React.Fragment>
-                                          <Typography
-                                            component="span"
-                                            variant="body2"
-                                            className={classes.inline}
-                                            color="textPrimary"
-                                          >
-                                            {messages[0].sender} 
-                                          </Typography>
-                                          : { messages[0].message } - { messages[0].timestamp }
-                                        </React.Fragment>
-                                      }
-                                    />
-                                 </ListItem>
-                              ))}
-                              </List>
-                              </TableCell>
-                              <TableCell>
-                              <List>
-                                 {getConvo(props.focusedConversation).messages.map(({ message, sender, timestamp }) => (
-                                       <ListItem>
-                                            <ListItemText
-                                              primary={message}
-                                              secondary={
-                                                <React.Fragment>
-                                                  <Typography
-                                                    component="span"
-                                                    variant="body2"
-                                                    className={classes.inline}
-                                                    color="textPrimary"
-                                                  >
-
-                                                  </Typography>
-                                                  { sender } - { timestamp }
-                                                </React.Fragment>
-                                              }
-                                            />
-                                 </ListItem>
-                                 ))}
-                              </List>
-                              </TableCell>
-                              <TableCell></TableCell>
-                           </TableRow>
-                        </TableBody> 
-                    </Table> 
-            </TableContainer> */}
             <div>
               <TableContainer component={Paper}>
                 <Table className={classes.table} size="small" aria-label="a dense table">
@@ -322,11 +311,41 @@ const AllConversations = (props) => {
                     </div>
                 }
             </TableContainer>
-
-            {/* <Modal show={modalOpen} onHide={closeModal}>
-                <div>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+            >
+              <div style={modalStyle} className={classes.paper}>
+                <h2 id="simple-modal-title">New Chat</h2>
+                <div className={classes.modalSubContainer}>
+                  <Typography id="simple-modal-description">Chat Name:</Typography>
+                  <TextField id="standard-basic" />
                 </div>
-            </Modal> */}
+                <div className={classes.modalSubContainer}>
+                  <Typography id="simple-modal-description">Members:</Typography>
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      labelId="demo-mutiple-name-label"
+                      id="demo-mutiple-name"
+                      multiple
+                      value={personName}
+                      onChange={handleChange}
+                      input={<Input />}
+                      MenuProps={MenuProps}
+                    >
+                      {names.map((name) => (
+                        <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+                <Button className='button' color="primary" onClick={createConversation}>Create</Button>
+              </div>
+            </Modal>
         </div>
     );
 }
