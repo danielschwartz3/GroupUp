@@ -5,13 +5,15 @@ import java.util.Date;
 public class ReactionDTO{
     private long id;
     private String reactor;
+    private String reactionType;
     private Date reactionDate;
 
     public ReactionDTO(){};
 
-    public ReactionDTO(long id, String reactor, Date reactionDate){
+    public ReactionDTO(long id, String reactor, String reactionType, Date reactionDate){
         this.id = id;
         this.reactor = reactor;
+        this.reactionType = reactionType;
         this.reactionDate = reactionDate;
     }
 
@@ -29,6 +31,14 @@ public class ReactionDTO{
 
     public void setReactor(String reactor){
         this.reactor = reactor;
+    }
+
+    public String getReactionType(){
+        return reactionType;
+    }
+
+    public void setReactionType(String reactionType){
+        this.reactionType = reactionType;
     }
 
     public Date getReactionDate() {

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.model.UserRole;
 import ca.mcgill.ecse428.groupup.model.Account;
 
 @SpringBootTest

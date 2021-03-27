@@ -13,9 +13,7 @@ import ca.mcgill.ecse428.groupup.service.ChatService;
 import ca.mcgill.ecse428.groupup.service.MessageService;
 import static ca.mcgill.ecse428.groupup.utility.DTOUtil.*;
 import ca.mcgill.ecse428.groupup.model.Reaction;
-import ca.mcgill.ecse428.groupup.service.StudentService;
 import ca.mcgill.ecse428.groupup.service.ReactionService;
-import ca.mcgill.ecse428.groupup.utility.DTOUtil;
 // import ca.mcgill.ecse428.groupup.utility.Semester;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -121,5 +119,12 @@ public class MessageController {
     for (Account student : reactors)
       reactorsDto.add(convertToDTO(student));
     return reactorsDto;
+  }
+
+  @DeleteMapping(value = {"/message/everyone/delete/", "/message/everyone/delete/"})
+  public Boolean deleteMessageForEveryone(@RequestParam("messageId") long id)
+      throws IllegalArgumentException {
+    Boolean deleteStatus = messageService.deleteMessage(id);
+    return deleteStatus;
   }
 }

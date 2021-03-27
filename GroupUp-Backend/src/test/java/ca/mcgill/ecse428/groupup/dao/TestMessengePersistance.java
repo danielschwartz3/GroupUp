@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Chat;
@@ -94,7 +93,7 @@ public class TestMessengePersistance {
     Random r = new Random();
     Chat sampleChat = createSampleChat(r);
     Message msg = TestUtil.generateMessage(r, sampleChat);
-    long id = messageRepository.save(msg).getId();
+    messageRepository.save(msg).getId();
     Pageable pageable = PageRequest.of(0, 40);
     Page<Message> savedMsg = messageRepository.findByLocation(msg.getLocation(), pageable);
     assertNotNull(savedMsg.getContent().get(0));
