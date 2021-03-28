@@ -14,59 +14,59 @@ import javax.persistence.TemporalType;
 
 @Entity
 public class Message {
-	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-	private long id;
-	
-	@ManyToOne
-	private Student sender;
-	
-	@ManyToOne
-	private Chat location;
-	
-	@Basic
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date sendDate;
-	
-	private String content;
-	
-	public long getId() {
-		return id;
-	}
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Id
+  private long id;
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	public Student getSender() {
-		return sender;
-	}
-	
-	public void setSender(Student sender) {
-		this.sender = sender;
-	}
-	
-	public Chat getLocation() {
-		return location;
-	}
+  @ManyToOne
+  private Account sender;
 
-	public void setLocation(Chat location) {
-		this.location = location;
-	}
+  @ManyToOne
+  private Chat location;
 
-	public Date getSendDate() {
-		return sendDate;
-	}
-	
-	public void setSendDate(Date sendDate) {
-		this.sendDate = sendDate;
-	}
+  @Basic
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date sendDate;
 
-	public String getContent() {
-		return content;
-	}
-	
-	public void setContent(String content) {
-		this.content = content;
-	}
+  private String content;
+
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public Account getSender() {
+    return sender;
+  }
+
+  public void setSender(Account sender) {
+    this.sender = sender;
+  }
+
+  public Chat getLocation() {
+    return location;
+  }
+
+  public void setLocation(Chat location) {
+    this.location = location;
+  }
+
+  public Date getSendDate() {
+    return sendDate;
+  }
+
+  public void setSendDate(Date sendDate) {
+    this.sendDate = sendDate;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
 }

@@ -1,77 +1,79 @@
 package ca.mcgill.ecse428.groupup.dto;
 
 public class CourseDTO {
-    String courseID;
-    String faculty;
-    String year;
-    String semester;
-    String section;
-    String name;
-    int id;
-    public CourseDTO() {};
+  String courseID;
+  String faculty;
+  String year;
+  String semester;
+  String section;
+  String name;
+  int id;
 
-    public CourseDTO(int id, String courseID, String faculty, String year, String semester, String section, String name) {
-        this.courseID = courseID;
-        this.faculty = faculty;
-        this.year = year;
-        this.semester = semester;
-        this.section = section;
-        this.name = name;
-    }
+  public CourseDTO() {};
 
-    public String getName() {
-        return name;
-    }
+  public CourseDTO(int id, String courseID, String faculty, String year, String semester,
+      String section, String name) {
+    this.courseID = courseID;
+    this.faculty = faculty;
+    this.year = year;
+    this.semester = semester;
+    this.section = section;
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getCourseID() {
-        return courseID;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setCourseID(String courseID) {
-        this.courseID = courseID;
-    }
+  public String getCourseID() {
+    return courseID;
+  }
 
-    public String getFaculty() {
-        return faculty;
-    }
+  public void setCourseID(String courseID) {
+    this.courseID = courseID;
+  }
 
-    public void setFaculty(String faculty) {
-        this.faculty = faculty;
-    }
+  public String getFaculty() {
+    return faculty;
+  }
 
-    public String getYear() {
-        return year;
-    }
+  public void setFaculty(String faculty) {
+    this.faculty = faculty;
+  }
 
-    public void setYear(String year) {
-        this.year = year;
-    }
+  public String getYear() {
+    return year;
+  }
 
-    public String getSemester() {
-        return semester;
-    }
+  public void setYear(String year) {
+    this.year = year;
+  }
 
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
+  public String getSemester() {
+    return semester;
+  }
 
-    public String getSection() {
-        return section;
-    }
+  public void setSemester(String semester) {
+    this.semester = semester;
+  }
 
-    public void setSection(String section) {
-        this.section = section;
-    }
+  public String getSection() {
+    return section;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public void setSection(String section) {
+    this.section = section;
+  }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 }
