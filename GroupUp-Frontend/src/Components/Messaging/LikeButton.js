@@ -25,7 +25,7 @@ const Like = (props) => {
               messageID: props.messageID,
           }
           }).then(function (response) {
-          //getReactors()
+            response.data.reactors = getReactors()
             })
         })
         .catch(function (error) {
@@ -44,7 +44,7 @@ const Like = (props) => {
                 messageID: props.messageID,
               }
                }).then(function (response) {
-               //getReactors()
+                response.data.reactors = getReactors()
                })
 
       })
