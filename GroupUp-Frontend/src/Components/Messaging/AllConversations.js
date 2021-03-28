@@ -334,6 +334,8 @@ const AllConversations = (props) => {
                   <FormControl className={classes.formControl}>
                     <StudentSearch studentsList = {studentsList}/>
                   </FormControl>
+
+                 
                 </div>
                 <Button className='button' color="primary" onClick={createConversation}>Create</Button>
               </div>
