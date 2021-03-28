@@ -4,55 +4,55 @@ import { Button, Modal, TextField } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { intializeUserAction, initializeUserCoursesAction } from '../../redux';
+import { getReactors } from '../../redux';
 import Cookies from 'js-cookie'
 
 const URL = 'http://localhost:8080'
 
 
-  // const Like = () => {
-  //   if (this.state.liked) {
-  //     axios.post(`${URL}/message/react/`, null, {
-  //         params: {
-  //             email: props.email,
-  //             reaction: props.reaction,
-  //             messageID: props.messageID,
-  //         }
-  //     }).then(function (response) {
+const Like = (props) => {
+    if (this.state.liked) {
+      axios.post(`${URL}/message/react/`, null, {
+          params: {
+              email: props.email,
+              reaction: props.reaction,
+              messageID: props.messageID,
+          }
+      }).then(function (response) {
 
-  //       axios.get(`${URL}/message/reactors/`, null, {
-  //         params: {
-  //             messageID: props.messageID,
-  //         }
-  //         }).then(function (response) {
-  //         //store all reactors
-  //           })
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //       });
-  //   } else {
-  //     axios.post(`${URL}/message/unreact/`, null, {
-  //       params: {
-  //           email: props.email,
-  //           reaction: props.reaction,
-  //           messageID: props.messageID,
-  //       }
-  //           }).then(function (response) {
-  //            axios.get(`${URL}/message/reactors/`, null, {
-  //              params: {
-  //               messageID: props.messageID,
-  //             }
-  //              }).then(function (response) {
-  //              //store all reactors
-  //              })
+        axios.get(`${URL}/message/reactors/`, null, {
+          params: {
+              messageID: props.messageID,
+          }
+          }).then(function (response) {
+          //getReactors()
+            })
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      axios.post(`${URL}/message/unreact/`, null, {
+        params: {
+            email: props.email,
+            reaction: props.reaction,
+            messageID: props.messageID,
+        }
+            }).then(function (response) {
+             axios.get(`${URL}/message/reactors/`, null, {
+               params: {
+                messageID: props.messageID,
+              }
+               }).then(function (response) {
+               //getReactors()
+               })
 
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //   }
-  // }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  }
 
   
 class LikeButton extends React.Component {
@@ -88,9 +88,17 @@ class LikeButton extends React.Component {
       );
     }
   }
-  
 
-  export default LikeButton;
+  const mapStateToProps = (state) => ({
+    user: state.user
+  }); 
+
+  export default connect(
+    mapStateToProps,
+    {getReactors}
+    )(LikeButton);
+
+
   
 
   

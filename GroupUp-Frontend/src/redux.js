@@ -13,6 +13,7 @@ const initialState = {
     focusedConversation: -1,
     conversations: [],
     courses: [],
+    reactors: [],
 };
 
 export const store = createStore(
@@ -95,6 +96,11 @@ function reducer(state, action) {
             ...state,
             focusedConversation: action.payload
         };
+    case 'GET_REACTORS':
+        return {
+            ...state,
+            reactors: action.payload
+        };
     default:
       return state;
     }
@@ -157,4 +163,9 @@ export const unregisterCourseAction = (id) => ({
 export const focusedConversationAction = (id) => ({
     type: 'FOCUS_CONVERSATION',
     payload: id
+});
+
+export const getReactors = (reactors) => ({
+    type: 'GET_REACTORS',
+    payload: reactors
 });
