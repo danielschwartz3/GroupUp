@@ -134,7 +134,7 @@ const AllConversations = (props) => {
   const [chatName, setChatName] = React.useState('');
   const [text, setText] = useState('');
 
-  const { registeredCourses, email, name } = props;
+  const { registeredCourses, email, name, userName } = props;
 
   useEffect(() => {
     getData();
@@ -173,22 +173,19 @@ const AllConversations = (props) => {
   }
 
   const createConversation = async () => {
-    console.log(personName)
-    console.log(chatName)
-
-    await axios.post(`${URL}/newchat/`, {
-      name : chatName,
-      members : personName
-    })
-    .then(res => {
-      console.log(res)
-      console.log("success!!")
-      setPersonName([])
-      setChatName('')
-    })
-    .catch(error => {
-      console.log(error)
-    })
+    if(personName.length > 1) {
+      await axios.post(`${URL}/newchat/`, {
+        "name" : chatName,
+        "members" : [...personName, userName]
+      })
+      .then(res => {
+        setPersonName([])
+        setChatName('')
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
   }
 
   const removeConversation = (id) => {
@@ -376,6 +373,7 @@ const mapStateToProps = (state) => ({
   registeredCourses: state.registeredCourses,
   email: state.user.email,
   name: state.user.name,
+  userName: state.user.userName,
   conversations: state.conversations,
   focusedConversation: state.focusedConversation
 }); 
