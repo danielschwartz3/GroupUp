@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.TimeZone;
 
 import ca.mcgill.ecse428.groupup.model.Account;
+import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Message;
 import ca.mcgill.ecse428.groupup.model.Student;
@@ -51,10 +52,11 @@ public class TestUtil {
 		return course;
 	}
 	
-	public static Message generateMessage(Random random) {
+	public static Message generateMessage(Random random, Chat chat) {
 		Message message = new Message();
 		message.setSendDate(generateDate(random));
 		message.setContent(generateString(random,50));
+		message.setLocation(chat);
 		return message;
 	}
 	
