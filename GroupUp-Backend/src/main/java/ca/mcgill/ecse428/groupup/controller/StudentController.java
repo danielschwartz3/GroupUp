@@ -51,7 +51,7 @@ public class StudentController {
     return stdDTO;
   }
 
-  @GetMapping(value = {"/student/{name}", "/student/{name}/"})
+  @GetMapping(value = {"/students/{name}", "/students/{name}/"})
   public List<AccountDTO> getStudentByName(@PathVariable("name") String name) {
     List<Student> students = studentService.getStudentByName(name);
     List<AccountDTO> studentsDto = new ArrayList<>();
@@ -59,5 +59,7 @@ public class StudentController {
       studentsDto.add(DTOUtil.convertToDTO(student.getAccount()));
     return studentsDto;
   }
+
+
 
 }
