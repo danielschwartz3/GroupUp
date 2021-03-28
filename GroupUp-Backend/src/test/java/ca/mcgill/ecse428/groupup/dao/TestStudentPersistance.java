@@ -3,11 +3,8 @@ package ca.mcgill.ecse428.groupup.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -19,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.model.UserRole;
 import ca.mcgill.ecse428.groupup.utility.Semester;
 
 @SpringBootTest
@@ -37,8 +33,6 @@ public class TestStudentPersistance {
 	private static final String EMAIL = "test@mail.mcgill.ca";
 	private static final String INSTITUTION = "McGill";
 	private static final String PASSWORD = "Password123";
-	private static final Student STUDENTROLE = new Student();
-	private static final int ID = 123456;
 	private static final String COURSEID = "ECSE-428";
 	
 	/**

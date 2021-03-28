@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
-import ca.mcgill.ecse428.groupup.model.Student;
+
 import ca.mcgill.ecse428.groupup.service.AccountService;
 import ca.mcgill.ecse428.groupup.service.CourseService;
 import io.cucumber.java.en.And;

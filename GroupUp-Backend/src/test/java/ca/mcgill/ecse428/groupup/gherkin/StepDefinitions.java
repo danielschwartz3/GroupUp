@@ -5,32 +5,21 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
-import ca.mcgill.ecse428.groupup.service.AccountService;
-import ca.mcgill.ecse428.groupup.service.CourseService;
-import ca.mcgill.ecse428.groupup.service.ChatService;
-import ca.mcgill.ecse428.groupup.service.MessageService;
+
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.But;
@@ -480,26 +469,25 @@ public class StepDefinitions extends SpringWrapper {
     Chat testChat = null;
     Message testMessage = null;
     Student testStudent = null;
-    Student studentb = null;
+    Account studentb = null;
     
     @And("studentb {word} is registered in the same course {word}")
     public void studentb_is_registered_in_the_same_course(String email, String course) {
-    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
-    	studentb = (Student) accountb.getUserRole();
-    	testCourse.addStudent(studentb);
+        studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
+    	testCourse.addStudent((Student)studentb.getUserRole());
     }
     
     @And("the user does not have an existing conversation with studentb {word}")
     public void the_user_does_not_have_an_existing_conversation_with_studentb(String email) {
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
     	students.add(studentb);
-    	testChat = testChatService.createChatWithoutName(students);
+    	testChat = testChatService.createChat(students,"Test Chat");
     }
 
     @When("the user tries to message studentb {word}")
     public void the_user_tries_to_message_studentb(String email) {
-    	testMessage = testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
+    	testMessage = testMessageService.createMessage(testStudent.getAccount(), testChat, "Hello my name is Joe");
     }
     
     @Then("studentb {word} should receive a new message")
@@ -510,54 +498,53 @@ public class StepDefinitions extends SpringWrapper {
     
     @And("the user has an existing conversation with studentb {word}")
     public void the_user_has_an_existing_conversation_with_studentb(String email) {
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+        List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
+    	studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
     	students.add(studentb);
-    	testChat = testChatService.createChatWithoutName(students);
+    	testChat = testChatService.createChat(students,"Test Chat");
     }
     
     
     
 //=================================================ID021 View Chats with Other Users==========================================================//
     
-    Page<Message> page = null;
+    List<Message> messages = null;
     //Given a user is logged in
     
     @And("the user has a history of messages with studentb {word}")
     public void the_user_has_a_history_of_messages_with_studentb(String email) {
-    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
-    	studentb = (Student) accountb.getUserRole();
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+        studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password2");
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
     	students.add(studentb);
-    	testChat = testChatService.createChatWithoutName(students);
-    	testMessageService.createMessage(testStudent, testChat, "Hello my name is Joe");
+    	testChat = testChatService.createChat(students,"Test Chat");
+    	testMessageService.createMessage(testStudent.getAccount(), testChat, "Hello my name is Joe");
     }
     
     @When("the user opens his conversation with studentb {word}")
     public void the_user_opens_his_conversation_with_studentb(String email) {
-    	page = testMessageService.getMessagesByChat(testChat, 0);
+      messages = testMessageService.getLatestMessagesByChat(testChat);
     }
     
     @Then("the user will see a display of all the past messages")
     public void the_user_will_see_a_display_of_all_the_past_messages() {
-    	assertNotNull(page.getContent().get(0));
-    	assertEquals("Hello my name is Joe", page.getContent().get(0).getContent());
+    	assertNotNull(messages.get(0));
+    	assertEquals("Hello my name is Joe", messages.get(0).getContent());
     }
     
     @And("the user has no history of messages with studentb {word}")
     public void the_user_has_no_history_of_messages_with_studentb(String email) {
-    	Account accountb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
-    	studentb = (Student) accountb.getUserRole();
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(testStudent);
+        studentb = testAccountService.createStudentAccount(new Student(), "username2", "name2", email, "institutionName", "password");
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(testStudent.getAccount());
     	students.add(studentb);
-    	testChat = testChatService.createChatWithoutName(students);
+    	testChat = testChatService.createChat(students,"Test Chat");
     }
     
     @Then("the user will see a display of an empty messaging inbox")
     public void the_user_will_see_a_display_of_an_empty_messaging_inbox() {
-    	assertTrue(page.getContent().isEmpty());
+    	assertTrue(messages.isEmpty());
     }
     
     
@@ -620,19 +607,19 @@ public class StepDefinitions extends SpringWrapper {
     
     @Given("a student with name Daniel Schwartz and email is logged in")
     public void a_student_with_name_Daniel_Schwartz_and_email_is_logged_in() {
-    	Account adaniel = testAccountService.createStudentAccount(new Student(), "username", "Daniel Schwartz", "dan@mail.mcgill.ca", "institutionName", "password");
+    	Account adaniel = testAccountService.createStudentAccount(new Student(), "danieluser", "Daniel Schwartz", "dan@mail.mcgill.ca", "institutionName", "password");
     	daniel = (Student) adaniel.getUserRole();
     	testAccountService.LogIn("dan@mail.mcgill.ca", "password");
     }
     
     @And("a chat exists between him and a student Ben Weiss")
     public void a_chat_exists_between_him_and_a_student_Ben_Weiss() {
-    	Account aben = testAccountService.createStudentAccount(new Student(), "username", "Ben Weiss", "ben@mail.mcgill.ca", "institutionName", "password");
+    	Account aben = testAccountService.createStudentAccount(new Student(), "benuser", "Ben Weiss", "ben@mail.mcgill.ca", "institutionName", "password");
     	ben = (Student) aben.getUserRole();
-    	List<Student> students = new ArrayList<Student>();
-    	students.add(daniel);
-    	students.add(ben);
-    	testChat = testChatService.createChatWithoutName(students);
+    	List<Account> students = new ArrayList<Account>();
+    	students.add(daniel.getAccount());
+    	students.add(ben.getAccount());
+    	testChat = testChatService.createChat(students, "A new Chat");
     }
     
     @And("the following messages exist in the chat:")
@@ -641,8 +628,8 @@ public class StepDefinitions extends SpringWrapper {
         for (Map<String, String> map : valueMaps) {
         	String sender = map.get("sender_email");
         	String content = map.get("content");
-        	String date = map.get("date");	//date isnt needed to create a message
-        	Student student = testStudentService.getStudentByEmail(sender);
+        	Account student = testAccountService.getAccountByID(sender);
+        	System.out.println(student);
         	testMessage = testMessageService.createMessage(student, testChat, content);
         }
     }
@@ -655,12 +642,10 @@ public class StepDefinitions extends SpringWrapper {
     	for (Map<String, String> map : valueMaps) {
         	String sender = map.get("sender_email");
         	content = map.get("content");
-        	String date = map.get("date");	//date isnt needed to create a message
         	daniel = testStudentService.getStudentByEmail(sender);
         }
     	
-    	page = testMessageService.getMessagesByChat(testChat, 0);
-    	List<Message> messages = page.getContent();
+    	List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
     	long msgID = 0;
     	//find the desired message to delete (assuming no other message has the same content in the chat)
     	for (Message message : messages) {
@@ -670,7 +655,7 @@ public class StepDefinitions extends SpringWrapper {
     	}
     	
     	try {
-    		testMessageService.unsendMessage(msgID, daniel);
+    		testMessageService.unsendMessage(msgID, daniel.getAccount().getUserName());
     	}
     	catch (Exception e) {
     		errorMessage = e.getMessage();
@@ -679,19 +664,15 @@ public class StepDefinitions extends SpringWrapper {
     
     @Then("the chat will have the following messages:")
     public void the_chat_will_have_the_following_messages(io.cucumber.datatable.DataTable dataTable) throws Throwable {
-    	page = testMessageService.getMessagesByChat(testChat, 0);
-    	List<Message> messages = page.getContent();
+        List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
     	
     	List<Map<String, String>> valueMaps = dataTable.asMaps();
     	List<String> contents = new ArrayList<String>();
         for (Map<String, String> map : valueMaps) {
-        	String sender = map.get("sender_email");
+        	map.get("sender_email");
         	String content = map.get("content");
-        	String date = map.get("date");	//date isnt needed to create a message
         	contents.add(content);
         }
-        //since getting the list from page gives back most recent to latest need to reverse order
-        Collections.reverse(contents);
         for(int i = 0; i < 3; i++) {
         	assertEquals(contents.get(i), messages.get(i).getContent());
         }
@@ -699,7 +680,11 @@ public class StepDefinitions extends SpringWrapper {
     
     @And("a group chat exists with those students")
     public void a_group_chat_exists_with_those_students() {
-    	testChat = testChatService.createChatWithoutName(studentList);
+    
+      List<Account> members = new ArrayList<>();
+      for(Student student : studentList)
+        members.add(student.getAccount());
+      testChat = testChatService.createChat(members, "Group Chat");
     }
     
     @When("the user Ben tries to unsend the following message:")
@@ -708,13 +693,12 @@ public class StepDefinitions extends SpringWrapper {
     	List<Map<String, String>> valueMaps = dataTable.asMaps();
     	String content = null;
     	for (Map<String, String> map : valueMaps) {
-        	String sender = map.get("sender_email");
+        	map.get("sender_email");
         	content = map.get("content");
-        	String date = map.get("date");	//date isnt needed to create a message
+        	map.get("date");	//date isnt needed to create a message
         }
     	ben = testStudentService.getStudentByEmail("ben@mail.mcgill.ca");
-    	page = testMessageService.getMessagesByChat(testChat, 0);
-    	List<Message> messages = page.getContent();
+    	List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
     	long msgID = 0;
     	//find the desired message to delete (assuming no other message has the same content in the chat)
     	for (Message message : messages) {
@@ -724,7 +708,7 @@ public class StepDefinitions extends SpringWrapper {
     	}
     	
     	try {
-    		testMessageService.unsendMessage(msgID, ben);
+    		testMessageService.unsendMessage(msgID, ben.getAccount().getUserName());
     	}
     	catch (Exception e) {
     		errorMessage = e.getMessage();
