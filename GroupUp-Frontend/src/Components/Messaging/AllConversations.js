@@ -18,6 +18,7 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import StudentSearch from './StudentSearch';
 
 const URL = 'http://localhost:8080'
 
@@ -143,15 +144,23 @@ const AllConversations = (props) => {
   const [open, setOpen] = React.useState(false);
   const [personName, setPersonName] = React.useState([]);
   const [text, setText] = useState('');
+  const [studentsList, setStudentsList] = useState([]);
 
   const { registeredCourses, email, name } = props;
 
   useEffect(() => {
     getData();
-  })
+    getAllStudentsName();
+  }, [])
 
   const getData = async () => {
     const response = await axios.get(`${URL}/chats/${email}`);
+  }
+
+  const getAllStudentsName = async () => {
+    const response = await axios.get(`${URL}/all/students/`);
+    console.log(response)
+    setStudentsList(response.data)
   }
 
   const handleChange = (event) => {
@@ -323,22 +332,10 @@ const AllConversations = (props) => {
                 <div className={classes.modalSubContainer}>
                   <Typography id="simple-modal-description">Members:</Typography>
                   <FormControl className={classes.formControl}>
-                    <Select
-                      labelId="demo-mutiple-name-label"
-                      id="demo-mutiple-name"
-                      multiple
-                      value={personName}
-                      onChange={handleChange}
-                      input={<Input />}
-                      MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    <StudentSearch studentsList = {studentsList}/>
                   </FormControl>
+
+                 
                 </div>
                 <Button className='button' color="primary" onClick={createConversation}>Create</Button>
               </div>
