@@ -5,8 +5,10 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -191,6 +193,7 @@ public class StepDefinitions extends SpringWrapper {
     
     //Given a user is logged in
     List<Student> studentList = new ArrayList<Student>();
+    List<Account> accountList = new ArrayList<Account>();
         
     @Given("the following students exist:")
     public void the_following_students_exist(io.cucumber.datatable.DataTable dataTable) throws Throwable {
@@ -201,6 +204,7 @@ public class StepDefinitions extends SpringWrapper {
     		String name = map.get("name");
     		String institution = map.get("institution");
     		Account account = testAccountService.createStudentAccount(new Student(), username, name, email, institution, "password");
+    		accountList.add(account);
     		studentList.add((Student) account.getUserRole());
     	}
     }
@@ -505,6 +509,62 @@ public class StepDefinitions extends SpringWrapper {
     	testChat = testChatService.createChat(students,"Test Chat");
     }
     
+
+//=================================================ID020 Group Messages=======================================================================//
+    
+    //given the following students exist
+   
+    @And("the student Daniel does not have any chats")
+    public void the_student_Daniel_does_not_have_any_chats() {
+
+    }
+    
+
+    @When("the user Daniel tries to send the following message:")
+    public void the_user_Daniel_tries_to_send_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+        for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	String content = map.get("content");
+        	String date = map.get("date");
+        	testChat = testChatService.createChat(accountList, "Group Chat");
+        	testMessageService.createMessage(testAccountService.getAccountByID(sender), testChat, content);
+        }
+    }
+    
+    @Then("a group chat will be created")
+    public void a_group_chat_will_be_created() {
+    	assertNotNull(testChat);
+    }
+    
+    @And("the group chat will have the following messages:")
+    public void the_group_chat_will_have_the_following_messages(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Message> messages = testMessageService.getLatestMessagesByChat(testChat);
+    	
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+    	List<String> contents = new ArrayList<String>();
+        for (Map<String, String> map : valueMaps) {
+        	map.get("sender_email");
+        	String content = map.get("content");
+        	contents.add(content);
+        }
+
+        for(int i = 0; i < messages.size(); i++) {
+        	assertEquals(contents.get(i), messages.get(i).getContent());
+        }
+    }
+    
+    @When("the user Ben tries to send the following message:")
+    public void the_user_Ben_tries_to_send_the_following_message(io.cucumber.datatable.DataTable dataTable) throws Throwable {
+    	List<Map<String, String>> valueMaps = dataTable.asMaps();
+        for (Map<String, String> map : valueMaps) {
+        	String sender = map.get("sender_email");
+        	String content = map.get("content");
+        	String date = map.get("date");
+        	testMessageService.createMessage(testAccountService.getAccountByID(sender), testChat, content);
+        }
+    }
+    
     
     
 //=================================================ID021 View Chats with Other Users==========================================================//
@@ -629,7 +689,6 @@ public class StepDefinitions extends SpringWrapper {
         	String sender = map.get("sender_email");
         	String content = map.get("content");
         	Account student = testAccountService.getAccountByID(sender);
-        	System.out.println(student);
         	testMessage = testMessageService.createMessage(student, testChat, content);
         }
     }
@@ -719,4 +778,31 @@ public class StepDefinitions extends SpringWrapper {
     public void an_error_message_saying_You_do_not_have_permission_to_unsend_this_message_will_be_thrown() {
     	assertEquals("You do not have permission to unsend this message", errorMessage);
     }
+    
+    
+//===================================================ID061 Search Students========================================================//
+    
+
+    @When("the user searches for name {string}")
+    public void the_user_searches_for_name(String name) throws Throwable {
+        testName = name;
+    	try {        	
+        	studentList = testStudentService.getStudentByName(name);
+        }
+        catch(Exception e) {
+        	errorMessage = e.getMessage();
+        }
+    }
+    
+    @Then("the user will see searched student")
+    public void the_user_will_see_searched_student() {
+    	assertNotNull(studentList);
+    	assertEquals(testName, studentList.get(0).getAccount().getName());
+    }
+    
+    @Then("the user will receive the following message No student was found with this name")
+    public void the_user_will_receive_the_following_message_No_student_was_found_with_this_name() {
+    	assertEquals("No student was found with this name", errorMessage);
+    }
+    
 }
