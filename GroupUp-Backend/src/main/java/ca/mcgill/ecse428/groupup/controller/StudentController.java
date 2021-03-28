@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse428.groupup.dto.AccountDTO;
-import ca.mcgill.ecse428.groupup.dto.StudentDTO;
-import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.service.CourseService;
@@ -21,42 +19,45 @@ import ca.mcgill.ecse428.groupup.utility.DTOUtil;
 @CrossOrigin(origins = "*")
 @RestController
 public class StudentController {
-	@Autowired
-	private StudentService studentService;
-	
-	@Autowired
-	private CourseService courseService;
-	
-	@GetMapping(value = {"/courses/{id}/students", "/courses/{id}/students/"})
-	public List<StudentDTO> getStudentsByCourseID(@PathVariable("id")int id){
-		Course course = courseService.getCourseByID(id);
-		List<Student> classMembers = studentService.getStudentsByCourse(course);
-		List<StudentDTO> memberDto = new ArrayList<>();
-		for(Student student: classMembers)memberDto.add(DTOUtil.convertToDTO(student));
-		return memberDto;
-	}
+  @Autowired
+  private StudentService studentService;
 
-	@GetMapping(value = {"/all/students", "/all/students/"})
-	public List<StudentDTO> getAllStudents(){
-		List<Student> students = studentService.getAllStudents();
-		List<StudentDTO> studentsDto = new ArrayList<>();
-		for(Student student: students)studentsDto.add(DTOUtil.convertToDTO(student));
-		return studentsDto;
-	}
+  @Autowired
+  private CourseService courseService;
 
-    @GetMapping(value = {"/student/{email}", "/student/{email}/"})
-    public StudentDTO getStudentByEmail(@PathVariable("email") String email) {
-        Student std = studentService.getStudentByEmail(email);
-        StudentDTO stdDTO = DTOUtil.convertToDTO(std);
-        return stdDTO;
-    }
+  @GetMapping(value = {"/courses/{id}/students", "/courses/{id}/students/"})
+  public List<AccountDTO> getStudentsByCourseID(@PathVariable("id") int id) {
+    Course course = courseService.getCourseByID(id);
+    List<Student> classMembers = studentService.getStudentsByCourse(course);
+    List<AccountDTO> memberDto = new ArrayList<>();
+    for (Student student : classMembers)
+      memberDto.add(DTOUtil.convertToDTO(student.getAccount()));
+    return memberDto;
+  }
 
-	@GetMapping(value = {"/student/{name}", "/student/{name}/"})
-    public List<StudentDTO> getStudentByName(@PathVariable("name") String name) {
-        List<Student> students = studentService.getStudentByName(name);
-		List<StudentDTO> studentsDto = new ArrayList<>();
-		for(Student student: students)studentsDto.add(DTOUtil.convertToDTO(student));
-		return studentsDto;
-    }
-    
+  @GetMapping(value = {"/all/students", "/all/students/"})
+  public List<AccountDTO> getAllStudents() {
+    List<Student> students = studentService.getAllStudents();
+    List<AccountDTO> studentsDto = new ArrayList<>();
+    for (Student student : students)
+      studentsDto.add(DTOUtil.convertToDTO(student.getAccount()));
+    return studentsDto;
+  }
+
+  @GetMapping(value = {"/student/{email}", "/student/{email}/"})
+  public AccountDTO getStudentByEmail(@PathVariable("email") String email) {
+    Student std = studentService.getStudentByEmail(email);
+    AccountDTO stdDTO = DTOUtil.convertToDTO(std.getAccount());
+    return stdDTO;
+  }
+
+  @GetMapping(value = {"/student/{name}", "/student/{name}/"})
+  public List<AccountDTO> getStudentByName(@PathVariable("name") String name) {
+    List<Student> students = studentService.getStudentByName(name);
+    List<AccountDTO> studentsDto = new ArrayList<>();
+    for (Student student : students)
+      studentsDto.add(DTOUtil.convertToDTO(student.getAccount()));
+    return studentsDto;
+  }
+
 }

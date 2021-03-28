@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,8 +74,7 @@ public class TestChatPersistance {
 	void testFindChatByMember() {
 		Chat newChat = createSampleChat();
 		chatRepository.save(newChat);
-//		Set<Student> students = newChat.getMembers();
-		List<Chat> chats = chatRepository.findAllByMembers(testStudent);
+		List<Chat> chats = chatRepository.findAllByMembers(testStudent.getAccount());
 		assertEquals(1, chats.size());
 		checkChatEqual(chats.get(0), newChat);
 	}
@@ -87,26 +85,11 @@ public class TestChatPersistance {
 	}
 	
 	Chat createSampleChat() {
-//		Student student = createSampleStudent();
-		testStudent = createSampleStudent();
-//		Account account = new Account();
-//        account.setEmail("test@mail.mcgill.ca");
-//        account.setInstitution("Institution");
-//        account.setName("testFullname");
-//        account.setPassword("password");
-//        account.setUserName("testusername");
-//        Student newStudent = new Student();
-//        account.setUserRole(newStudent);
-//        newStudent.setAccount(account);
-//        newStudent = studentRepository.save(newStudent);
-        
-		Set<Student> students = new HashSet<Student>();
-		students.add(testStudent);
-        
+		testStudent = createSampleStudent();      
+		Set<Account> students = new HashSet<Account>();
+		students.add(testStudent.getAccount());
 		Chat chat = new Chat();
-//		chat.setId(CHAT_ID);	automatically generated id?
 		chat.setMembers(students);
-		
 		return chat;
 	}
 	

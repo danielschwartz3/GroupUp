@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @SpringBootApplication
 public class GroupUpApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GroupUpApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(GroupUpApplication.class, args);
+  }
 
-	@RequestMapping("/")
-	public String greeting() {
-		return "Hello world!";
-	}
+  @RequestMapping("/")
+  public String greeting() {
+    return "Hello world!";
+  }
 
 }

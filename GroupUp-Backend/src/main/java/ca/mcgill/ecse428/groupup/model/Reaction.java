@@ -16,64 +16,64 @@ import javax.persistence.TemporalType;
 @Entity
 public class Reaction {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private long id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Id
+  private long id;
 
-    @Enumerated(EnumType.STRING)
-    private ReactionType reactionType;
+  @Enumerated(EnumType.STRING)
+  private ReactionType reactionType;
 
-    @ManyToOne
-    private Message reactionMessage;
+  @ManyToOne
+  private Message reactionMessage;
 
-    @ManyToOne
-    private Student reactor;
+  @ManyToOne
+  private Account reactor;
 
-    @Basic
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date reactionDate;
+  @Basic
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date reactionDate;
 
-    
-    public long getId(){
-        return id;
-    }
 
-    public void setId(long id){
-        this.id = id;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public ReactionType getReactionType(){
-        return reactionType;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setReactionType(ReactionType reactionType){
-        this.reactionType = reactionType;
-    }
+  public ReactionType getReactionType() {
+    return reactionType;
+  }
 
-    public Message getReactionMessage(){
-        return reactionMessage;
-    }
+  public void setReactionType(ReactionType reactionType) {
+    this.reactionType = reactionType;
+  }
 
-    public void setReactionMessage(Message reactionMessage){
-        this.reactionMessage = reactionMessage;
-    }
+  public Message getReactionMessage() {
+    return reactionMessage;
+  }
 
-    public Student getReactor(){
-        return reactor;
-    }
+  public void setReactionMessage(Message reactionMessage) {
+    this.reactionMessage = reactionMessage;
+  }
 
-    public void setReactor(Student reactor){
-        this.reactor = reactor;
-    }
+  public Account getReactor() {
+    return reactor;
+  }
 
-    public Date getReactionDate() {
-		return reactionDate;
-	}
-	
-	public void setReactionDate(Date reactionDate) {
-		this.reactionDate = reactionDate;
-	}
+  public void setReactor(Account reactor) {
+    this.reactor = reactor;
+  }
 
-    
-    
+  public Date getReactionDate() {
+    return reactionDate;
+  }
+
+  public void setReactionDate(Date reactionDate) {
+    this.reactionDate = reactionDate;
+  }
+
+
+
 }

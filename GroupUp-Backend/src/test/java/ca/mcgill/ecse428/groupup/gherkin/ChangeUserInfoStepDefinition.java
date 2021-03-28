@@ -1,27 +1,15 @@
 package ca.mcgill.ecse428.groupup.gherkin;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.junit.Assert;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.ecse428.groupup.model.Account;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
-import ca.mcgill.ecse428.groupup.service.AccountService;
-import ca.mcgill.ecse428.groupup.service.CourseService;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.PendingException;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.But;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
