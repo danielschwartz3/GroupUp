@@ -27,6 +27,7 @@ public class DTOUtil {
     String userRole = account.getUserRole().userType();
     AccountDTO accountDTO = new AccountDTO(userRole, account.getUserName(), account.getName(),
         account.getEmail(), account.getInstitution());
+    accountDTO.setSession(account.getSession().getId());
     return accountDTO;
   }
 

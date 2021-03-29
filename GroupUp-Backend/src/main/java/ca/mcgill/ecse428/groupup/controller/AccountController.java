@@ -66,6 +66,7 @@ public class AccountController {
     Account acc = accountService.Logout(email, password);
     return DTOUtil.convertToDTO(acc);
   }
+  
 
   @GetMapping(value = {"/account/{email}", "/account/{email}/"})
   public AccountDTO getAccountByEmail(@PathVariable("email") String email) {

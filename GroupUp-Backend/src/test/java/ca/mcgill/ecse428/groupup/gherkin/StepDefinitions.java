@@ -16,6 +16,7 @@ import java.util.Set;
 import org.junit.Assert;
 
 import ca.mcgill.ecse428.groupup.model.Account;
+import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.model.Chat;
@@ -779,6 +780,53 @@ public class StepDefinitions extends SpringWrapper {
     	assertEquals("You do not have permission to unsend this message", errorMessage);
     }
     
+  //===================================================ID060 Logout User========================================================//  
+    String pass = null;
+    String em = null;
+    @Given("^student valid email (.+) and password (.+) is logged in$")
+    public void student_valid_email_and_password_is_logged_in(String email, String password) throws Throwable {
+    	pass = password;
+    	em = email;
+    	Account adaniel = testAccountService.createStudentAccount(new Student(), "danieluser", "Daniel Schwartz", email, "institutionName", password);
+    	testAccountService.LogIn(email, password);
+    	Account testAccount = testAccountService.getAccountByID(em);
+    	if (testAccount.getSession() == null) {
+    		Assert.fail();
+    	}
+    	else {
+    		System.out.println(testAccount.getSession().getId().toString());
+    		System.out.println(testAccount.getSession().getLoginTime().toString());
+    	}
+    }
+
+    @Given("^administrator valid email (.+) and password (.+) is logged in$")
+    public void administrator_valid_email_and_password_is_logged_in(String email, String password) throws Throwable {
+    	pass = password;
+    	em = email;
+    	Account adaniel = testAccountService.createAdminAccount(new Admin(), "danieluser", "Daniel Schwartz", email, "institutionName", password);
+    	testAccountService.LogIn(email, password);
+    	Account testAccount = testAccountService.getAccountByID(em);
+    	if (testAccount.getSession() == null) {
+    		Assert.fail();
+    	}
+    	else {
+    		System.out.println(testAccount.getSession().getId().toString());
+    		System.out.println(testAccount.getSession().getLoginTime().toString());
+    	}
+    }
+
+    @When("^the user (.+) requests logout of the GroupUp system$")
+    public void the_user_requests_logout_of_the_groupup_system(String email) throws Throwable {
+       testAccountService.Logout(email, pass);
+    }
+
+    @Then("^the user will be logged out of the system$")
+    public void the_user_will_be_logged_out_of_the_system() throws Throwable {
+    	Account testAccount = testAccountService.getAccountByID(em);
+    	if (testAccount.getSession() != null) {
+    		Assert.fail();
+    	}
+    }
     
 //===================================================ID061 Search Students========================================================//
     
