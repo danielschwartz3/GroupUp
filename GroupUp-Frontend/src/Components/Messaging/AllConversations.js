@@ -153,7 +153,9 @@ const AllConversations = (props) => {
     const response = await axios.get(`${URL}/all/students/`);
     var nameList = []
     for(var i = 0; i < response.data.length; i++) {
-      nameList.push(response.data[i].userName)
+      if(response.data[i].userName != userName) {
+        nameList.push(response.data[i].userName)
+      }
     }
     setStudentsList(nameList)
   }
@@ -172,7 +174,7 @@ const AllConversations = (props) => {
   }
 
   const createConversation = async () => {
-    if(personName.length > 10) {
+    if(personName.length > 1) {
       await axios.post(`${URL}/newchat/`, {
         "name" : chatName,
         "members" : [...studentsList, userName]
