@@ -4,7 +4,5 @@ jobs:
     script: "./gradlew build"
     deploy:
       provider: heroku
-      api_key:
-        secure: csigPk9lr05K43ZSbfVuZKhQ2fIzFoM2NCMWMxj9aAafw5ecVLfvoTndxqSY0R+LpATbcoJ5memL2SKWauibXDqH/aW4DzKTsiwl25ORVT68yauRZ04IVkK7vLk4gRqspEA2g4ZkZt+PMMgfOUYaxktMTWAayMJDdqW+tt/+CP4w9iQgIRo0rS+2w/igwvrzpYBpiA/dFID0C2xvAseomIvnvPdZFON4kjgwE05l/afvLuVOo4YnZ/icPtmA/UUMWhvLd+PDhSZ77cuQlXJT5IUmHnW4hMiusdp0Hv8cyFVvRXV7mU/nehS3UP9kja0kh1JybTxH2JVxsNEC0Wp2L1SYJKuHswgAflqQ1juYwYeOBzvQHWOj+xErWlL70ErI4u+QbYxE6zLA2EcEvlYPDgdc9rsIJzIbOIDhnxDojvNgKSTmhJeYEbAAB0ATIvMYe6IEfL+m/BxpXi4gAIMu0MUhcNYffu+SDbazg4vlDWcIXKAFs52e8WyOLLD4+jmWHRpsY4Pyzc54VdXmXC6590hafinff3vh4uO0FSjc4HqtEVgkDBfnkOBwyCPtqGFUT9fTm/R28P0lx3m+OY3ldsUEPMAJxfo3rV9Hx9CeuY+mfzQKN4FWgM5ziEYs97MqKg7tvgfcqvSxT5xBgVghoSz1mcx5M19Vu+oByeATjJY=
       app: groupup-backend
       on: main
