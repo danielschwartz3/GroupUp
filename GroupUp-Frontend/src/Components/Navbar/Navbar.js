@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
       const response = await axios.get(URL + '/student/' + `${Cookies.get("GroupUpUserEmailCookie")}`);
       props.setUserName(response.data.userName);
       props.setName(response.data.name);
-      props.setEmail(Cookies.get("GroupUpUserEmailCookie"));
-      props.setInstitution(response.data.institution);
+      props.setEmail(response.data.userEmail);
+      props.setInstitution(response.data.userInstitution);
     }
     props.handleCreateModal();
   }

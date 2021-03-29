@@ -81,6 +81,9 @@ public class StudentService {
   @Transactional
   public List<Student> getStudentByName(String name) throws IllegalArgumentException {
     List<Account> accounts = accountRepository.findByNameContaining(name);
+    if (accounts.isEmpty()) {
+    	throw new IllegalArgumentException("No student was found with this name");
+    }
     List<Student> students = new ArrayList<>();
     Student std;
     for (Account account : accounts) {

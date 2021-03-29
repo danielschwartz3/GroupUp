@@ -12,12 +12,15 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button, Modal } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import LikeButton from './LikeButton';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import StudentSearch from './StudentSearch';
+
 
 const URL = 'http://localhost:8080'
 
@@ -133,31 +136,27 @@ const AllConversations = (props) => {
   const [personName, setPersonName] = React.useState([]);
   const [chatName, setChatName] = React.useState('');
   const [text, setText] = useState('');
+  const [studentsList, setStudentsList] = useState([]);
 
   const { registeredCourses, email, name, userName } = props;
 
   useEffect(() => {
     getData();
-    setNames();
-  })
-
-  const setNames = async () => {
-    const response = await axios.get(`${URL}/all/students`);
-    console.log(response.data)
-    var nameList = []
-    for(var i = 0; i < response.data.length; i++) {
-      nameList.push(response.data[i].userName)
-    }
-    names = nameList;
-  }
+    getAllStudentsName();
+  }, [])
 
   const getData = async () => {
     const response = await axios.get(`${URL}/chats/${email}`);
   }
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
-  };
+  const getAllStudentsName = async () => {
+    const response = await axios.get(`${URL}/all/students/`);
+    var nameList = []
+    for(var i = 0; i < response.data.length; i++) {
+      nameList.push(response.data[i].userName)
+    }
+    setStudentsList(nameList)
+  }
 
   const handleChangeChatName = (event) => {
     setChatName(event.target.value);
@@ -173,13 +172,13 @@ const AllConversations = (props) => {
   }
 
   const createConversation = async () => {
-    if(personName.length > 1) {
+    if(personName.length > 10) {
       await axios.post(`${URL}/newchat/`, {
         "name" : chatName,
-        "members" : [...personName, userName]
+        "members" : [...studentsList, userName]
       })
       .then(res => {
-        setPersonName([])
+        setStudentsList([])
         setChatName('')
       })
       .catch(error => {
@@ -247,18 +246,21 @@ const AllConversations = (props) => {
                   {getConvo(props.focusedConversation).messages.map(({ message, sender, timestamp }) => (
                     <div 
                       key={timestamp}
-                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`}
+                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`} 
                     > {/* change id later! */}
                       <div 
                         className={`rounded px-2 py-1 ${sender == name ? 'bg-primary text-white' : 'border'}`}
                       >
-                        {message}
+                        {message} 
+                        
                       </div>
+                      <LikeButton/>
                       <div
                         className={`text-muted small ${sender == name ? 'text-right' : ''}`}
                       >
                         {sender == name ? 'You' : sender}
                       </div>
+                      
                     </div>
                   ))}
                 </div>
@@ -345,22 +347,10 @@ const AllConversations = (props) => {
                 <div className={classes.modalSubContainer}>
                   <Typography id="simple-modal-description">Members:</Typography>
                   <FormControl className={classes.formControl}>
-                    <Select
-                      labelId="demo-mutiple-name-label"
-                      id="demo-mutiple-name"
-                      multiple
-                      value={personName}
-                      onChange={handleChange}
-                      input={<Input />}
-                      MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    <StudentSearch studentsList = {studentsList}/>
                   </FormControl>
+
+                 
                 </div>
                 <Button className='button' color="primary" onClick={createConversation}>Create</Button>
               </div>

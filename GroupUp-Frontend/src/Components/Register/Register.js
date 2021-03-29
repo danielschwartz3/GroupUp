@@ -49,7 +49,7 @@ const Register = (props) => {
     const Edit = () => {
       if (props.name !== "" && checkEmail() && props.email !== "" && props.institution !== "" && props.userName !== "" && checkPassword() && props.password !== "") {
         clearErrorTexts()
-        axios.post(`${URL}/account/update`, null, {
+        axios.put(`${URL}/account/update`, null, {
             params: {
                 email: Cookies.get("GroupUpUserEmailCookie"),
                 newUserName: props.userName,
