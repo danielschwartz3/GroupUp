@@ -42,9 +42,9 @@ public class MessageService {
     if (content == null || content.length() == 0) {
       error += "Conent can not be empty";
     }
-    for(Account account : chat.getMembers())
-      System.out.println(account);
-    System.out.println(sender);
+//    for(Account account : chat.getMembers())
+//      System.out.println(account);
+//    System.out.println(sender);
     if (!chat.getMembers().contains(sender)) {
       error += "sender not authorized in this chat.";
     }

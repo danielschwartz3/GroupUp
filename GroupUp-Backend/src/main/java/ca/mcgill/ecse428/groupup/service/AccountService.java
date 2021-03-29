@@ -31,7 +31,7 @@ public class AccountService {
   @Transactional
   public Account createStudentAccount(Student role, String userName, String name, String email,
       String institution, String password) {
-    System.out.println(email);
+//    System.out.println(email);
     Account acc;
     String error = "";
     Boolean isEmailValid = false;
