@@ -116,8 +116,8 @@ const MenuProps = {
  {/*going to need to do some work to get database data into this formate
  static only for visualize to be replaced with state variable conversations and data*/} 
 // const conversations = [ 
-//     createData(1,'428-Frontend', ["Daniel Schwartz", "Edem Nuviadenu", "Person 3", "Person 4", "Person 5"], 
-//       [{message: "how is everyone?", sender: "Edem Nuviadenu", timestamp: "2:45pm"},
+//     createData(1,'428-Frontend', ["Daniel Schwartz", "ashaduzzamane", "Person 3", "Person 4", "Person 5"], 
+//       [{message: "how is everyone?", sender: "ashaduzzamane", timestamp: "2:45pm"},
 //       {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
 //     createData(2,'428', ["Daniel Schwartz", "Edem Nuviadenu",], 
 //       [{message: "I am scrum master, respect my authority", sender: "Daniel Schwartz", timestamp: "6:45am"},
@@ -166,9 +166,7 @@ const AllConversations = (props) => {
     var convo = [];
     for(var i = 0; i < response.data.length; i++) {
       convo.push(
-        createData(response.data[i].id, response.data[i].chatName, response.data[i].members, 
-        [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
-        {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
+        createData(response.data[i].id, response.data[i].chatName, response.data[i].members)
       )
     }
     setConversations(convo)
@@ -229,14 +227,16 @@ const AllConversations = (props) => {
     setText('')
   }
 
-  const getConvo = (id) => {
-      var convo;
-      for (convo in conversations) {
-         if (conversations[convo].id == id) {
-            console.log(conversations[convo])
-            return conversations[convo];
-         }
-      }
+  const getConvo = async (id) => {
+    const response = await axios.get(`${URL}/chats/${id}/messages/`);
+    return response.data;
+      // var convo;
+      // for (convo in conversations) {
+      //    if (conversations[convo].id == id) {
+      //       console.log(conversations[convo])
+      //       return conversations[convo];
+      //    }
+      // }
    }
 
     if (props.focusedConversation != -1) {
@@ -259,24 +259,22 @@ const AllConversations = (props) => {
             <div className="d-flex flex-column flex-grow-1">
               <div className="flex-grow-1 overflow-auto">
                 <div className="d-flex flex-column align-items-start justify-content-end px-3">
-                  {getConvo(props.focusedConversation).messages.map(({ message, sender, timestamp }) => (
+                  {getConvo(props.focusedConversation).map(({ id, content, sender, timestamp }) => (
                     <div 
-                      key={timestamp}
-                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`} 
-                    > {/* change id later! */}
+                      key={id}
+                      className={`my-1 d-flex flex-column ${sender == userName ? 'align-self-end' : ''}`} 
+                    > 
                       <div 
-                        className={`rounded px-2 py-1 ${sender == name ? 'bg-primary text-white' : 'border'}`}
+                        className={`rounded px-2 py-1 ${sender == userName ? 'bg-primary text-white' : 'border'}`}
                       >
-                        {message} 
-                        
+                        {content} 
                       </div>
                       <LikeButton/>
                       <div
-                        className={`text-muted small ${sender == name ? 'text-right' : ''}`}
+                        className={`text-muted small ${sender == userName ? 'text-right' : ''}`}
                       >
-                        {sender == name ? 'You' : sender}
+                        {sender == userName ? 'You' : sender}
                       </div>
-                      
                     </div>
                   ))}
                 </div>
@@ -308,9 +306,9 @@ const AllConversations = (props) => {
                         <TableHead>
                         <TableRow>
                             <TableCell>Your Conversations</TableCell>
-                            <TableCell align="right">Last Message</TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
+                            {/* <TableCell align="right">Last Message</TableCell> */}
+                            {/* <TableCell align="right"></TableCell> */}
+                            {/* <TableCell align="right"></TableCell> */}
                             <TableCell align="right"></TableCell>
                             <TableCell align="right">Participants</TableCell>
                             <TableCell align="right">
@@ -324,9 +322,9 @@ const AllConversations = (props) => {
                                        <TableCell component="th" scope="row">
                                        <Button className='button' color="primary" onClick={() => focusedConvo(id)}>{ name }</Button>
                                        </TableCell>
-                                       <TableCell align="right">{ messages[0].message }</TableCell>
-                                       <TableCell align="right">From: { messages[0].sender }; { messages[0].timestamp }</TableCell>
-                                       <TableCell align="right"> </TableCell>
+                                       {/* <TableCell align="right">{ messages[0].message }</TableCell>
+                                       <TableCell align="right">From: { messages[0].sender }; { messages[0].timestamp }</TableCell> */}
+                                       {/* <TableCell align="right"></TableCell> */}
                                        <TableCell align="right"></TableCell>
                                        <TableCell align="right">{ members.length }</TableCell>
                                        <TableCell align="right">
@@ -337,10 +335,17 @@ const AllConversations = (props) => {
                             </TableBody> 
                     </Table> :
                     <div>
-                        <Button className='button'>New Message</Button>
                         <h4>
                             You currently have no conversations, click new message to start chatting!
                         </h4>
+                        <Button 
+                          className='button'
+                          style={{marginBottom: "10px"}} 
+                          variant="contained" 
+                          color='primary' 
+                          onClick={() => startNewConversation()}>
+                            New Message
+                        </Button>
                     </div>
                 }
             </TableContainer>
