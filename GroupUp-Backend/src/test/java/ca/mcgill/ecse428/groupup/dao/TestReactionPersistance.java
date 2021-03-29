@@ -47,8 +47,8 @@ public class TestReactionPersistance {
     @AfterEach
     void clearDatabase() {
         // Clear the table
-        accountRepository.deleteAll();
         reactionRepository.deleteAll();
+        accountRepository.deleteAll();
         messageRepository.deleteAll();
         chatRepository.deleteAll();
         studentRepository.deleteAll();
