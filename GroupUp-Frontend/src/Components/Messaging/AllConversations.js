@@ -137,6 +137,7 @@ const AllConversations = (props) => {
   const [text, setText] = useState('');
   const [studentsList, setStudentsList] = useState([]);
   const [conversations, setConversations] = useState([]);
+  const [focusedConversation, setFocusedConversation] = useState([]);
 
   const { registeredCourses, email, name, userName } = props;
 
@@ -191,7 +192,7 @@ const AllConversations = (props) => {
         "name" : chatName,
         "members" : [...studentsList, userName]
       })
-      .then(res => {
+      .then(response => {
         setStudentsList([])
         setChatName('')
       })
@@ -206,25 +207,31 @@ const AllConversations = (props) => {
       /*props.unregisterCourseAction(id)*/
   }
   
-  const focusedConvo = (id) => {
+  const focusedConvo = async(id) => {
+    if(id == -1) {
+      setFocusedConversation([])
+    } else {
+      const response = await axios.get(`${URL}/chats/${id}/messages/`);
+      setFocusedConversation(response.data)
+    }
     props.focusedConversationAction(id);
   }
 
-  function submitMessage(e) {
-    e.preventDefault()
-
-    conversations[0].messages.push(
-      {
-        message: text,
-        sender: name,
-        time: '12344'
-      }
-    )
-
-    // console.log(conversations[0].messages)
-
-    console.log(text)
-    setText('')
+  const submitMessage = async (id) => {
+    await axios.post(`${URL}/newmessage/`, {
+      "userName" : userName,
+      "id" : id,
+      "content" : text
+    })
+    .then(response => {
+      var newConvo = focusedConversation;
+      newConvo.push(response.data);
+      setFocusedConversation(newConvo);
+      setText('')
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
   const getConvo = async (id) => {
@@ -259,7 +266,7 @@ const AllConversations = (props) => {
             <div className="d-flex flex-column flex-grow-1">
               <div className="flex-grow-1 overflow-auto">
                 <div className="d-flex flex-column align-items-start justify-content-end px-3">
-                  {getConvo(props.focusedConversation).map(({ id, content, sender, timestamp }) => (
+                  {focusedConversation.map(({ id, content, sender, sendDate }) => (
                     <div 
                       key={id}
                       className={`my-1 d-flex flex-column ${sender == userName ? 'align-self-end' : ''}`} 
@@ -291,7 +298,7 @@ const AllConversations = (props) => {
                 placeholder="Enter Message..."
                 variant="outlined"
               />
-              <Button onClick={submitMessage} variant="outlined" color="primary" className='bg-primary text-white'>
+              <Button onClick={submitMessage(props.focusedConversation)} variant="outlined" color="primary" className='bg-primary text-white'>
                 Send
               </Button>
             </div>
