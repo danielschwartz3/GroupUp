@@ -20,6 +20,7 @@ import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
+import ca.mcgill.ecse428.groupup.model.Reaction;
 
 import io.cucumber.java.After;
 import io.cucumber.java.PendingException;
@@ -44,6 +45,7 @@ public class StepDefinitions extends SpringWrapper {
     public void clearDatabase() {
         // Clear the table to avoid inconsistency
 		System.out.println("Clearing database in between tests");
+		reactionRepository.deleteAll();
         courseRepository.deleteAll();
         messageRepository.deleteAll();
         chatRepository.deleteAll();
@@ -657,6 +659,75 @@ public class StepDefinitions extends SpringWrapper {
         if (requestCourses.size() == 0) {//try to think of more assertive test
         	Assert.fail("The requested courses did not match the examples, should not be null");
         }
+    }
+    
+    
+    
+//===============================================================ID046 Like Messages==================================================================//
+    
+    @When("the user Daniel tries to like a message")
+    public void the_user_Daniel_tries_to_like_a_message() {
+    	//will like the most recent sent message
+    	daniel = testStudentService.getStudentByEmail("dan@mail.mcgill.ca");
+
+    	try {
+    		testReactionService.reactToMessage("LIKE", daniel.getAccount(), testMessage);
+    	}
+    	catch(Exception e) {
+    		
+    	}
+    }
+    
+    @Then("the message will be liked by the user Daniel")
+    public void the_message_will_be_liked_by_the_user_Daniel() {
+    	List<Reaction> reactions = testReactionService.getAllReactionsToMessage(testMessage);
+    	assertNotNull(reactions);
+    	assertEquals("LIKE", reactions.get(0).getReactionType().toString());
+    	assertEquals(daniel.getAccount().getName(), reactions.get(0).getReactor().getName());
+    	assertEquals(testMessage.getContent(), reactions.get(0).getReactionMessage().getContent());
+    }
+    
+    @And("the user Ben likes a message")
+    public void the_user_Ben_likes_a_message() {
+    	ben = testStudentService.getStudentByEmail("ben@mail.mcgill.ca");
+    	testReactionService.reactToMessage("LIKE", ben.getAccount(), testMessage);
+    }
+    
+    @Then("the message will be liked by Daniel and Ben")
+    public void the_message_will_be_liked_by_Daniel_and_Ben() {
+    	List<Reaction> reactions = testReactionService.getAllReactionsToMessage(testMessage);
+    	assertNotNull(reactions);
+    	assertEquals(2, reactions.size());
+    	assertEquals("LIKE", reactions.get(0).getReactionType().toString());
+    	assertEquals(daniel.getAccount().getName(), reactions.get(1).getReactor().getName());
+    	assertEquals(ben.getAccount().getName(), reactions.get(0).getReactor().getName());
+    	assertEquals(testMessage.getContent(), reactions.get(0).getReactionMessage().getContent());
+    }
+    
+    @And("the user Daniel likes a message")
+    public void the_user_Daniel_likes_a_message() {
+    	daniel = testStudentService.getStudentByEmail("dan@mail.mcgill.ca");
+    	testReactionService.reactToMessage("LIKE", daniel.getAccount(), testMessage);
+
+    }
+    
+    @When("the user Daniel tries to like the message")
+    public void the_user_Daniel_tries_to_like_the_message() {
+    	daniel = testStudentService.getStudentByEmail("dan@mail.mcgill.ca");
+
+    	try {
+    		testReactionService.reactToMessage("LIKE", daniel.getAccount(), testMessage);
+    	}
+    	catch(Exception e) {
+    		
+    	}
+    	
+//    	List<Reaction> reactions = testReactionService.getAllReactionsToMessage(testMessage);
+//    		
+//    	assertNotNull(reactions);
+//    	assertEquals("LIKE", reactions.get(0).getReactionType().toString());
+//    	assertEquals(daniel.getAccount().getName(), reactions.get(0).getReactor().getName());
+//    	assertEquals(testMessage.getContent(), reactions.get(0).getReactionMessage().getContent());
     }
     
     

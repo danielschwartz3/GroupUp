@@ -28,7 +28,7 @@ So that I can show that I have seen it or agree with it
       | dan@mail.mcgill.ca | hey, what is up       | 2021-03-03-12:00:00 | 
       | ben@mail.mcgill.ca | I am good how are you | 2021-03-03-12:03:00 | 
       | dan@mail.mcgill.ca | adfasda               | 2021-03-03-12:05:00 | 
-     When the user the user Daniel tries to like a message
+     When the user Daniel tries to like a message
      Then the message will be liked by the user Daniel
   
   Scenario Outline: Like a message that someone else already liked in a private chat (Alternate Flow)
@@ -57,8 +57,6 @@ So that I can show that I have seen it or agree with it
       | dan@mail.mcgill.ca | adfasda               | 2021-03-03-12:05:00 |
       And the user Ben likes a message
      	When the user Daniel tries to like the message
-      | sender_email       | content | date                | 
-      | dan@mail.mcgill.ca | adfasda | 2021-03-03-12:05:00 | 
       Then the message will be liked by Daniel and Ben
   
   Scenario Outline: Like a message that I already liked in a private chat (Error Flow)
@@ -86,7 +84,7 @@ So that I can show that I have seen it or agree with it
       | ben@mail.mcgill.ca | I am good how are you | 2021-03-03-12:03:00 | 
       | dan@mail.mcgill.ca | adfasda               | 2021-03-03-12:05:00 | 
       And the user Daniel likes a message
-     	When the user the user Daniel tries to like the message
+     	When the user Daniel tries to like the message
      	Then the message will be liked by the user Daniel
   
   
