@@ -1,5 +1,7 @@
 package ca.mcgill.ecse428.groupup.dto;
 
+import java.util.UUID;
+
 public class AccountDTO {
 
   String userRole;
@@ -7,7 +9,7 @@ public class AccountDTO {
   String name;
   String userEmail;
   String userInstitution;
-  String session;
+  UUID session;
 
   public AccountDTO() {};
 
@@ -61,11 +63,11 @@ public class AccountDTO {
     this.userInstitution = userInstitution;
   }
 
-  public String getSession() {
+  public UUID getSession() {
     return session;
   }
 
-  public void setSession(String session) {
+  public void setSession(UUID session) {
     this.session = session;
   }
 }
