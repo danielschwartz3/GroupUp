@@ -1,5 +1,6 @@
 package ca.mcgill.ecse428.groupup.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,24 +10,26 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 public class Session {
   @Id
   private UUID id = UUID.randomUUID();
-  @Basic
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date loginTime;
+
+  @CreationTimestamp
+  private Calendar loginTime;
 
 
   public UUID getId() {
     return id;
   }
 
-  public Date getLoginTime() {
+  public Calendar getLoginTime() {
     return loginTime;
   }
 
-  public void setLoginTime(Date loginTime) {
+  public void setLoginTime(Calendar loginTime) {
     this.loginTime = loginTime;
   }
 }

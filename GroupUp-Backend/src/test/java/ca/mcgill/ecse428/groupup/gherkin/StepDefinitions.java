@@ -16,10 +16,12 @@ import java.util.Set;
 import org.junit.Assert;
 
 import ca.mcgill.ecse428.groupup.model.Account;
+import ca.mcgill.ecse428.groupup.model.Admin;
 import ca.mcgill.ecse428.groupup.model.Course;
 import ca.mcgill.ecse428.groupup.model.Student;
 import ca.mcgill.ecse428.groupup.model.Chat;
 import ca.mcgill.ecse428.groupup.model.Message;
+import ca.mcgill.ecse428.groupup.model.Reaction;
 
 import io.cucumber.java.After;
 import io.cucumber.java.PendingException;
@@ -44,6 +46,7 @@ public class StepDefinitions extends SpringWrapper {
     public void clearDatabase() {
         // Clear the table to avoid inconsistency
 		System.out.println("Clearing database in between tests");
+		reactionRepository.deleteAll();
         courseRepository.deleteAll();
         messageRepository.deleteAll();
         chatRepository.deleteAll();
@@ -660,6 +663,75 @@ public class StepDefinitions extends SpringWrapper {
     }
     
     
+    
+//===============================================================ID046 Like Messages==================================================================//
+    
+    @When("the user Daniel tries to like a message")
+    public void the_user_Daniel_tries_to_like_a_message() {
+    	//will like the most recent sent message
+    	daniel = testStudentService.getStudentByEmail("dan@mail.mcgill.ca");
+
+    	try {
+    		testReactionService.reactToMessage("LIKE", daniel.getAccount(), testMessage);
+    	}
+    	catch(Exception e) {
+    		
+    	}
+    }
+    
+    @Then("the message will be liked by the user Daniel")
+    public void the_message_will_be_liked_by_the_user_Daniel() {
+    	List<Reaction> reactions = testReactionService.getAllReactionsToMessage(testMessage);
+    	assertNotNull(reactions);
+    	assertEquals("LIKE", reactions.get(0).getReactionType().toString());
+    	assertEquals(daniel.getAccount().getName(), reactions.get(0).getReactor().getName());
+    	assertEquals(testMessage.getContent(), reactions.get(0).getReactionMessage().getContent());
+    }
+    
+    @And("the user Ben likes a message")
+    public void the_user_Ben_likes_a_message() {
+    	ben = testStudentService.getStudentByEmail("ben@mail.mcgill.ca");
+    	testReactionService.reactToMessage("LIKE", ben.getAccount(), testMessage);
+    }
+    
+    @Then("the message will be liked by Daniel and Ben")
+    public void the_message_will_be_liked_by_Daniel_and_Ben() {
+    	List<Reaction> reactions = testReactionService.getAllReactionsToMessage(testMessage);
+    	assertNotNull(reactions);
+    	assertEquals(2, reactions.size());
+    	assertEquals("LIKE", reactions.get(0).getReactionType().toString());
+    	assertEquals(daniel.getAccount().getName(), reactions.get(1).getReactor().getName());
+    	assertEquals(ben.getAccount().getName(), reactions.get(0).getReactor().getName());
+    	assertEquals(testMessage.getContent(), reactions.get(0).getReactionMessage().getContent());
+    }
+    
+    @And("the user Daniel likes a message")
+    public void the_user_Daniel_likes_a_message() {
+    	daniel = testStudentService.getStudentByEmail("dan@mail.mcgill.ca");
+    	testReactionService.reactToMessage("LIKE", daniel.getAccount(), testMessage);
+
+    }
+    
+    @When("the user Daniel tries to like the message")
+    public void the_user_Daniel_tries_to_like_the_message() {
+    	daniel = testStudentService.getStudentByEmail("dan@mail.mcgill.ca");
+
+    	try {
+    		testReactionService.reactToMessage("LIKE", daniel.getAccount(), testMessage);
+    	}
+    	catch(Exception e) {
+    		
+    	}
+    	
+//    	List<Reaction> reactions = testReactionService.getAllReactionsToMessage(testMessage);
+//    		
+//    	assertNotNull(reactions);
+//    	assertEquals("LIKE", reactions.get(0).getReactionType().toString());
+//    	assertEquals(daniel.getAccount().getName(), reactions.get(0).getReactor().getName());
+//    	assertEquals(testMessage.getContent(), reactions.get(0).getReactionMessage().getContent());
+    }
+    
+    
 //===============================================================ID051 Unsend A Message===============================================================//
     
     Student daniel;
@@ -779,6 +851,53 @@ public class StepDefinitions extends SpringWrapper {
     	assertEquals("You do not have permission to unsend this message", errorMessage);
     }
     
+  //===================================================ID060 Logout User========================================================//  
+    String pass = null;
+    String em = null;
+    @Given("^student valid email (.+) and password (.+) is logged in$")
+    public void student_valid_email_and_password_is_logged_in(String email, String password) throws Throwable {
+    	pass = password;
+    	em = email;
+    	Account adaniel = testAccountService.createStudentAccount(new Student(), "danieluser", "Daniel Schwartz", email, "institutionName", password);
+    	testAccountService.LogIn(email, password);
+    	Account testAccount = testAccountService.getAccountByID(em);
+    	if (testAccount.getSession() == null) {
+    		Assert.fail();
+    	}
+    	else {
+    		System.out.println(testAccount.getSession().getId().toString());
+    		System.out.println(testAccount.getSession().getLoginTime().toString());
+    	}
+    }
+
+    @Given("^administrator valid email (.+) and password (.+) is logged in$")
+    public void administrator_valid_email_and_password_is_logged_in(String email, String password) throws Throwable {
+    	pass = password;
+    	em = email;
+    	Account adaniel = testAccountService.createAdminAccount(new Admin(), "danieluser", "Daniel Schwartz", email, "institutionName", password);
+    	testAccountService.LogIn(email, password);
+    	Account testAccount = testAccountService.getAccountByID(em);
+    	if (testAccount.getSession() == null) {
+    		Assert.fail();
+    	}
+    	else {
+    		System.out.println(testAccount.getSession().getId().toString());
+    		System.out.println(testAccount.getSession().getLoginTime().toString());
+    	}
+    }
+
+    @When("^the user (.+) requests logout of the GroupUp system$")
+    public void the_user_requests_logout_of_the_groupup_system(String email) throws Throwable {
+       testAccountService.Logout(email, pass);
+    }
+
+    @Then("^the user will be logged out of the system$")
+    public void the_user_will_be_logged_out_of_the_system() throws Throwable {
+    	Account testAccount = testAccountService.getAccountByID(em);
+    	if (testAccount.getSession() != null) {
+    		Assert.fail();
+    	}
+    }
     
 //===================================================ID061 Search Students========================================================//
     
