@@ -115,18 +115,17 @@ const MenuProps = {
  
  {/*going to need to do some work to get database data into this formate
  static only for visualize to be replaced with state variable conversations and data*/} 
-const conversations = [ 
-    createData(1,'428-Frontend', ["Daniel Schwartz", "Edem Nuviadenu", "Person 3", "Person 4", "Person 5"], 
-      [{message: "how is everyone?", sender: "Edem Nuviadenu", timestamp: "2:45pm"},
-      {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
-    createData(2,'428', ["Daniel Schwartz", "Edem Nuviadenu",], 
-      [{message: "I am scrum master, respect my authority", sender: "Daniel Schwartz", timestamp: "6:45am"},
-      {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
-    createData(3,'', ["Glen Xu"], 
-      [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
-      {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
-];
-var names = [];
+// const conversations = [ 
+//     createData(1,'428-Frontend', ["Daniel Schwartz", "Edem Nuviadenu", "Person 3", "Person 4", "Person 5"], 
+//       [{message: "how is everyone?", sender: "Edem Nuviadenu", timestamp: "2:45pm"},
+//       {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
+//     createData(2,'428', ["Daniel Schwartz", "Edem Nuviadenu",], 
+//       [{message: "I am scrum master, respect my authority", sender: "Daniel Schwartz", timestamp: "6:45am"},
+//       {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
+//     createData(3,'', ["Glen Xu"], 
+//       [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
+//       {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
+// ];
 
 const AllConversations = (props) => {
   const classes = useStyles();
@@ -137,12 +136,14 @@ const AllConversations = (props) => {
   const [chatName, setChatName] = React.useState('');
   const [text, setText] = useState('');
   const [studentsList, setStudentsList] = useState([]);
+  const [conversations, setConversations] = useState([]);
 
   const { registeredCourses, email, name, userName } = props;
 
   useEffect(() => {
     getData();
     getAllStudentsName();
+    getAllConversations();
   }, [])
 
   const getData = async () => {
@@ -160,6 +161,19 @@ const AllConversations = (props) => {
     setStudentsList(nameList)
   }
 
+  const getAllConversations = async () => {
+    const response = await axios.get(`${URL}/chats/${userName}/`);
+    var convo = [];
+    for(var i = 0; i < response.data.length; i++) {
+      convo.push(
+        createData(response.data[i].id, response.data[i].chatName, response.data[i].members, 
+        [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
+        {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
+      )
+    }
+    setConversations(convo)
+  }
+
   const handleChangeChatName = (event) => {
     setChatName(event.target.value);
     console.log(event)
@@ -174,7 +188,7 @@ const AllConversations = (props) => {
   }
 
   const createConversation = async () => {
-    if(personName.length > 1) {
+    if(studentsList.length > 1) {
       await axios.post(`${URL}/newchat/`, {
         "name" : chatName,
         "members" : [...studentsList, userName]
