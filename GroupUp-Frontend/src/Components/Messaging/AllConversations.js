@@ -115,29 +115,17 @@ const MenuProps = {
  
  {/*going to need to do some work to get database data into this formate
  static only for visualize to be replaced with state variable conversations and data*/} 
-const conversations = [ 
-    createData(1,'428-Frontend', ["Daniel Schwartz", "Edem Nuviadenu", "Person 3", "Person 4", "Person 5"], 
-      [{message: "how is everyone?", sender: "Edem Nuviadenu", timestamp: "2:45pm"},
-      {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
-    createData(2,'428', ["Daniel Schwartz", "Edem Nuviadenu",], 
-      [{message: "I am scrum master, respect my authority", sender: "Daniel Schwartz", timestamp: "6:45am"},
-      {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
-    createData(3,'', ["Glen Xu"], 
-      [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
-      {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
-];
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+// const conversations = [ 
+//     createData(1,'428-Frontend', ["Daniel Schwartz", "ashaduzzamane", "Person 3", "Person 4", "Person 5"], 
+//       [{message: "how is everyone?", sender: "ashaduzzamane", timestamp: "2:45pm"},
+//       {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
+//     createData(2,'428', ["Daniel Schwartz", "Edem Nuviadenu",], 
+//       [{message: "I am scrum master, respect my authority", sender: "Daniel Schwartz", timestamp: "6:45am"},
+//       {message: "Lets work", sender: "Daniel Schwartz", timestamp: "7:45pm"}]),
+//     createData(3,'', ["Glen Xu"], 
+//       [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
+//       {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
+// ];
 
 const AllConversations = (props) => {
   const classes = useStyles();
@@ -145,14 +133,18 @@ const AllConversations = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [personName, setPersonName] = React.useState([]);
+  const [chatName, setChatName] = React.useState('');
   const [text, setText] = useState('');
   const [studentsList, setStudentsList] = useState([]);
+  const [conversations, setConversations] = useState([]);
+  const [focusedConversation, setFocusedConversation] = useState([]);
 
-  const { registeredCourses, email, name } = props;
+  const { registeredCourses, email, name, userName } = props;
 
   useEffect(() => {
     getData();
     getAllStudentsName();
+    getAllConversations();
   }, [])
 
   const getData = async () => {
@@ -161,13 +153,30 @@ const AllConversations = (props) => {
 
   const getAllStudentsName = async () => {
     const response = await axios.get(`${URL}/all/students/`);
-    console.log(response)
-    setStudentsList(response.data)
+    var nameList = []
+    for(var i = 0; i < response.data.length; i++) {
+      if(response.data[i].userName != userName) {
+        nameList.push(response.data[i].userName)
+      }
+    }
+    setStudentsList(nameList)
   }
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
-  };
+  const getAllConversations = async () => {
+    const response = await axios.get(`${URL}/chats/${userName}/`);
+    var convo = [];
+    for(var i = 0; i < response.data.length; i++) {
+      convo.push(
+        createData(response.data[i].id, response.data[i].chatName, response.data[i].members)
+      )
+    }
+    setConversations(convo)
+  }
+
+  const handleChangeChatName = (event) => {
+    setChatName(event.target.value);
+    console.log(event)
+  }
   
   const handleClose = () => {
     setOpen(false);
@@ -177,8 +186,20 @@ const AllConversations = (props) => {
     setOpen(true);
   }
 
-  function createConversation() {
-
+  const createConversation = async () => {
+    if(studentsList.length > 1) {
+      await axios.post(`${URL}/newchat/`, {
+        "name" : chatName,
+        "members" : [...studentsList, userName]
+      })
+      .then(response => {
+        setStudentsList([])
+        setChatName('')
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
   }
 
   const removeConversation = (id) => {
@@ -186,35 +207,43 @@ const AllConversations = (props) => {
       /*props.unregisterCourseAction(id)*/
   }
   
-  const focusedConvo = (id) => {
+  const focusedConvo = async(id) => {
+    if(id == -1) {
+      setFocusedConversation([])
+    } else {
+      const response = await axios.get(`${URL}/chats/${id}/messages/`);
+      setFocusedConversation(response.data)
+    }
     props.focusedConversationAction(id);
   }
 
-  function submitMessage(e) {
-    e.preventDefault()
-
-    conversations[0].messages.push(
-      {
-        message: text,
-        sender: name,
-        time: '12344'
-      }
-    )
-
-    // console.log(conversations[0].messages)
-
-    console.log(text)
-    setText('')
+  const submitMessage = async (id) => {
+    await axios.post(`${URL}/newmessage/`, {
+      "userName" : userName,
+      "id" : id,
+      "content" : text
+    })
+    .then(response => {
+      var newConvo = focusedConversation;
+      newConvo.push(response.data);
+      setFocusedConversation(newConvo);
+      setText('')
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
-  const getConvo = (id) => {
-      var convo;
-      for (convo in conversations) {
-         if (conversations[convo].id == id) {
-            console.log(conversations[convo])
-            return conversations[convo];
-         }
-      }
+  const getConvo = async (id) => {
+    const response = await axios.get(`${URL}/chats/${id}/messages/`);
+    return response.data;
+      // var convo;
+      // for (convo in conversations) {
+      //    if (conversations[convo].id == id) {
+      //       console.log(conversations[convo])
+      //       return conversations[convo];
+      //    }
+      // }
    }
 
     if (props.focusedConversation != -1) {
@@ -237,24 +266,22 @@ const AllConversations = (props) => {
             <div className="d-flex flex-column flex-grow-1">
               <div className="flex-grow-1 overflow-auto">
                 <div className="d-flex flex-column align-items-start justify-content-end px-3">
-                  {getConvo(props.focusedConversation).messages.map(({ message, sender, timestamp }) => (
+                  {focusedConversation.map(({ id, content, sender, sendDate }) => (
                     <div 
-                      key={timestamp}
-                      className={`my-1 d-flex flex-column ${sender == name ? 'align-self-end' : ''}`} 
-                    > {/* change id later! */}
+                      key={id}
+                      className={`my-1 d-flex flex-column ${sender == userName ? 'align-self-end' : ''}`} 
+                    > 
                       <div 
-                        className={`rounded px-2 py-1 ${sender == name ? 'bg-primary text-white' : 'border'}`}
+                        className={`rounded px-2 py-1 ${sender == userName ? 'bg-primary text-white' : 'border'}`}
                       >
-                        {message} 
-                        
+                        {content} 
                       </div>
                       <LikeButton/>
                       <div
-                        className={`text-muted small ${sender == name ? 'text-right' : ''}`}
+                        className={`text-muted small ${sender == userName ? 'text-right' : ''}`}
                       >
-                        {sender == name ? 'You' : sender}
+                        {sender == userName ? 'You' : sender}
                       </div>
-                      
                     </div>
                   ))}
                 </div>
@@ -271,7 +298,7 @@ const AllConversations = (props) => {
                 placeholder="Enter Message..."
                 variant="outlined"
               />
-              <Button onClick={submitMessage} variant="outlined" color="primary" className='bg-primary text-white'>
+              <Button onClick={submitMessage(props.focusedConversation)} variant="outlined" color="primary" className='bg-primary text-white'>
                 Send
               </Button>
             </div>
@@ -286,9 +313,9 @@ const AllConversations = (props) => {
                         <TableHead>
                         <TableRow>
                             <TableCell>Your Conversations</TableCell>
-                            <TableCell align="right">Last Message</TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
+                            {/* <TableCell align="right">Last Message</TableCell> */}
+                            {/* <TableCell align="right"></TableCell> */}
+                            {/* <TableCell align="right"></TableCell> */}
                             <TableCell align="right"></TableCell>
                             <TableCell align="right">Participants</TableCell>
                             <TableCell align="right">
@@ -302,9 +329,9 @@ const AllConversations = (props) => {
                                        <TableCell component="th" scope="row">
                                        <Button className='button' color="primary" onClick={() => focusedConvo(id)}>{ name }</Button>
                                        </TableCell>
-                                       <TableCell align="right">{ messages[0].message }</TableCell>
-                                       <TableCell align="right">From: { messages[0].sender }; { messages[0].timestamp }</TableCell>
-                                       <TableCell align="right"> </TableCell>
+                                       {/* <TableCell align="right">{ messages[0].message }</TableCell>
+                                       <TableCell align="right">From: { messages[0].sender }; { messages[0].timestamp }</TableCell> */}
+                                       {/* <TableCell align="right"></TableCell> */}
                                        <TableCell align="right"></TableCell>
                                        <TableCell align="right">{ members.length }</TableCell>
                                        <TableCell align="right">
@@ -315,10 +342,17 @@ const AllConversations = (props) => {
                             </TableBody> 
                     </Table> :
                     <div>
-                        <Button className='button'>New Message</Button>
                         <h4>
                             You currently have no conversations, click new message to start chatting!
                         </h4>
+                        <Button 
+                          className='button'
+                          style={{marginBottom: "10px"}} 
+                          variant="contained" 
+                          color='primary' 
+                          onClick={() => startNewConversation()}>
+                            New Message
+                        </Button>
                     </div>
                 }
             </TableContainer>
@@ -332,7 +366,11 @@ const AllConversations = (props) => {
                 <h2 id="simple-modal-title">New Chat</h2>
                 <div className={classes.modalSubContainer}>
                   <Typography id="simple-modal-description">Chat Name:</Typography>
-                  <TextField id="standard-basic" />
+                  <TextField 
+                    id="standard-basic"
+                    value={chatName}
+                    onChange={handleChangeChatName}
+                  />
                 </div>
                 <div className={classes.modalSubContainer}>
                   <Typography id="simple-modal-description">Members:</Typography>
@@ -353,6 +391,7 @@ const mapStateToProps = (state) => ({
   registeredCourses: state.registeredCourses,
   email: state.user.email,
   name: state.user.name,
+  userName: state.user.userName,
   conversations: state.conversations,
   focusedConversation: state.focusedConversation
 }); 

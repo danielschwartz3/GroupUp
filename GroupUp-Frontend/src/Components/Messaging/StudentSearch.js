@@ -23,7 +23,7 @@ export default function StudentSearch(props) {
         multiple
         id="tags-standard"
         options={studentsList}
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => option}
         renderInput={(params) => (
           <TextField
             {...params}

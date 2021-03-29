@@ -48,10 +48,17 @@ const Login = (props) => {
           console.log(response);
           setLoginErrorText('')
           Cookies.set("GroupUpUserEmailCookie", props.email, {expires: 1})
-          props.setUserName(response.data.userName);
-          props.setName(response.data.name);
-          props.setEmail(response.data.userEmail);
-          props.setInstitution(response.data.userInstitution);
+          var user = {
+            userName : response.data.userName,
+            name : response.data.name,
+            email : response.data.userEmail,
+            userInstitution : response.data.userInstitution
+          }
+          props.intializeUserAction(user);
+          // props.setUserName(response.data.userName);
+          // props.setName(response.data.name);
+          // props.setEmail(response.data.userEmail);
+          // props.setInstitution(response.data.userInstitution);
 
           axios.get(`${URL}/courses/enrolled/${props.email}/`).then((response) => {
               props.initializeUserCoursesAction(response.data);
