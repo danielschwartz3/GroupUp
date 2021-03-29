@@ -126,18 +126,7 @@ const conversations = [
       [{message: "Hey Glen", sender: "Ben Weiss", timestamp: "6:45am"},
       {message: "Hey Ben", sender: "Glen Xu", timestamp: "7:45pm"}])
 ];
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+var names = [];
 
 const AllConversations = (props) => {
   const classes = useStyles();
@@ -145,10 +134,11 @@ const AllConversations = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [personName, setPersonName] = React.useState([]);
+  const [chatName, setChatName] = React.useState('');
   const [text, setText] = useState('');
   const [studentsList, setStudentsList] = useState([]);
 
-  const { registeredCourses, email, name } = props;
+  const { registeredCourses, email, name, userName } = props;
 
   useEffect(() => {
     getData();
@@ -161,13 +151,19 @@ const AllConversations = (props) => {
 
   const getAllStudentsName = async () => {
     const response = await axios.get(`${URL}/all/students/`);
-    console.log(response)
-    setStudentsList(response.data)
+    var nameList = []
+    for(var i = 0; i < response.data.length; i++) {
+      if(response.data[i].userName != userName) {
+        nameList.push(response.data[i].userName)
+      }
+    }
+    setStudentsList(nameList)
   }
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
-  };
+  const handleChangeChatName = (event) => {
+    setChatName(event.target.value);
+    console.log(event)
+  }
   
   const handleClose = () => {
     setOpen(false);
@@ -177,8 +173,20 @@ const AllConversations = (props) => {
     setOpen(true);
   }
 
-  function createConversation() {
-
+  const createConversation = async () => {
+    if(personName.length > 1) {
+      await axios.post(`${URL}/newchat/`, {
+        "name" : chatName,
+        "members" : [...studentsList, userName]
+      })
+      .then(res => {
+        setStudentsList([])
+        setChatName('')
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
   }
 
   const removeConversation = (id) => {
@@ -332,7 +340,11 @@ const AllConversations = (props) => {
                 <h2 id="simple-modal-title">New Chat</h2>
                 <div className={classes.modalSubContainer}>
                   <Typography id="simple-modal-description">Chat Name:</Typography>
-                  <TextField id="standard-basic" />
+                  <TextField 
+                    id="standard-basic"
+                    value={chatName}
+                    onChange={handleChangeChatName}
+                  />
                 </div>
                 <div className={classes.modalSubContainer}>
                   <Typography id="simple-modal-description">Members:</Typography>
@@ -353,6 +365,7 @@ const mapStateToProps = (state) => ({
   registeredCourses: state.registeredCourses,
   email: state.user.email,
   name: state.user.name,
+  userName: state.user.userName,
   conversations: state.conversations,
   focusedConversation: state.focusedConversation
 }); 
